@@ -3,14 +3,11 @@ body{
     background:rgb(37, 36, 36);
 }
 
-h1{
-    color: white;
-}
-
     .container-fluid{
         color: white;
         border-style: black;
         background:blue;
+        height: 92vh;
     }
 
 
@@ -28,7 +25,16 @@ h1{
     }
 
     .gamepad{
+        height: 25vh;
         color:white;
         border-style: black;
         background:blue;
+    }
+
+    .panorama{
+        height: 75vh;
+        text-align: center;
+        color:white;
+        border-style: black;
+        background:grey;
     }
