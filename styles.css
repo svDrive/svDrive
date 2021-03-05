@@ -1,0 +1,34 @@
+
+body{
+    background:rgb(37, 36, 36);
+}
+
+h1{
+    color: white;
+}
+
+    .container-fluid{
+        color: white;
+        border-style: black;
+        background:blue;
+    }
+
+
+    .location{
+        color:red;
+        border-style: black;
+        background:white;
+    }
+
+
+    .logo{
+        color:blue;
+        border-style: black;
+        background:yellow;
+    }
+
+    .gamepad{
+        color:white;
+        border-style: black;
+        background:blue;
+    }
