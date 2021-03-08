@@ -7,38 +7,172 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
 
-  <link rel="stylesheet" href="styles.css" />
 
   <title>svDrive</title>
-
 </head>
 
 <body>
+
+
   <main>
+
+    <!-- Start of container-fluid-->
     <div class="container-fluid">
-      <div class="row">
+      
+      
+      <div class="row"> 
+
+
+
+        <!-- End of location div-->
         <div class="col-sm location">
-          <h2>Put Location stuff here</h2>
+          <h2 class="text-center">Location</h2>
+
+        <form action="#">
+        
+        <!-- Start of first row in location--> 
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label>API key</label>
+              <input type="password" class="form-control" id="APIkey" placeholder="API key">
+            </div>
+          </div>
+        </div>
+        <!-- End of first row in location-->
+
+        <!-- Start of second row in location-->
+        <div class="row">
+
+          <div class="col">
+            <div class="form-group">
+            <label>Starting Point</label>
+            <input type="text" class="form-control" id="startValue" placeholder="Start">
+          </div>
         </div>
 
-        <div class="col-sm logo">
-          <h2>Put logo here</h2>
+
+        <div class="col">
+
+            <div class="form-group">
+            <label>End Point</label>
+            <input type="text" class="form-control" id="endValue" placeholder="End">
+            </div>
+
         </div>
 
-        <div class="col-sm gamepad">
-        <h2>Put Gamepad stuff here</h2>
-        </div>
-      </div>
 
-      <div class = "row">
-        <div class="col-sm panorama">
-          <h2>Put Panaorma stuff here</h2>
         </div>
-      </div>
+        <!-- End of second row in location-->
 
+
+        <!-- Start of Third row in location-->
+        <div class="row">
+            <div class="col text-center">
+              <button type="submit" class="btn btn-outline-secondary" value="play">Play</button>
+
+            </div>
+        </div>
+        <!-- End of Third row in location-->
+
+ </form>
+
+        
+
+
+<div class="row">
+  <div class="col text-center">
+  </br>
+    <label>Select Pre-route</label> 
+  </br>
+  
+    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">Pre-route</button>
+    <div class="dropdown-menu">
+      <a href="#" class="dropdown-item">Portland city drive</a>
+      <a href="#" class="dropdown-item">Oregon scenic drive</a>
     </div>
-  </main>
+  </div>
+  </div>
+
+    
+  </div> <!-- End of location div-->
+
+      
+
+
+
+
+
+
+
+
+    <div class="col-sm logo">
+      <!-- <h2>Put logo here</h2> -->
+      <div class="col d-flex align-items-center justify-content-center">
+      <img src="/images/transparentlogo.png">
+      </div>
+    </div>
+
+
+    <div class="col-sm gamepad">
+    <h2 class="text-center">Gamepad</h2>
+    </div>
+
+  </div> 
+
+
+<div class="row">
+  <div class="col-sm panorama">
+    <h2>Put Panaorma stuff here</h2>
+  </div>
+</div>
+
+</div>
+  <!-- End of container-fluid-->
+</main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyjhol9EoyqMduScGkKVFTcMch8miHzzU&callback=initMap&libraries=places&v=weekly"; async></script> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+  integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+  integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<!-- Always remember to call the above files first before calling the bootstrap.min.js file -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"
+  integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+
+
+
+
 </body>
 
 </html>
