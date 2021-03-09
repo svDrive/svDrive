@@ -28,6 +28,8 @@ window.addEventListener("gamepaddisconnected", (event) => {
 var controller = {};
 var buttons = [];
 var axis = [];
+var posDeadzone = 0.8;
+var negDeadzone = -0.8;
 
 function updateHandler() {
 	buttons = [];
@@ -42,7 +44,7 @@ function updateHandler() {
 
 	if (controller.axes) {
 		for (var i = 0; i < controller.axes.length; ++i) {
-			if (controller.axes[i] > 0.5 || controller.axes[i] < -0.5) {
+			if (controller.axes[i] > posDeadzone || controller.axes[i] < negDeadzone) {
 				console.log(controller.axes[i]);
                 console.log(axis);
                 if(axis.length === 0){
@@ -67,11 +69,12 @@ function buttonPressHandler(button) {
 
 function axesPressHandler(axis) {
 	var touched = false;
+    console.log('from handlers ' + axis[0])
 	for (var i = 0; i < axis.length; ++i) {
-		if (axis[i] == axis) {
+		if (axis[i] > .8) {
 			touched = true;
 		}
-	}
+    }
 	return touched;
 }
 
@@ -109,8 +112,9 @@ function pollGamepads() {
 		console.log(`Button 1 pressed`);
 		updateHandler();
 	} 
-   
-    else if(axesPressHandler(0)){
+  
+    //this needs to be worked on
+    else if(axesPressHandler(axis)){
 		console.log('axis is ' +axis);
 		updateHandler();
     }
