@@ -114,9 +114,11 @@ function pollGamepads() {
 	} 
   
     //this needs to be worked on
+    /*
     else if(axesPressHandler(axis)){
-		console.log('axis is ' +axis);
+		//console.log('axis is ' +axis);
 		updateHandler();
     }
+    */
     else updateHandler();
 }
