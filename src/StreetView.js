@@ -8,6 +8,18 @@ function initMap() {
   const sv = new google.maps.StreetViewService();
   panorama = new google.maps.StreetViewPanorama(panoDiv);
 
+  const options = {
+    clickToGo: false,
+    addressControl: false,
+    fullscreenControl: false,
+    linksControl: false,
+    motionTracking: false,
+    panControl: false,
+    showRoadLabels: true,
+    zoomControl: false,
+  } 
+  panorama.setOptions(options);
+  
   sv.getPanorama({ location: location, radius: 50 }, processSVData);
 }
 
