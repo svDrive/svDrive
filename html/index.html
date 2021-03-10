@@ -20,6 +20,17 @@
     </div class="HUD-Overlay">
         <div class="HUD-Navigation">
             <div class="HUD-Navigation-Element">
+                <div class="col-sm gamepad">
+                            <!-- <label>Controller Status</label> -->
+                            <svg id = "statusButton" width = "215" height = "50">
+                              <text fill = "rgb(121, 84, 105)" font-size = "22" x = "0" y = "30">Controller Status</text>
+                              <circle cx = "190" cy = "25" r = "15" fill = "red" />
+                            </svg>
+                            <p id = "picture">
+                            </p>
+                    </div>
+            </div>
+            <div class="HUD-Navigation-Element">
                 <!-- An 'img' is used below as an example. Ideally this can be any HTML element. -->
                 <img  src="../assets/NavigationCompass.png" class="img-thumbnail" alt="...">
             </div>
@@ -58,7 +69,7 @@
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script> 
 -->
 <script src="../src/StreetView.js"></script>
-<script src="../src/index.js"></script>
+<script src="../src/gamepad.js"></script>
 <!--  Uncomment below to enable Google Maps JavaScript API.  Provide your API key, in place of [YOURKEY] -->
 <!--
     <script async src="https://maps.googleapis.com/maps/api/js?key=[YOURKEY]&callback=initMap"></script> 

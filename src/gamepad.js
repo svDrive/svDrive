@@ -19,6 +19,7 @@ var rsR = 0;
 var rsU = 0;
 var rsD = 0;
 
+var flag = 0;
 
 window.addEventListener("gamepadconnected", (e) => {
 	controller = e.gamepad;
@@ -135,6 +136,20 @@ function pollGamepads() {
     
     else if (buttonPressHandler(1)) {
 		console.log(`Button 1 pressed`);
+		updateHandler();
+	}
+
+    else if (buttonPressHandler(13)) {
+        var xboxScheme = document.getElementById("picture");
+
+        if(flag === 0){
+            var image = new Image();
+            image.src = "../assets/svDriveGamepad.png"
+	        xboxScheme.appendChild(image);
+
+            flag = 1;
+        }
+
 		updateHandler();
 	}
 
