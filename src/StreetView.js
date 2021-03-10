@@ -41,6 +41,23 @@ function processSVData(data, status) {
   }
 }
 
+function UpdateAPIKey() {
+  // read and clear user input
+  let inputField = document.getElementById("API-KEY-Input");
+  const newKey = inputField.value;
+  inputField.value = '';
+
+  // TODO: Sanitize input to prevent XSS.
+
+  // TODO: verify key is valid
+
+  // store key for future page loads
+  localStorage.setItem("API-KEY", newKey);
+
+  // Update script tag on index page
+  reloadAPIs(newKey)
+}
+
 function reloadAPIs(key) {
   // TODO: Dynamically reload, the various Google Map API/services, with the new API Key.
   // This is non-trival, as on first visit to our site, the index.html page loads the Google Maps API
