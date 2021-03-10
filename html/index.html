@@ -29,6 +29,19 @@
                 <!-- An 'img' is used below as an example. Ideally this can be any HTML element. -->
                 <img src="../assets/Odometer.jpg" class="img-thumbnail" alt="...">
             </div>
+            <!-- The following HUD-Dashboard-Element will likely be moved into a Modal, to better represent a 'Menu'-->
+            <div class="HUD-Dashboard-Element">
+                <div>
+                    <label for="API-KEY-Input">New API Key: </label>
+                    <input id="API-KEY-Input" type="text">
+                    <button onclick="UpdateAPIKey()">Update Key</button>
+                </div>
+                <div>
+                    <label for="Starting-Location-Input">Staring Location</label>
+                    <input id="Starting-Location-Input" type="text">
+                    <button onclick="SetStartingLocation()">Go</button>
+                </div>
+            </div>
         </div>
         <footer>
             <!--  Section is designed to contain links to various support/resources that a user would find helpful. 
