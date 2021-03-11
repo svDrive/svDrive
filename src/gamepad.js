@@ -1,3 +1,10 @@
+/*NOTES:
+in Chrome Navigator. getGamepads needs a webkit prefix and the button values are stored
+ as an array of double values, whereas in Firefox Navigator.getGamepads doesn't need a prefix, i
+ and the button values are stored as an array of GamepadButton objects; it is the GamepadButton.
+ value or GamepadButton.pressed properties of these we need to access, depending on what type 
+ of buttons they are.
+*/
 
 var controller = {};
 var buttons = [];
@@ -7,6 +14,7 @@ var axis = [];
 var posDeadzone = 0.8;
 var negDeadzone = -0.8;
 
+//getting the cirlce svg
 const statusButton = document.querySelector("circle");
 
 //axis directions
