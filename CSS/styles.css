@@ -61,7 +61,7 @@ body{
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    background-color: grey;
+    background-color: rgb(143, 112, 133);
 }
 
 /* Container for elements in Dashboard HUD*/
@@ -77,6 +77,13 @@ body{
 /* Restrict elements that are contained, to the container */
 .HUD-Navigation-Element *,
 .HUD-Dashboard-Element * {
+    max-height: 100%;
+    width: auto;
+}
+
+
+/* Gamepad - Controller Image*/
+#gamepad * {
     max-height: 100%;
     width: auto;
 }

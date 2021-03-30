@@ -146,13 +146,24 @@ function pollGamepads() {
 		console.log(`Button 1 pressed`);
 		updateHandler();
 	}
-
+		
+	else if (buttonPressHandler(12)) {
+        var xboxScheme = document.getElementById("picture");
+		if (flag === 1) {
+			var image = document.getElementById("controller-scheme");
+	        xboxScheme.removeChild(image);
+            flag = 0;
+        }
+		updateHandler();
+	}
+		
     else if (buttonPressHandler(13)) {
         var xboxScheme = document.getElementById("picture");
 
         if(flag === 0){
             var image = new Image();
-            image.src = "../assets/svDriveGamepad.png"
+			image.src = "../assets/svDriveGamepad.png"
+			image.id = "controller-scheme"
 	        xboxScheme.appendChild(image);
 
             flag = 1;
@@ -160,6 +171,8 @@ function pollGamepads() {
 
 		updateHandler();
 	}
+		
+
 
     //when left axis stick moves right...
     else if(axesPressHandler(lsR > posDeadzone)){

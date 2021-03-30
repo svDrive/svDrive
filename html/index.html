@@ -21,24 +21,20 @@
         <div class="HUD-Navigation">
             <div class="HUD-Navigation-Element">
                 <div class="col-sm gamepad">
-                            <!-- <label>Controller Status</label> -->
-                            <svg id = "statusButton" width = "215" height = "50">
-                              <text fill = "rgb(121, 84, 105)" font-size = "22" x = "0" y = "30">Controller Status</text>
-                              <circle cx = "190" cy = "25" r = "15" fill = "red" />
-                            </svg>
-                            <p id = "picture">
-                            </p>
-                    </div>
-            </div>
-            <div class="HUD-Navigation-Element">
-                <!-- An 'img' is used below as an example. Ideally this can be any HTML element. -->
-                <img  src="../assets/NavigationCompass.png" class="img-thumbnail" alt="...">
+                        <!-- <label>Controller Status</label> -->
+                        <svg id = "statusButton" width = "215" height = "50">
+                            <text fill = "rgb(121, 84, 105)" font-size = "22" x = "0" y = "30">Controller Status</text>
+                            <circle cx = "190" cy = "25" r = "15" fill = "red" />
+                        </svg>
+                        <p id = "picture"> </p>
+                </div>
             </div>
         </div>
         <div class="HUD-Dashboard">
             <div class="HUD-Dashboard-Element">
-                <!-- An 'img' is used below as an example. Ideally this can be any HTML element. -->
-                <img src="../assets/Odometer.jpg" class="img-thumbnail" alt="...">
+                <div>
+                    <img src="../assets/transparentlogo.png" alt="SV Drive Logo">
+                </div>
             </div>
             <!-- The following HUD-Dashboard-Element will likely be moved into a Modal, to better represent a 'Menu'-->
             <div class="HUD-Dashboard-Element">
@@ -48,7 +44,7 @@
                     <button onclick="UpdateAPIKey()">Update Key</button>
                 </div>
                 <div>
-                    <label for="Starting-Location-Input">Staring Location</label>
+                    <label for="Starting-Location-Input">Starting Location</label>
                     <input id="Starting-Location-Input" type="text">
                     <button onclick="SetStartingLocation()">Go</button>
                 </div>
@@ -72,5 +68,6 @@
 <script src="../src/gamepad.js"></script>
 <!--  Uncomment below to enable Google Maps JavaScript API.  Provide your API key, in place of [YOURKEY] -->
 <!--
-    <script async src="https://maps.googleapis.com/maps/api/js?key=[YOURKEY]&callback=initMap"></script> 
---> 
+<script async src="https://maps.googleapis.com/maps/api/js?key=[YOURKEY]&callback=initMap"></script>
+-->
+
