@@ -25,9 +25,11 @@ class Display {
   
   setEventListeners() {
     document.getElementById("API-Key-Button").addEventListener("click", () => { this.setAPIKey();})
-    document.getElementById("Starting-Location-Button").addEventListener("click", () => {this.setStartingLocation()})
+    document.getElementById("Starting-Location-Button").addEventListener("click", () => { this.setStartingLocation() })
+    panorama.addListener("links_changed", () => {
+      console.log(panorama.getLinks());
+    })
  } 
-
 
   /* Updates the pre-existing panorama with new StreetView data. Specfically, a new position. */
   setNewPanorama(position) {
@@ -36,6 +38,7 @@ class Display {
 
   /* The callback being provided. Essentially, 'what to do' after the panorama data get's fetched. */
   processSVData(data, status) {
+    console.log(data);
     if (status === "OK") {
       const location = data.location;
       panorama.setPano(location.pano);
