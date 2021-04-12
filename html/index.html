@@ -40,13 +40,13 @@
             <div class="HUD-Dashboard-Element">
                 <div>
                     <label for="API-Key-Input">New API Key: </label>
-                    <input id="API-Key-Input" type="text">
+                    <input id="API-Key-Input" type="password">
                     <button id="API-Key-Button">Update Key</button>
                 </div>
                 <div>
                     <label for="Starting-Location-Input">Starting Location</label>
                     <input id="Starting-Location-Input" type="text">
-                    <button id="Starting-Location-Button">Go</button>
+                    <button id="Starting-Location-Button" onclick="validate()">Go</button>
                 </div>
             </div>
         </div>
@@ -64,8 +64,12 @@
 <!--
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script> 
 -->
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/validator/13.5.2/validator.min.js"></script>
 <script src="../src/panorama.js"></script>
 <script src="../src/gamepad.js"></script>
+<script src="../src/validatesanitize.js"></script>
+<script src="../src/connect.js"></script>
 <script src="../src/app.js"></script>
 <!--  Uncomment below to enable Google Maps JavaScript API.  Provide your API key, in place of [YOURKEY] -->
  <!-- 
