@@ -170,14 +170,13 @@ function pollGamepads() {
 		updateHandler();
 	}
 
-
 	else if (buttonPressHandler(12)) {
 		console.log("Dpad up pressed")
 		updateHandler();
 	}
 		
     else if (buttonPressHandler(13)) {
-		console.log("Dpad up pressed")
+		console.log("Dpad down pressed")
 		updateHandler();
 	}
 		
@@ -195,12 +194,14 @@ function pollGamepads() {
 		updateHandler();
     }
 
+    //when left axis stick moves up...
     else if(axesPressHandler(lsU < negDeadzone)){
 		console.log('lsU moved ' +axis);
         lsU = 0;
 		updateHandler();
     }
 
+    //when left axis stick moves down...
     else if(axesPressHandler(lsD > posDeadzone)){
 		console.log('lsD moved ' +axis);
         lsD = 0;
