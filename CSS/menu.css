@@ -88,6 +88,7 @@ body {
   border-top: 24px solid transparent;
   border-left: 11px solid white;
   border-bottom: 24px solid transparent;
+  border-radius: 0px;
 }
 
 .subMenu a:after {
@@ -107,6 +108,7 @@ body {
   border-top: 24px solid transparent;
   border-right: 11px solid white;
   border-bottom: 24px solid transparent;
+  border-radius: 0px;
 }
 
 .subMenu a:hover {
