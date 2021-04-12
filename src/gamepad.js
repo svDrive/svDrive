@@ -146,18 +146,8 @@ function pollGamepads() {
 		console.log(`Button 1 pressed`);
 		updateHandler();
 	}
-		
-	else if (buttonPressHandler(12)) {
-        var xboxScheme = document.getElementById("picture");
-		if (flag === 1) {
-			var image = document.getElementById("controller-scheme");
-	        xboxScheme.removeChild(image);
-            flag = 0;
-        }
-		updateHandler();
-	}
-		
-    else if (buttonPressHandler(13)) {
+
+    else if (buttonPressHandler(9)) {
         var xboxScheme = document.getElementById("picture");
 
         if(flag === 0){
@@ -167,12 +157,28 @@ function pollGamepads() {
 	        xboxScheme.appendChild(image);
 
             flag = 1;
+			updateHandler();
+			return;
+        }
+
+		if (flag === 1) {
+			var image = document.getElementById("controller-scheme");
+	        xboxScheme.removeChild(image);
+            flag = 0;
         }
 
 		updateHandler();
 	}
 		
-
+	else if (buttonPressHandler(12)) {
+		console.log("Dpad up pressed");
+		updateHandler();
+	}
+		
+    else if (buttonPressHandler(13)) {
+		console.log("Dpad down pressed");
+		updateHandler();
+	}
 
     //when left axis stick moves right...
     else if(axesPressHandler(lsR > posDeadzone)){
@@ -181,18 +187,21 @@ function pollGamepads() {
 		updateHandler();
     }
 
+    //when left axis stick moves left...
     else if(axesPressHandler(lsL < negDeadzone)){
 		console.log('lsL moved ' +axis);
         lsL = 0;
 		updateHandler();
     }
 
+    //when left axis stick moves up...
     else if(axesPressHandler(lsU < negDeadzone)){
 		console.log('lsU moved ' +axis);
         lsU = 0;
 		updateHandler();
     }
 
+    //when left axis stick moves down...
     else if(axesPressHandler(lsD > posDeadzone)){
 		console.log('lsD moved ' +axis);
         lsD = 0;
@@ -222,7 +231,6 @@ function pollGamepads() {
         rsD = 0;
 		updateHandler();
     }
-
 
 	else updateHandler();
 }
