@@ -1,0 +1,155 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  list-style: none;
+  text-decoration: none;
+}
+
+body {
+  background-color: white;
+}
+
+/* Container for Menu */
+.wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Menu */
+.menu {
+  width: 22vw;
+  display: block;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Menu Selections */
+.selection {
+  border-top: 1px solid rgb(78, 61, 73);
+  overflow: hidden;
+}
+
+/* Buttons */
+.button {
+  display: block;
+  padding: 15px 20px;
+  background-color: rgb(143, 112, 133);
+  color: white;
+  position: relative;
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid rgb(143, 112, 133);
+  right: 15px;
+  bottom: -10px;
+  z-index: 9;
+}
+
+/* Sub-Menu */
+.subMenu {
+  background: rgb(15, 19, 34);
+  overflow: hidden;
+  transition: max-height 1s;
+  max-height: 0;
+}
+
+.subMenu a {
+  display: block;
+  padding: 15px 20px;
+  color: white;
+  font-size: 14px;
+  border-bottom: 1px solid rgb(22, 30, 50);
+  position: relative;
+}
+
+.subMenu a:before {
+  content: "";
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.subMenu a:hover:before {
+  content: "";
+  position: absolute;
+  height: 0;
+  width: 6px;
+  left: 0;
+  top: 0;
+  opacity: 1;
+  border-top: 24px solid transparent;
+  border-left: 11px solid white;
+  border-bottom: 24px solid transparent;
+}
+
+.subMenu a:after {
+  content: "";
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.subMenu a:hover:after {
+  content: "";
+  position: absolute;
+  height: 0;
+  width: 6px;
+  right: 0px;
+  top: 0;
+  opacity: 1;
+  border-top: 24px solid transparent;
+  border-right: 11px solid white;
+  border-bottom: 24px solid transparent;
+}
+
+.subMenu a:hover {
+  background: rgb(15, 19, 34);
+  background: -moz-linear-gradient(
+    top,
+    rgb(15, 19, 34) 0%,
+    rgb(15, 19, 34) 50%,
+    rgb(22, 30, 50) 51%,
+    rgb(22, 30, 50) 100%
+  );
+  background: -webkit-linear-gradient(
+    top,
+    rgb(15, 19, 34) 0%,
+    rgb(15, 19, 34) 50%,
+    rgb(22, 30, 50) 51%,
+    rgb(22, 30, 50) 100%
+  );
+  background: linear-gradient(
+    to bottom,
+    rgb(15, 19, 34) 0%,
+    rgb(15, 19, 34) 50%,
+    rgb(22, 30, 50) 51%,
+    rgb(22, 30, 50) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgb(15, 19, 34)', endColorstr='rgb(22, 30, 50)',GradientType=0 );
+  transition: all 0.3s;
+  border-bottom: 1px solid rgb(22, 30, 50);
+}
+
+.subMenu a:last-child {
+  border: none;
+}
+
+.selection:target .subMenu {
+  max-height: 15em;
+}
+
+img[alt="logo"] {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: none;
+  width: 60%;
+  height: width;
+}
