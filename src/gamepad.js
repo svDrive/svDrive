@@ -93,13 +93,13 @@ function pollGamepads() {
 
 	//AXES
 	const leftStickXAxis = Math.abs(controller.axes[0]);
-	const LeftStickYAxis = Math.abs(controller.axes[1]);
+	const leftStickYAxis = Math.abs(controller.axes[1]);
 	const rightStickXAxis = Math.abs(controller.axes[2]);
 	const rightStickYAxis = Math.abs(controller.axes[3]);
     if(leftStickXAxis > deadzone){
 		console.log(controller.axes[0])
     }
-	if(LeftStickYAxis > deadzone){
+	if(leftStickYAxis > deadzone){
 		console.log(controller.axes[1])
     }
 	if(rightStickXAxis > deadzone){
