@@ -9,23 +9,21 @@ in Chrome Navigator. getGamepads needs a webkit prefix and the button values are
 //deadzone for axis controls
 let deadzone = 0.8;
 
-//getting the cirlce svg
+//circle indicating the status of the controller
 const controllerStatus = document.querySelector("circle");
 
 //flag to display the controller scheme or not
 let schemeFlag = 0;
 
-//setInterval id (used to clear interval in clearInterval())
+//setInterval id (used in clearInterval())
 let id= 0;
 
 window.addEventListener("gamepadconnected", (e) => {
-	//fills the circle with green on controller connect
 	controllerStatus.setAttribute("fill", "green");
 	id = setInterval(pollGamepads, 150);
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
-	//fills the circle with red on controller disconnect
 	controllerStatus.setAttribute("fill", "red");
 	clearInterval(id);
 });
@@ -48,8 +46,6 @@ Dpad D = 13
 Start = 9
 Options = 8
 */
-
-//TODO: Fix this experiment
 
 function pollGamepads() {
 	let controller= navigator.getGamepads()[0];
@@ -81,7 +77,6 @@ function pollGamepads() {
             schemeFlag = 1;
         }
 	}
-	//D-Pad
 	if (controller.buttons[12].pressed) {
 		console.log(`Button 12 pressed`);
 	} 
@@ -94,7 +89,6 @@ function pollGamepads() {
 	if (controller.buttons[15].pressed) {
 		console.log(`Button 15 pressed`);
 	} 
-	//Axes
     if(Math.abs(controller.axes[0]) > deadzone){ //left stick X axis
 		console.log(controller.axes[0])
     }
