@@ -53,9 +53,11 @@ Options = 8
 
 function pollGamepads() {
 	let controller= navigator.getGamepads()[0];
-	
-	if(controller == undefined)
+
+	if(controller == undefined){
 		clearInterval(id);
+		return 
+	}
 
 	if (controller.buttons[0].pressed) {
 		console.log(`Button 0 pressed`);
@@ -79,6 +81,20 @@ function pollGamepads() {
             schemeFlag = 1;
         }
 	}
+	//D-Pad
+	if (controller.buttons[12].pressed) {
+		console.log(`Button 12 pressed`);
+	} 
+	if (controller.buttons[13].pressed) {
+		console.log(`Button 13 pressed`);
+	} 
+	if (controller.buttons[14].pressed) {
+		console.log(`Button 14 pressed`);
+	} 
+	if (controller.buttons[15].pressed) {
+		console.log(`Button 15 pressed`);
+	} 
+	//Axes
     if(Math.abs(controller.axes[0]) > deadzone){ //left stick X axis
 		console.log(controller.axes[0])
     }
