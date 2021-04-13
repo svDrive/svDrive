@@ -6,113 +6,29 @@ in Chrome Navigator. getGamepads needs a webkit prefix and the button values are
  of buttons they are.
 */
 
-var controller = {};
-var buttons = [];
-var axis = [];
-
-//deadzone for axis, handler doesn't trip unless input > or < deadzone 
-var posDeadzone = 0.8;
-var negDeadzone = -0.8;
+//deadzone for axis controls
+let deadzone = 0.8;
 
 //getting the cirlce svg
-const statusButton = document.querySelector("circle");
+const controllerStatus = document.querySelector("circle");
 
-//axis directions
-var lsL = 0;
-var lsR = 0;
-var lsU = 0;
-var lsD = 0;
-var rsL = 0;
-var rsR = 0;
-var rsU = 0;
-var rsD = 0;
+//flag to display the controller scheme or not
+let schemeFlag = 0;
 
-var flag = 0;
+//setInterval id (used to clear interval in clearInterval())
+let id= 0;
 
 window.addEventListener("gamepadconnected", (e) => {
-	controller = e.gamepad;
-	console.log(e.gamepad);
-	gp = e.gamepad;
-	console.log(
-		"Gamepad connected at index %d\nName: %s\nNumber of Buttons: %d\nAvailable axes: %d",
-		gp.index,
-		gp.id,
-		gp.buttons.length,
-		gp.axes.length
-	);
-
 	//fills the circle with green on controller connect
-	statusButton.setAttribute("fill", "green");
-	pollGamepads();
+	controllerStatus.setAttribute("fill", "green");
+	id = setInterval(pollGamepads, 150);
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
-	gp = event.gamepad;
-	console.log("Gamepad %s disconnected from index %d", gp.id, gp.index);
-
 	//fills the circle with red on controller disconnect
-	statusButton.setAttribute("fill", "red");
+	controllerStatus.setAttribute("fill", "red");
+	clearInterval(id);
 });
-
-function updateHandler() {
-	buttons = [];
-	if (controller.buttons) {
-		for (var b = 0; b < controller.buttons.length; ++b) {
-			if (controller.buttons[b].pressed) {
-				console.log(b);
-				buttons.push(b);
-			}
-		}
-	}
-
-	if (controller.axes) {
-		for (var i = 0; i < controller.axes.length; ++i) {
-			if (
-				controller.axes[i] > posDeadzone ||
-				controller.axes[i] < negDeadzone
-			) {
-				console.log(controller.axes[i]);
-                axis.splice(0, 1, controller.axes);
-                lsR = axis[0][0];
-                lsL = axis[0][0];
-                lsU = axis[0][1];
-                lsD = axis[0][1];
-                rsR = axis[0][2];
-                rsL = axis[0][2];
-                rsU = axis[0][3];
-                rsD = axis[0][3];
-
-				console.log("axis[0][0] " + axis[0][0]);
-				console.log("axis[0][1] " + axis[0][1]);
-				console.log("axis[0][2] " + axis[0][2]);
-				console.log("axis[0][3] " + axis[0][3]);
-                return axis;
-			}
-		}
-	}
-}
-
-function buttonPressHandler(button) {
-	var press = false;
-	for (var i = 0; i < buttons.length; ++i) {
-		if (buttons[i] == button) {
-			press = true;
-		}
-	}
-	return press;
-}
-
-function axesPressHandler(axis) {
-	var touched = false;
-	if (axis > posDeadzone || axis < negDeadzone) {
-		touched = true;
-	}
-	return touched;
-}
-
-if (!("ongamepadconnected" in window)) {
-	setInterval(pollGamepads, 150);
-}
 
 /*Controller Scheme Xbox/PS4
 A/X = 0
@@ -133,96 +49,46 @@ Start = 9
 Options = 8
 */
 
-//do something with the presses
+//TODO: Fix this experiment
+
 function pollGamepads() {
+	let controller= navigator.getGamepads()[0];
+	
+	if(controller == undefined)
+		clearInterval(id);
 
-    //when button 0 is pressed...
-	if (buttonPressHandler(0)) {
+	if (controller.buttons[0].pressed) {
 		console.log(`Button 0 pressed`);
-		updateHandler();
 	} 
-    
-    else if (buttonPressHandler(1)) {
+    if (controller.buttons[1].pressed) {
 		console.log(`Button 1 pressed`);
-		updateHandler();
 	}
-		
-	else if (buttonPressHandler(12)) {
-        var xboxScheme = document.getElementById("picture");
-		if (flag === 1) {
-			var image = document.getElementById("controller-scheme");
+	if (controller.buttons[8].pressed || controller.buttons[9].pressed) {
+		let xboxScheme = document.getElementById("picture");
+		if (schemeFlag === 1) {
+			let image = document.getElementById("controller-scheme");
 	        xboxScheme.removeChild(image);
-            flag = 0;
+            schemeFlag = 0;
         }
-		updateHandler();
-	}
-		
-    else if (buttonPressHandler(13)) {
-        var xboxScheme = document.getElementById("picture");
-
-        if(flag === 0){
-            var image = new Image();
+		else{
+            let image = new Image();
 			image.src = "../assets/svDriveGamepad.png"
 			image.id = "controller-scheme"
 	        xboxScheme.appendChild(image);
 
-            flag = 1;
+            schemeFlag = 1;
         }
-
-		updateHandler();
 	}
-		
-
-
-    //when left axis stick moves right...
-    else if(axesPressHandler(lsR > posDeadzone)){
-		console.log('lsR moved ' +axis);
-        lsR = 0;
-		updateHandler();
+    if(Math.abs(controller.axes[0]) > deadzone){ //left stick X axis
+		console.log(controller.axes[0])
     }
-
-    else if(axesPressHandler(lsL < negDeadzone)){
-		console.log('lsL moved ' +axis);
-        lsL = 0;
-		updateHandler();
+	if(Math.abs(controller.axes[1]) > deadzone){ //left stick Y axis
+		console.log(controller.axes[1])
     }
-
-    else if(axesPressHandler(lsU < negDeadzone)){
-		console.log('lsU moved ' +axis);
-        lsU = 0;
-		updateHandler();
+	if(Math.abs(controller.axes[2]) > deadzone){ //right stick X axis
+		console.log(controller.axes[2])
     }
-
-    else if(axesPressHandler(lsD > posDeadzone)){
-		console.log('lsD moved ' +axis);
-        lsD = 0;
-		updateHandler();
+	if(Math.abs(controller.axes[3]) > deadzone){ //right stick Y axis
+		console.log(controller.axes[3])
     }
-
-    else if(axesPressHandler(rsR > posDeadzone)){
-		console.log('rsR moved ' +axis);
-        rsR = 0;
-		updateHandler();
-    }
-
-    else if(axesPressHandler(rsL < negDeadzone)){
-		console.log('rsL moved ' +axis);
-        rsL = 0;
-		updateHandler();
-    }
-
-    else if(axesPressHandler(rsU < negDeadzone)){
-		console.log('rsU moved ' +axis);
-        rsU = 0;
-		updateHandler();
-    }
-
-    else if(axesPressHandler(rsD > posDeadzone)){
-		console.log('rsD moved ' +axis);
-        rsD = 0;
-		updateHandler();
-    }
-
-
-	else updateHandler();
 }
