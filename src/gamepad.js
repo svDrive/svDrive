@@ -43,9 +43,11 @@ window.addEventListener("gamepadconnected", (e) => {
 
 	//fills the circle with green on controller connect
 	statusButton.setAttribute("fill", "green");
-	pollGamepads();
+	setInterval(testPollGamepad, 150);
+	// pollGamepads();
 });
 
+//TODO: add 'clearInterval()'
 window.addEventListener("gamepaddisconnected", (event) => {
 	gp = event.gamepad;
 	console.log("Gamepad %s disconnected from index %d", gp.id, gp.index);
@@ -110,9 +112,10 @@ function axesPressHandler(axis) {
 	return touched;
 }
 
-if (!("ongamepadconnected" in window)) {
-	setInterval(pollGamepads, 150);
-}
+// if (!("ongamepadconnected" in window)) { //NOTE: this method of checking if something is connected does not always work
+// 	setInterval(pollGamepads, 150);
+// 	setInterval(testPollGamepad, 150);
+// }
 
 /*Controller Scheme Xbox/PS4
 A/X = 0
@@ -135,7 +138,6 @@ Options = 8
 
 //do something with the presses
 function pollGamepads() {
-
     //when button 0 is pressed...
 	if (buttonPressHandler(0)) {
 		console.log(`Button 0 pressed`);
@@ -225,4 +227,34 @@ function pollGamepads() {
 
 
 	else updateHandler();
+}
+
+//PROTOTYPING
+function testPollGamepad() {
+	//TODO: revise controller initialization
+	let controllers = navigator.getGamepads();
+	let controller = controllers[0]; 
+	//Note: index 1 is left stick: + BACKWARD, - FORWARD
+	if(Math.abs(controller.axes[1]) > 0.8){ 
+		let heading;
+		let links= display.links;
+
+		if(controller.axes[1] > 0) heading= display.heading - 180;
+		else heading = display.heading;
+
+		for(let i = 0; i < links.length; ++i){
+			if(heading - 45 < links[i].heading && heading + 45 > links[i].heading) {//TODO: maybe revise to use the CLOSEST link?
+				let data= {
+					location: {
+						pano: `${links[i].pano}`,
+					}
+				}
+				display.processSVData(data, "OK");
+				return;
+			}
+		}
+	}
+	if(controller.buttons[2].pressed === true) {
+
+	}
 }

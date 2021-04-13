@@ -1,9 +1,11 @@
 let panorama;
+
 let panoDiv = document.getElementById("pano");
 
 class Display {
-
   constructor(startingLocation) {
+    this.heading= 180;
+    this.links= [];
     this.sv = new google.maps.StreetViewService();
     panorama = new google.maps.StreetViewPanorama(panoDiv);
     this.geocoder = new google.maps.Geocoder();
@@ -27,7 +29,8 @@ class Display {
     document.getElementById("API-Key-Button").addEventListener("click", () => { this.setAPIKey();})
     document.getElementById("Starting-Location-Button").addEventListener("click", () => { this.setStartingLocation() })
     panorama.addListener("links_changed", () => {
-      console.log(panorama.getLinks());
+      // console.log(panorama.getLinks());
+      this.links= panorama.getLinks();
     })
  } 
 
@@ -42,7 +45,7 @@ class Display {
     if (status === "OK") {
       const location = data.location;
       panorama.setPano(location.pano);
-      panorama.setPov({ heading: 180, pitch: 0 });
+      panorama.setPov({ heading: this.heading, pitch: 0 });
       panorama.setVisible(true);
     } else {
       console.error("Street View data not found for this location.");
