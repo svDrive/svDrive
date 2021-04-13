@@ -201,24 +201,28 @@ function pollGamepads() {
 
     else if(axesPressHandler(rsR > posDeadzone)){
 		console.log('rsR moved ' +axis);
+		panorama.setPov({heading: 270, pitch: 0});
         rsR = 0;
 		updateHandler();
     }
 
     else if(axesPressHandler(rsL < negDeadzone)){
 		console.log('rsL moved ' +axis);
+		panorama.setPov({heading: 90, pitch: 0});
         rsL = 0;
 		updateHandler();
     }
 
     else if(axesPressHandler(rsU < negDeadzone)){
 		console.log('rsU moved ' +axis);
+		panorama.setPov({heading: 90, pitch: 40});
         rsU = 0;
 		updateHandler();
     }
 
     else if(axesPressHandler(rsD > posDeadzone)){
 		console.log('rsD moved ' +axis);
+		panorama.setPov({heading: 90, pitch: -40});
         rsD = 0;
 		updateHandler();
     }
