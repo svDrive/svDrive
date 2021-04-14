@@ -102,7 +102,27 @@ function pollGamepads() {
 		console.log(controller.axes[0])
     }
 	if(leftStickYAxis > deadzone){
-		console.log(controller.axes[1])
+		let heading;
+		let links= _panorama.getLinks();
+
+		if(controller.axes[1] > 0) heading= _display.heading - 180;
+		else heading = _display.heading;
+
+		let minDifferenceIndex;
+		let minDifference= 360;
+		for(let i = 0; i < links.length; ++i){
+			let diff= Math.abs(heading - links[i].heading);
+			if(diff < minDifference){
+				minDifference= diff;
+				minDifferenceIndex= i;
+			}
+		}
+		_display.processSVData({ 
+			location: {
+				pano: `${links[minDifferenceIndex].pano}`,
+			}
+		}, "OK");
+		return;
     }
 	if(rightStickXAxis > deadzone){
 		console.log(controller.axes[2])
