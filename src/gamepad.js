@@ -23,7 +23,6 @@ window.addEventListener("gamepadconnected", (e) => {
 	id = setInterval(pollGamepads, 150);
 });
 
-//TODO: add 'clearInterval()'
 window.addEventListener("gamepaddisconnected", (event) => {
 	controllerStatus.setAttribute("fill", "red");
 	clearInterval(id);
