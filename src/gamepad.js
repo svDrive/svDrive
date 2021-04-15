@@ -91,6 +91,7 @@ function pollGamepads() {
 		console.log(`Button 15 pressed`);
 	}
 
+
 	//AXES
 	const leftStickXAxis = Math.abs(controller.axes[0]);
 	const leftStickYAxis = Math.abs(controller.axes[1]);
@@ -104,8 +105,16 @@ function pollGamepads() {
     }
 	if(rightStickXAxis > deadzone){
 		console.log(controller.axes[2])
+		
+		_display.heading += controller.axes[2]*5;
+		_panorama.setPov({heading: _display.heading, pitch: _display.pitch})
+
     }
 	if(rightStickYAxis > deadzone){
 		console.log(controller.axes[3])
+		_display.pitch -= controller.axes[3]*5;
+		if (_display.pitch < 90 && _display.pitch > -90) {
+			_panorama.setPov({heading: _display.heading, pitch: _display.pitch})
+		}
     }
 }

@@ -3,6 +3,7 @@ let panoDiv = document.getElementById("pano");
 class Display {
   constructor(startingLocation) {
     this.heading = 180;
+    this.pitch = 0;
     this.sv = new google.maps.StreetViewService();
     _panorama = new google.maps.StreetViewPanorama(panoDiv);
     this.geocoder = new google.maps.Geocoder();
