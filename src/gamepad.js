@@ -116,5 +116,11 @@ function pollGamepads() {
 		if (_display.pitch < 90 && _display.pitch > -90) {
 			_panorama.setPov({heading: _display.heading, pitch: _display.pitch})
 		}
+		if (_display.pitch > 90) {
+			_display.pitch = 90
+		}
+		if (_display.pitch < -90) {
+			_display.pitch = -90
+		}
     }
 }
