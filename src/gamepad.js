@@ -73,7 +73,20 @@ function pollGamepads() {
 
 
 	//Map a button to the close ref to close the according menu
-	
+
+
+	const mainMenu = document.getElementById("drive2");
+	mainMenu.addEventListener("click", (e) => {
+		e.preventDefault();
+		console.log("button pressed");
+		mainMenu.style.fontSize = "large";
+		mainMenu.style.background = "#ff0000";
+	})
+
+	if (controller.buttons[1].pressed) {
+		console.log(`Button 1 pressed`);
+	} 
+
 	if (controller.buttons[12].pressed) {
 		console.log(`Button 12 pressed`);
 	} 
