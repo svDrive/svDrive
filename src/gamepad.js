@@ -92,6 +92,7 @@ function pollGamepads() {
 	}
 
 
+<<<<<<< HEAD
 	//AXES
 	const leftStickXAxis = Math.abs(controller.axes[0]);
 	const leftStickYAxis = Math.abs(controller.axes[1]);
@@ -102,6 +103,20 @@ function pollGamepads() {
     }
 	if(leftStickYAxis > deadzone){
 		console.log(controller.axes[1])
+=======
+    else if(axesPressHandler(rsR > posDeadzone)){
+		console.log('rsR moved ' +axis);
+		panorama.setPov({heading: 270, pitch: 0});
+        rsR = 0;
+		updateHandler();
+    }
+
+    else if(axesPressHandler(rsL < negDeadzone)){
+		console.log('rsL moved ' +axis);
+		panorama.setPov({heading: 90, pitch: 0});
+        rsL = 0;
+		updateHandler();
+>>>>>>> 9ce6b5a (thumbstick lookaround POC)
     }
 	if(rightStickXAxis > deadzone){
 		console.log(controller.axes[2])
@@ -109,6 +124,7 @@ function pollGamepads() {
 		_display.heading += controller.axes[2]*5;
 		_panorama.setPov({heading: _display.heading, pitch: _display.pitch})
 
+<<<<<<< HEAD
     }
 	if(rightStickYAxis > deadzone){
 		console.log(controller.axes[3])
@@ -116,5 +132,19 @@ function pollGamepads() {
 		if (_display.pitch < 90 && _display.pitch > -90) {
 			_panorama.setPov({heading: _display.heading, pitch: _display.pitch})
 		}
+=======
+    else if(axesPressHandler(rsU < negDeadzone)){
+		console.log('rsU moved ' +axis);
+		panorama.setPov({heading: 90, pitch: 40});
+        rsU = 0;
+		updateHandler();
+    }
+
+    else if(axesPressHandler(rsD > posDeadzone)){
+		console.log('rsD moved ' +axis);
+		panorama.setPov({heading: 90, pitch: -40});
+        rsD = 0;
+		updateHandler();
+>>>>>>> 9ce6b5a (thumbstick lookaround POC)
     }
 }
