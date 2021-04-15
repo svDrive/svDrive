@@ -70,6 +70,10 @@ function pollGamepads() {
             isSchemeOn = true;
         }
 	}
+
+
+	//Map a button to the close ref to close the according menu
+	
 	if (controller.buttons[12].pressed) {
 		console.log(`Button 12 pressed`);
 	} 
