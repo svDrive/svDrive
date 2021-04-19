@@ -41,9 +41,9 @@ Options = 8
 
 //Determine html page we're on
 function getPath() {
-	if (window.location.pathname === "/svDrive/html/index.html") {
+	if (window.location.pathname === "/html/index.html") {
 		return "index";
-	} else if (window.location.pathname === "/svDrive/html/drive.html") {
+	} else if (window.location.pathname === "/html/drive.html") {
 		return "drive";
 	} else {
 		alert("unknow path");
@@ -52,16 +52,23 @@ function getPath() {
 }
 
 //MMD: Main Menu Drive!
-let MM = document.getElementById("MM");
+//
+let MM = document.getElementById("1");
 let MMD = document.getElementById("MMD");
 let MMS2 = document.getElementById("MMS2");
-let API = document.getElementById("API");
+let API = document.getElementById("0");
 let EK = document.getElementById("EK");
 let AK = document.getElementById("AK");
 let option;
 let loadedMenu = false;
 let path = getPath();
-
+let botidx=1;
+let hrefidx=0;
+let botlen=5;
+let hreflen=2;
+var preidx=1;
+let prebot;
+let curbot;
 function pollGamepads() {
 	let controller = navigator.getGamepads()[0];
 
@@ -85,7 +92,10 @@ function pollGamepads() {
 
 		//Dpad Down
 		if (controller.buttons[13].pressed) {
+			//set flag or Dpadchange function , 0 is go down
+			Dpadchange(0);
 			//came from Main Menu
+			/*
 			if (option === MM) {
 				option.style.fontSize = "medium";
 
@@ -110,12 +120,15 @@ function pollGamepads() {
 				console.log("option changed to AK");
 				option = AK;
 				option.style.fontSize = "large";
-			}
+			}*/
 		}
 
 		//Dpad UP
 		else if (controller.buttons[12].pressed) {
+			//set flag or Dpadchange function , 0 is go up
+			Dpadchange(1);
 			//came from API option
+			/*
 			if (option === API) {
 				option.style.fontSize = "medium";
 
@@ -140,9 +153,36 @@ function pollGamepads() {
 				console.log("option changed to EK");
 				option = EK;
 				option.style.fontSize = "large";
-			}
+			}*/
 		}
 
+		
+		else if(controller.buttons[0].pressed){
+			path = getPath();
+			window.location.href=curbot.href;
+		}
+		else if (controller.buttons[1].pressed) {
+			window.location.href="#";
+			/*
+			if (option === MMD || option === MMS2) {
+				MMD.style.fontSize = "medium";
+				MMS2.style.fontSize = "medium";
+				console.log("option changed to MM");
+				option = MM;
+				option.style.fontSize = "large";
+				window.location.href = "#";
+			}
+
+			if (option === EK || option === AK) {
+				EK.style.fontSize = "medium";
+				AK.style.fontSize = "medium";
+				console.log("option changed to API");
+				option = API;
+				option.style.fontSize = "large";
+				window.location.href = "#";
+			}*/
+		}
+		/*
 		//Open Main Menu
 		else if (controller.buttons[0].pressed && option === MM) {
 			path = getPath();
@@ -167,7 +207,7 @@ function pollGamepads() {
 			console.log("option changed to MMD");
 			option = MMD;
 			option.style.fontSize = "large";
-		}
+		}*/
 
 		//Close the menu when circle is pressed
 		else if (controller.buttons[1].pressed) {
@@ -272,4 +312,22 @@ function pollGamepads() {
 			console.log(controller.axes[3]);
 		}
 	}
+}
+
+function Dpadchange(flag){
+	//preidx: indx of prenode 
+	preidx=botidx;
+	if(flag==1)
+		botidx+=1;
+	else
+		botidx-=1;
+	var trueidx=Math.abs(botidx)%botlen;
+	prebot=document.getElementById((Math.abs(preidx)%botlen).toString());
+	curbot=document.getElementById(trueidx.toString());
+	prebot.style.fontSize ="medium";
+	curbot.style.fontSize = "large";
+}
+
+function OpenBot(){
+
 }
