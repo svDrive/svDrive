@@ -56,19 +56,25 @@ function getPath() {
 let MM = document.getElementById("1");
 let MMD = document.getElementById("MMD");
 let MMS2 = document.getElementById("MMS2");
-let API = document.getElementById("0");
+let API = document.getElementById("2");
 let EK = document.getElementById("EK");
 let AK = document.getElementById("AK");
 let option;
 let loadedMenu = false;
 let path = getPath();
 let botidx=1;
-let hrefidx=0;
-let botlen=5;
-let hreflen=2;
 var preidx=1;
+let hrefidx=0;
+let phrefidx=0;
+let botlen=5;
+
 let prebot;
 let curbot;
+let preurl;
+let cururl;
+let subMenulst=document.getElementsByClassName("subMenu");
+let subMenuflag=0;
+let urllist=[];
 function pollGamepads() {
 	let controller = navigator.getGamepads()[0];
 
@@ -93,7 +99,10 @@ function pollGamepads() {
 		//Dpad Down
 		if (controller.buttons[13].pressed) {
 			//set flag or Dpadchange function , 0 is go down
-			Dpadchange(0);
+			if(subMenuflag==1)
+				Urlchange(0);
+			else
+				Dpadchange(0);
 			//came from Main Menu
 			/*
 			if (option === MM) {
@@ -126,7 +135,10 @@ function pollGamepads() {
 		//Dpad UP
 		else if (controller.buttons[12].pressed) {
 			//set flag or Dpadchange function , 0 is go up
-			Dpadchange(1);
+			if(subMenuflag==1)
+				Urlchange(1);
+			else
+				Dpadchange(1);
 			//came from API option
 			/*
 			if (option === API) {
@@ -158,10 +170,31 @@ function pollGamepads() {
 
 		
 		else if(controller.buttons[0].pressed){
+			if(subMenuflag==1)
+				window.location.href=urllist[Math.abs(hrefidx)%urllist.length].href;
+			else
+			if(subMenuflag==0)
+				subMenuflag=1;
 			path = getPath();
 			window.location.href=curbot.href;
+			//console.log(subMenulst.length);
+			var subMenuidx;
+			subMenuidx=(Math.abs(botidx)-1)%5;
+
+			//console.log(subMenulst[subMenuidx]);
+			//console.log(subMenulst[subMenuidx].childNodes.length);
+			
+			for(var i=0;i<subMenulst[subMenuidx].childNodes.length;i++){
+				if(subMenulst[subMenuidx].childNodes[i].nodeType==1){
+					urllist.push(subMenulst[subMenuidx].childNodes[i]);
+					//console.log(subMenulst[subMenuidx].childNodes[i]);
+				}
+			}
+			
 		}
 		else if (controller.buttons[1].pressed) {
+			urllist.length=0;
+			subMenuflag=0;
 			window.location.href="#";
 			/*
 			if (option === MMD || option === MMS2) {
@@ -210,6 +243,7 @@ function pollGamepads() {
 		}*/
 
 		//Close the menu when circle is pressed
+		/*
 		else if (controller.buttons[1].pressed) {
 			if (option === MMD || option === MMS2) {
 				MMD.style.fontSize = "medium";
@@ -229,7 +263,7 @@ function pollGamepads() {
 				window.location.href = "#";
 			}
 		}
-
+		*/
 		//BUTTONS
 		if (controller.buttons[8].pressed || controller.buttons[9].pressed) {
 			let xboxScheme = document.getElementById("picture");
@@ -321,13 +355,25 @@ function Dpadchange(flag){
 		botidx+=1;
 	else
 		botidx-=1;
-	var trueidx=Math.abs(botidx)%botlen;
 	prebot=document.getElementById((Math.abs(preidx)%botlen).toString());
-	curbot=document.getElementById(trueidx.toString());
+	curbot=document.getElementById((Math.abs(botidx)%botlen).toString());
 	prebot.style.fontSize ="medium";
 	curbot.style.fontSize = "large";
 }
 
-function OpenBot(){
-
+function Urlchange(flag){
+	//preidx: indx of prenode 
+	phrefidx=hrefidx;
+	if(flag==1)
+		hrefidx+=1;
+	else
+		hrefidx-=1;
+	//console.log("prehref:"+phrefidx);
+	//console.log("curhref:"+hrefidx);
+	preurl=urllist[Math.abs(phrefidx)%urllist.length];
+	cururl=urllist[Math.abs(hrefidx)%urllist.length];
+	preurl.style.fontSize ="medium";
+	cururl.style.fontSize = "large";
 }
+
+
