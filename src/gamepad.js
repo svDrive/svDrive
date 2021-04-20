@@ -97,8 +97,32 @@ function pollGamepads() {
 	const leftStickYAxis = Math.abs(controller.axes[1]);
 	const rightStickXAxis = Math.abs(controller.axes[2]);
 	const rightStickYAxis = Math.abs(controller.axes[3]);
+	//TODO: add a minimum width for all turns
     if(leftStickXAxis > deadzone){
-		console.log(controller.axes[0])
+		let heading;
+		let links= _panorama.getLinks();
+		console.log(links);
+
+		if(controller.axes[1] > 0) heading= _display.heading + 90;
+		else heading = _display.heading - 90;
+
+		let minDifferenceIndex;
+		let minDifference= 360;
+		for(let i = 0; i < links.length; ++i){
+			let diff= Math.abs(heading - links[i].heading);
+			if(diff < minDifference && diff < 45){
+				minDifference= diff;
+				minDifferenceIndex= i;
+			}
+		}
+		if(minDifferenceIndex === undefined) return; 
+		_display.heading = links[minDifferenceIndex].heading;
+		_display.processSVData({ 
+			location: {
+				pano: `${links[minDifferenceIndex].pano}`,
+			}
+		}, "OK");
+		return;
     }
 	if(leftStickYAxis > deadzone){
 		let heading;
