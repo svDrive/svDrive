@@ -106,21 +106,21 @@ function pollGamepads() {
 	if(rightStickXAxis > deadzone){
 		console.log(controller.axes[2])
 		
-		_display.heading += controller.axes[2]*5;
+		_display.heading += controller.axes[2]*10;
 		_panorama.setPov({heading: _display.heading, pitch: _display.pitch})
 
     }
 	if(rightStickYAxis > deadzone){
 		console.log(controller.axes[3])
-		_display.pitch -= controller.axes[3]*5;
-		if (_display.pitch < 90 && _display.pitch > -90) {
-			_panorama.setPov({heading: _display.heading, pitch: _display.pitch})
+		let pitch = _display.pitch-controller.axes[3]*10;
+		if (pitch > 90) {
+			pitch = 90
 		}
-		if (_display.pitch > 90) {
-			_display.pitch = 90
+		if (pitch < -90) {
+			pitch = -90
 		}
-		if (_display.pitch < -90) {
-			_display.pitch = -90
-		}
+		_display.pitch = pitch;
+		_panorama.setPov({heading: _display.heading, pitch: _display.pitch})
+		
     }
 }
