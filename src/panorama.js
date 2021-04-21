@@ -39,7 +39,8 @@ class Display {
     if (status === "OK") {
       const location = data.location;
       _panorama.setPano(location.pano);
-      _panorama.setPov({ heading: this.heading, pitch: 0 });
+      this.pitch = 0;
+      _panorama.setPov({ heading: this.heading, pitch: this.pitch });
       _panorama.setVisible(true);
     } else {
       console.error("Street View data not found for this location.");
