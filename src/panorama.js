@@ -3,6 +3,7 @@ let panoDiv = document.getElementById("pano");
 class Display {
   constructor(startingLocation) {
     this.heading = 180;
+    this.pitch = 0;
     this.sv = new google.maps.StreetViewService();
     _panorama = new google.maps.StreetViewPanorama(panoDiv);
     this.geocoder = new google.maps.Geocoder();
@@ -38,7 +39,8 @@ class Display {
     if (status === "OK") {
       const location = data.location;
       _panorama.setPano(location.pano);
-      _panorama.setPov({ heading: this.heading, pitch: 0 });
+      this.pitch = 0;
+      _panorama.setPov({ heading: this.heading, pitch: this.pitch });
       _panorama.setVisible(true);
     } else {
       console.error("Street View data not found for this location.");
