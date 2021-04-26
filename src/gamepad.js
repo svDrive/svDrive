@@ -41,9 +41,9 @@ Options = 8
 
 //Determine html page we're on
 function getPath() {
-	if (window.location.pathname === "/html/index.html") {
+	if (window.location.pathname === "/html/index.html" || window.location.pathname === "/svDrive/html/index.html") {
 		return "index";
-	} else if (window.location.pathname === "/html/drive.html") {
+	} else if (window.location.pathname === "/html/drive.html" || window.location.pathname === "/svDrive/html/drive.html") {
 		return "drive";
 	} else {
 		alert("unknow path");
@@ -52,7 +52,6 @@ function getPath() {
 }
 
 //MMD: Main Menu Drive!
-//
 let MM = document.getElementById("1");
 let MMD = document.getElementById("MMD");
 let MMS2 = document.getElementById("MMS2");
@@ -63,7 +62,7 @@ let option;
 let loadedMenu = false;
 let path = getPath();
 let botidx=2001;
-var preidx=2001;
+let preidx=2001;
 let hrefidx=0;
 let phrefidx=0;
 let botlen=5;
@@ -75,9 +74,9 @@ let cururl;
 let subMenulst=document.getElementsByClassName("subMenu");
 let subMenuflag=0;
 let urllist=[];
+
 function pollGamepads() {
 	let controller = navigator.getGamepads()[0];
-
 
 	if (controller == undefined) {
 		clearInterval(id);
@@ -88,7 +87,6 @@ function pollGamepads() {
 	if (path === "index") {
 		if (loadedMenu === false) {
 			alert("Dpad up and Dpad down to move, x/a is select, and circle/b closes the accordian");
-			console.log("option changed to MM");
 			option = MM;
 			option.style.fontSize = "large";
 			//close the accordian menu
@@ -103,33 +101,6 @@ function pollGamepads() {
 				Urlchange(0);
 			else
 				Dpadchange(0);
-			//came from Main Menu
-			/*
-			if (option === MM) {
-				option.style.fontSize = "medium";
-
-				console.log("option changed to API");
-				option = API;
-				option.style.fontSize = "large";
-			}
-
-			//we know we came from Main Menu Drive button
-			if (option === MMD) {
-				option.style.fontSize = "medium";
-
-				console.log("option changed to MMS2");
-				option = MMS2;
-				option.style.fontSize = "large";
-			}
-
-			//Came From Enter Key
-			if (option === EK) {
-				option.style.fontSize = "medium";
-
-				console.log("option changed to AK");
-				option = AK;
-				option.style.fontSize = "large";
-			}*/
 		}
 
 		//Dpad UP
@@ -139,41 +110,11 @@ function pollGamepads() {
 				Urlchange(1);
 			else
 				Dpadchange(1);
-			//came from API option
-			/*
-			if (option === API) {
-				option.style.fontSize = "medium";
-
-				console.log("option changed to MM");
-				option = MM;
-				option.style.fontSize = "large";
-			}
-
-			//we came from Main Menu Selection 2
-			if (option === MMS2) {
-				option.style.fontSize = "medium";
-
-				console.log("option changed to MMD");
-				option = MMD;
-				option.style.fontSize = "large";
-			}
-
-			//Came from AK
-			if (option === AK) {
-				option.style.fontSize = "medium";
-
-				console.log("option changed to EK");
-				option = EK;
-				option.style.fontSize = "large";
-			}*/
 		}
-
 		
 		else if(controller.buttons[0].pressed){
 			var subMenuidx;
 			subMenuidx=(Math.abs(botidx)-1)%5;			
-			//console.log(subMenulst[subMenuidx]);
-			//console.log(subMenulst[subMenuidx].childNodes.length);
 			if(subMenuflag==1)
 				window.location.href=urllist[Math.abs(hrefidx)%urllist.length].href;
 			else
@@ -181,7 +122,6 @@ function pollGamepads() {
 				for(var i=0;i<subMenulst[subMenuidx].childNodes.length;i++){
 					if(subMenulst[subMenuidx].childNodes[i].nodeType==1){
 						urllist.push(subMenulst[subMenuidx].childNodes[i]);
-						//console.log(subMenulst[subMenuidx].childNodes[i]);
 					}
 				}
 				subMenuflag=1;
@@ -191,12 +131,8 @@ function pollGamepads() {
 				hrefidx+=urllist.length*200;
 				phrefidx+=urllist.length*200;	
 			}
-			
-			//console.log(subMenulst.length);
-			
-			
-			
 		}
+
 		else if (controller.buttons[1].pressed) {
 			urllist.length=0;
 			subMenuflag=0;
@@ -204,74 +140,8 @@ function pollGamepads() {
 			cururl.style.fontSize = "medium";
 			hrefidx=0;
 			phrefidx=0;		
-			/*
-			if (option === MMD || option === MMS2) {
-				MMD.style.fontSize = "medium";
-				MMS2.style.fontSize = "medium";
-				console.log("option changed to MM");
-				option = MM;
-				option.style.fontSize = "large";
-				window.location.href = "#";
-			}
-
-			if (option === EK || option === AK) {
-				EK.style.fontSize = "medium";
-				AK.style.fontSize = "medium";
-				console.log("option changed to API");
-				option = API;
-				option.style.fontSize = "large";
-				window.location.href = "#";
-			}*/
-		}
-		/*
-		//Open Main Menu
-		else if (controller.buttons[0].pressed && option === MM) {
-			path = getPath();
-			window.location.href = "#mainMenu";
-			console.log("option changed to MMD");
-			option = MMD;
-			option.style.fontSize = "large";
 		}
 
-		//Open API Menu
-		else if (controller.buttons[0].pressed && option === API) {
-		 	path = getPath();
-			window.location.href = "#apiKey";
-			console.log("option changed to API");
-			option = EK;
-			option.style.fontSize = "large";
-		}
-
-		//open the drive page
-		else if (controller.buttons[0].pressed && option === MMD) {
-			window.location.href = "drive.html";
-			console.log("option changed to MMD");
-			option = MMD;
-			option.style.fontSize = "large";
-		}*/
-
-		//Close the menu when circle is pressed
-		/*
-		else if (controller.buttons[1].pressed) {
-			if (option === MMD || option === MMS2) {
-				MMD.style.fontSize = "medium";
-				MMS2.style.fontSize = "medium";
-				console.log("option changed to MM");
-				option = MM;
-				option.style.fontSize = "large";
-				window.location.href = "#";
-			}
-
-			if (option === EK || option === AK) {
-				EK.style.fontSize = "medium";
-				AK.style.fontSize = "medium";
-				console.log("option changed to API");
-				option = API;
-				option.style.fontSize = "large";
-				window.location.href = "#";
-			}
-		}
-		*/
 		//BUTTONS
 		if (controller.buttons[8].pressed || controller.buttons[9].pressed) {
 			let xboxScheme = document.getElementById("picture");
@@ -310,7 +180,6 @@ function pollGamepads() {
 
 	//Do things if on the drive page
 	if (path === "drive") {
-		console.log("in drive path");
 		//BUTTONS
 		if (controller.buttons[0].pressed) {
 			console.log(`Button 0 pressed`);
@@ -376,8 +245,6 @@ function Urlchange(flag){
 		hrefidx-=1;
 	else
 		hrefidx+=1;
-	//console.log("prehref:"+phrefidx);
-	//console.log("curhref:"+hrefidx);
 	preurl=urllist[Math.abs(phrefidx)%urllist.length];
 	cururl=urllist[Math.abs(hrefidx)%urllist.length];
 	preurl.style.fontSize ="medium";
