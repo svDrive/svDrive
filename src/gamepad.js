@@ -96,7 +96,7 @@ function pollGamepads() {
 		//Dpad Down
 		if (controller.buttons[13].pressed) {
 			//set flag or Dpadchange function , 0 is go down
-			if(subMenuflag==1)
+			if(subMenuflag === 1)
 				Urlchange(0);
 			else
 				Dpadchange(0);
@@ -105,7 +105,7 @@ function pollGamepads() {
 		//Dpad UP
 		else if (controller.buttons[12].pressed) {
 			//set flag or Dpadchange function , 0 is go up
-			if(subMenuflag==1)
+			if(subMenuflag === 1)
 				Urlchange(1);
 			else
 				Dpadchange(1);
@@ -114,10 +114,10 @@ function pollGamepads() {
 		else if(controller.buttons[0].pressed){
 			var subMenuidx;
 			subMenuidx=(Math.abs(botidx)-1)%5;			
-			if(subMenuflag==1)
+			if(subMenuflag === 1)
 				window.location.href=urllist[Math.abs(hrefidx)%urllist.length].href;
 			else
-			if(subMenuflag==0){
+			if(subMenuflag === 0){
 				for(var i=0;i<subMenulst[subMenuidx].childNodes.length;i++){
 					if(subMenulst[subMenuidx].childNodes[i].nodeType==1){
 						urllist.push(subMenulst[subMenuidx].childNodes[i]);
