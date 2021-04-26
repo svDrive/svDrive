@@ -86,7 +86,6 @@ function pollGamepads() {
 	//Do things if on the index page
 	if (path === "index") {
 		if (loadedMenu === false) {
-			alert("Dpad up and Dpad down to move, x/a is select, and circle/b closes the accordian");
 			option = MM;
 			option.style.fontSize = "large";
 			//close the accordian menu
