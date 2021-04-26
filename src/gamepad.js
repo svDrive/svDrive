@@ -62,8 +62,8 @@ let AK = document.getElementById("AK");
 let option;
 let loadedMenu = false;
 let path = getPath();
-let botidx=1;
-var preidx=1;
+let botidx=2001;
+var preidx=2001;
 let hrefidx=0;
 let phrefidx=0;
 let botlen=5;
@@ -170,32 +170,40 @@ function pollGamepads() {
 
 		
 		else if(controller.buttons[0].pressed){
+			var subMenuidx;
+			subMenuidx=(Math.abs(botidx)-1)%5;			
+			//console.log(subMenulst[subMenuidx]);
+			//console.log(subMenulst[subMenuidx].childNodes.length);
 			if(subMenuflag==1)
 				window.location.href=urllist[Math.abs(hrefidx)%urllist.length].href;
 			else
-			if(subMenuflag==0)
-				subMenuflag=1;
-			path = getPath();
-			window.location.href=curbot.href;
-			//console.log(subMenulst.length);
-			var subMenuidx;
-			subMenuidx=(Math.abs(botidx)-1)%5;
-
-			//console.log(subMenulst[subMenuidx]);
-			//console.log(subMenulst[subMenuidx].childNodes.length);
-			
-			for(var i=0;i<subMenulst[subMenuidx].childNodes.length;i++){
-				if(subMenulst[subMenuidx].childNodes[i].nodeType==1){
-					urllist.push(subMenulst[subMenuidx].childNodes[i]);
-					//console.log(subMenulst[subMenuidx].childNodes[i]);
+			if(subMenuflag==0){
+				for(var i=0;i<subMenulst[subMenuidx].childNodes.length;i++){
+					if(subMenulst[subMenuidx].childNodes[i].nodeType==1){
+						urllist.push(subMenulst[subMenuidx].childNodes[i]);
+						//console.log(subMenulst[subMenuidx].childNodes[i]);
+					}
 				}
+				subMenuflag=1;
+				cururl=urllist[0];
+				cururl.style.fontSize = "large";
+				window.location.href=curbot.href;
+				hrefidx+=urllist.length*200;
+				phrefidx+=urllist.length*200;	
 			}
+			
+			//console.log(subMenulst.length);
+			
+			
 			
 		}
 		else if (controller.buttons[1].pressed) {
 			urllist.length=0;
 			subMenuflag=0;
 			window.location.href="#";
+			cururl.style.fontSize = "medium";
+			hrefidx=0;
+			phrefidx=0;		
 			/*
 			if (option === MMD || option === MMS2) {
 				MMD.style.fontSize = "medium";
@@ -352,9 +360,9 @@ function Dpadchange(flag){
 	//preidx: indx of prenode 
 	preidx=botidx;
 	if(flag==1)
-		botidx+=1;
-	else
 		botidx-=1;
+	else
+		botidx+=1;
 	prebot=document.getElementById((Math.abs(preidx)%botlen).toString());
 	curbot=document.getElementById((Math.abs(botidx)%botlen).toString());
 	prebot.style.fontSize ="medium";
@@ -365,9 +373,9 @@ function Urlchange(flag){
 	//preidx: indx of prenode 
 	phrefidx=hrefidx;
 	if(flag==1)
-		hrefidx+=1;
-	else
 		hrefidx-=1;
+	else
+		hrefidx+=1;
 	//console.log("prehref:"+phrefidx);
 	//console.log("curhref:"+hrefidx);
 	preurl=urllist[Math.abs(phrefidx)%urllist.length];
