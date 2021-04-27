@@ -114,8 +114,12 @@ function pollGamepads() {
 		else if(controller.buttons[0].pressed){
 			var subMenuidx;
 			subMenuidx=(Math.abs(botidx)-1)%5;			
-			if(subMenuflag === 1)
-				window.location.href=urllist[Math.abs(hrefidx)%urllist.length].href;
+			if(subMenuflag === 1){
+				if(Math.abs(hrefidx)%urllist.length==urllist.length-1)
+					Backtomenu();
+				else
+					window.location.href=urllist[Math.abs(hrefidx)%urllist.length].href;
+			}
 			else
 			if(subMenuflag === 0){
 				for(var i=0;i<subMenulst[subMenuidx].childNodes.length;i++){
@@ -133,12 +137,7 @@ function pollGamepads() {
 		}
 
 		else if (controller.buttons[1].pressed) {
-			urllist.length=0;
-			subMenuflag=0;
-			window.location.href="#";
-			cururl.style.fontSize = "medium";
-			hrefidx=0;
-			phrefidx=0;		
+			Backtomenu();
 		}
 
 		//BUTTONS
@@ -177,6 +176,12 @@ function pollGamepads() {
 		}
 	}
 
+	//If not in menu path, press 'b' to goback to menu page
+	if(path!="index"){
+		if (controller.buttons[1].pressed) {
+			window.location.href="index.html";
+		}
+	}
 	//Do things if on the drive page
 	if (path === "drive") {
 		//BUTTONS
@@ -250,4 +255,11 @@ function Urlchange(flag){
 	cururl.style.fontSize = "large";
 }
 
-
+function Backtomenu(){
+	urllist.length=0;
+	subMenuflag=0;
+	window.location.href="#";
+	cururl.style.fontSize = "medium";
+	hrefidx=0;
+	phrefidx=0;	
+}
