@@ -3,6 +3,7 @@ let panoDiv = document.getElementById("pano");
 class Display {
   constructor(startingLocation) {
     this.heading = 180;
+    this.vehicleHeading= 180;
     this.pitch = 0;
     this.sv = new google.maps.StreetViewService();
     _panorama = new google.maps.StreetViewPanorama(panoDiv);
@@ -35,7 +36,7 @@ class Display {
 
   /* The callback being provided. Essentially, 'what to do' after the panorama data get's fetched. */
   processSVData(data, status) {
-    console.log(data);
+    // console.log(data);
     if (status === "OK") {
       const location = data.location;
       _panorama.setPano(location.pano);

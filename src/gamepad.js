@@ -97,21 +97,82 @@ function pollGamepads() {
 	const leftStickYAxis = Math.abs(controller.axes[1]);
 	const rightStickXAxis = Math.abs(controller.axes[2]);
 	const rightStickYAxis = Math.abs(controller.axes[3]);
+
     if(leftStickXAxis > deadzone){
-		console.log(controller.axes[0])
+		let heading;
+		let links= _panorama.getLinks();
+
+		if(controller.axes[1] > 0) {
+			 heading= _display.vehicleHeading + 90;
+			 if(heading > 360) heading = heading - 360;
+		}
+		else {
+			heading = _display.vehicleHeading - 90;
+			if(heading <= 0) heading = 360 + heading;
+		}
+
+		let minDifferenceIndex;
+		let minDifference= 360;
+		for(let i = 0; i < links.length; ++i){
+			let leftDiff= Math.abs(heading - links[i].heading);
+			let rightDiff= 360 - leftDiff;
+			let diff = Math.min(leftDiff, rightDiff);
+			if(diff < minDifference && diff < 45){
+				minDifference= diff;
+				minDifferenceIndex= i;
+			}
+		}
+		if(minDifferenceIndex === undefined) return;
+
+		if(controller.axes[1] > 0)
+			_display.heading += minDifference;
+		else
+			_display.heading -= minDifference;
+			
+		_display.vehicleHeading = links[minDifferenceIndex].heading;
+		_display.processSVData({ 
+			location: {
+				pano: `${links[minDifferenceIndex].pano}`,
+			}
+		}, "OK");
     }
 	if(leftStickYAxis > deadzone){
-		console.log(controller.axes[1])
+		let heading;
+		let links= _panorama.getLinks();
+		// console.log(links);
+
+		if(controller.axes[1] > 0) heading= _display.vehicleHeading - 180;
+		else heading= _display.vehicleHeading;
+
+		let minDifferenceIndex;
+		let minDifference= 360;
+		for(let i = 0; i < links.length; ++i){
+			let leftDiff= Math.abs(heading - links[i].heading);
+			let rightDiff= 360 - leftDiff;
+			let diff = Math.min(leftDiff, rightDiff);
+			if(diff < minDifference && diff < 45){
+				minDifference= diff;
+				minDifferenceIndex= i;
+			}
+		}
+
+		if(minDifferenceIndex === undefined) return;
+		_display.processSVData({ 
+			location: {
+				pano: `${links[minDifferenceIndex].pano}`,
+			}
+		}, "OK");
     }
 	if(rightStickXAxis > deadzone){
-		console.log(controller.axes[2])
+		// console.log(controller.axes[2])
 		
 		_display.heading += controller.axes[2]*10;
+		// console.log(_display.heading);
 		_panorama.setPov({heading: _display.heading, pitch: _display.pitch})
 
     }
 	if(rightStickYAxis > deadzone){
-		console.log(controller.axes[3])
+		// console.log(controller.axes[3])
 		let pitch = _display.pitch-controller.axes[3]*10;
 		if (pitch > 90) {
 			pitch = 90
