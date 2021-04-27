@@ -6,113 +6,27 @@ in Chrome Navigator. getGamepads needs a webkit prefix and the button values are
  of buttons they are.
 */
 
-var controller = {};
-var buttons = [];
-var axis = [];
+//circle indicating the status of the controller
+const controllerStatus = document.querySelector("circle");
 
-//deadzone for axis, handler doesn't trip unless input > or < deadzone 
-var posDeadzone = 0.8;
-var negDeadzone = -0.8;
+//flag to display the controller scheme or not
+let isSchemeOn = false;
 
-//getting the cirlce svg
-const statusButton = document.querySelector("circle");
+//Defines the deadzone for controller axes
+const deadzone = 0.8;
 
-//axis directions
-var lsL = 0;
-var lsR = 0;
-var lsU = 0;
-var lsD = 0;
-var rsL = 0;
-var rsR = 0;
-var rsU = 0;
-var rsD = 0;
-
-var flag = 0;
+//setInterval id (used in clearInterval())
+let id= 0;
 
 window.addEventListener("gamepadconnected", (e) => {
-	controller = e.gamepad;
-	console.log(e.gamepad);
-	gp = e.gamepad;
-	console.log(
-		"Gamepad connected at index %d\nName: %s\nNumber of Buttons: %d\nAvailable axes: %d",
-		gp.index,
-		gp.id,
-		gp.buttons.length,
-		gp.axes.length
-	);
-
-	//fills the circle with green on controller connect
-	statusButton.setAttribute("fill", "green");
-	pollGamepads();
+	controllerStatus.setAttribute("fill", "green");
+	id = setInterval(pollGamepads, 150);
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
-	gp = event.gamepad;
-	console.log("Gamepad %s disconnected from index %d", gp.id, gp.index);
-
-	//fills the circle with red on controller disconnect
-	statusButton.setAttribute("fill", "red");
+	controllerStatus.setAttribute("fill", "red");
+	clearInterval(id);
 });
-
-function updateHandler() {
-	buttons = [];
-	if (controller.buttons) {
-		for (var b = 0; b < controller.buttons.length; ++b) {
-			if (controller.buttons[b].pressed) {
-				console.log(b);
-				buttons.push(b);
-			}
-		}
-	}
-
-	if (controller.axes) {
-		for (var i = 0; i < controller.axes.length; ++i) {
-			if (
-				controller.axes[i] > posDeadzone ||
-				controller.axes[i] < negDeadzone
-			) {
-				console.log(controller.axes[i]);
-                axis.splice(0, 1, controller.axes);
-                lsR = axis[0][0];
-                lsL = axis[0][0];
-                lsU = axis[0][1];
-                lsD = axis[0][1];
-                rsR = axis[0][2];
-                rsL = axis[0][2];
-                rsU = axis[0][3];
-                rsD = axis[0][3];
-
-				console.log("axis[0][0] " + axis[0][0]);
-				console.log("axis[0][1] " + axis[0][1]);
-				console.log("axis[0][2] " + axis[0][2]);
-				console.log("axis[0][3] " + axis[0][3]);
-                return axis;
-			}
-		}
-	}
-}
-
-function buttonPressHandler(button) {
-	var press = false;
-	for (var i = 0; i < buttons.length; ++i) {
-		if (buttons[i] == button) {
-			press = true;
-		}
-	}
-	return press;
-}
-
-function axesPressHandler(axis) {
-	var touched = false;
-	if (axis > posDeadzone || axis < negDeadzone) {
-		touched = true;
-	}
-	return touched;
-}
-
-if (!("ongamepadconnected" in window)) {
-	setInterval(pollGamepads, 150);
-}
 
 /*Controller Scheme Xbox/PS4
 A/X = 0
@@ -133,96 +47,141 @@ Start = 9
 Options = 8
 */
 
-//do something with the presses
 function pollGamepads() {
+	let controller= navigator.getGamepads()[0];
 
-    //when button 0 is pressed...
-	if (buttonPressHandler(0)) {
+	if(controller == undefined){
+		clearInterval(id);
+		return 
+	}
+
+	//BUTTONS
+	if (controller.buttons[0].pressed) {
 		console.log(`Button 0 pressed`);
-		updateHandler();
 	} 
-    
-    else if (buttonPressHandler(1)) {
+    if (controller.buttons[1].pressed) {
 		console.log(`Button 1 pressed`);
-		updateHandler();
 	}
-		
-	else if (buttonPressHandler(12)) {
-        var xboxScheme = document.getElementById("picture");
-		if (flag === 1) {
-			var image = document.getElementById("controller-scheme");
+	if (controller.buttons[8].pressed || controller.buttons[9].pressed) {
+		let xboxScheme = document.getElementById("picture");
+		if (isSchemeOn === true) {
+			let image = document.getElementById("controller-scheme");
 	        xboxScheme.removeChild(image);
-            flag = 0;
+            isSchemeOn = false;
         }
-		updateHandler();
-	}
-		
-    else if (buttonPressHandler(13)) {
-        var xboxScheme = document.getElementById("picture");
-
-        if(flag === 0){
-            var image = new Image();
+		else{
+            let image = new Image();
 			image.src = "../assets/svDriveGamepad.png"
 			image.id = "controller-scheme"
 	        xboxScheme.appendChild(image);
 
-            flag = 1;
+            isSchemeOn = true;
         }
-
-		updateHandler();
 	}
+	if (controller.buttons[12].pressed) {
+		console.log(`Button 12 pressed`);
+	} 
+	if (controller.buttons[13].pressed) {
+		console.log(`Button 13 pressed`);
+	} 
+	if (controller.buttons[14].pressed) {
+		console.log(`Button 14 pressed`);
+	} 
+	if (controller.buttons[15].pressed) {
+		console.log(`Button 15 pressed`);
+	}
+
+
+	//AXES
+	const leftStickXAxis = Math.abs(controller.axes[0]);
+	const leftStickYAxis = Math.abs(controller.axes[1]);
+	const rightStickXAxis = Math.abs(controller.axes[2]);
+	const rightStickYAxis = Math.abs(controller.axes[3]);
+
+    if(leftStickXAxis > deadzone){
+		let heading;
+		let links= _panorama.getLinks();
+
+		if(controller.axes[1] > 0) {
+			 heading= _display.vehicleHeading + 90;
+			 if(heading > 360) heading = heading - 360;
+		}
+		else {
+			heading = _display.vehicleHeading - 90;
+			if(heading <= 0) heading = 360 + heading;
+		}
+
+		let minDifferenceIndex;
+		let minDifference= 360;
+		for(let i = 0; i < links.length; ++i){
+			let leftDiff= Math.abs(heading - links[i].heading);
+			let rightDiff= 360 - leftDiff;
+			let diff = Math.min(leftDiff, rightDiff);
+			if(diff < minDifference && diff < 45){
+				minDifference= diff;
+				minDifferenceIndex= i;
+			}
+		}
+		if(minDifferenceIndex === undefined) return;
+
+		if(controller.axes[1] > 0)
+			_display.heading += minDifference;
+		else
+			_display.heading -= minDifference;
+			
+		_display.vehicleHeading = links[minDifferenceIndex].heading;
+		_display.processSVData({ 
+			location: {
+				pano: `${links[minDifferenceIndex].pano}`,
+			}
+		}, "OK");
+    }
+	if(leftStickYAxis > deadzone){
+		let heading;
+		let links= _panorama.getLinks();
+		// console.log(links);
+
+		if(controller.axes[1] > 0) heading= _display.vehicleHeading - 180;
+		else heading= _display.vehicleHeading;
+
+		let minDifferenceIndex;
+		let minDifference= 360;
+		for(let i = 0; i < links.length; ++i){
+			let leftDiff= Math.abs(heading - links[i].heading);
+			let rightDiff= 360 - leftDiff;
+			let diff = Math.min(leftDiff, rightDiff);
+			if(diff < minDifference && diff < 45){
+				minDifference= diff;
+				minDifferenceIndex= i;
+			}
+		}
+
+		if(minDifferenceIndex === undefined) return;
+		_display.processSVData({ 
+			location: {
+				pano: `${links[minDifferenceIndex].pano}`,
+			}
+		}, "OK");
+    }
+	if(rightStickXAxis > deadzone){
+		// console.log(controller.axes[2])
 		
+		_display.heading += controller.axes[2]*10;
+		// console.log(_display.heading);
+		_panorama.setPov({heading: _display.heading, pitch: _display.pitch})
 
-
-    //when left axis stick moves right...
-    else if(axesPressHandler(lsR > posDeadzone)){
-		console.log('lsR moved ' +axis);
-        lsR = 0;
-		updateHandler();
     }
-
-    else if(axesPressHandler(lsL < negDeadzone)){
-		console.log('lsL moved ' +axis);
-        lsL = 0;
-		updateHandler();
+	if(rightStickYAxis > deadzone){
+		// console.log(controller.axes[3])
+		let pitch = _display.pitch-controller.axes[3]*10;
+		if (pitch > 90) {
+			pitch = 90
+		}
+		if (pitch < -90) {
+			pitch = -90
+		}
+		_display.pitch = pitch;
+		_panorama.setPov({heading: _display.heading, pitch: _display.pitch})
+		
     }
-
-    else if(axesPressHandler(lsU < negDeadzone)){
-		console.log('lsU moved ' +axis);
-        lsU = 0;
-		updateHandler();
-    }
-
-    else if(axesPressHandler(lsD > posDeadzone)){
-		console.log('lsD moved ' +axis);
-        lsD = 0;
-		updateHandler();
-    }
-
-    else if(axesPressHandler(rsR > posDeadzone)){
-		console.log('rsR moved ' +axis);
-        rsR = 0;
-		updateHandler();
-    }
-
-    else if(axesPressHandler(rsL < negDeadzone)){
-		console.log('rsL moved ' +axis);
-        rsL = 0;
-		updateHandler();
-    }
-
-    else if(axesPressHandler(rsU < negDeadzone)){
-		console.log('rsU moved ' +axis);
-        rsU = 0;
-		updateHandler();
-    }
-
-    else if(axesPressHandler(rsD > posDeadzone)){
-		console.log('rsD moved ' +axis);
-        rsD = 0;
-		updateHandler();
-    }
-
-
-	else updateHandler();
 }
