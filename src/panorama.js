@@ -1,11 +1,12 @@
-let panorama;
 let panoDiv = document.getElementById("pano");
 
 class Display {
-
   constructor(startingLocation) {
+    this.heading = 180;
+    this.vehicleHeading= 180;
+    this.pitch = 0;
     this.sv = new google.maps.StreetViewService();
-    panorama = new google.maps.StreetViewPanorama(panoDiv);
+    _panorama = new google.maps.StreetViewPanorama(panoDiv);
     this.geocoder = new google.maps.Geocoder();
     this.startingLocation = startingLocation;
     this.mapOptions = {
@@ -18,16 +19,15 @@ class Display {
       showRoadLabels: true,
       zoomControl: false,
     }
-    panorama.setOptions(this.mapOptions);
+    _panorama.setOptions(this.mapOptions);
     this.setNewPanorama(this.startingLocation);
     this.setEventListeners();
   }
   
   setEventListeners() {
-    document.getElementById("API-Key-Button").addEventListener("click", () => { this.setAPIKey();})
-    document.getElementById("Starting-Location-Button").addEventListener("click", () => {this.setStartingLocation()})
- } 
-
+    document.getElementById("API-Key-Button").addEventListener("click", () => { this.setAPIKey();});
+    document.getElementById("Starting-Location-Button").addEventListener("click", () => { this.setStartingLocation() });
+  } 
 
   /* Updates the pre-existing panorama with new StreetView data. Specfically, a new position. */
   setNewPanorama(position) {
@@ -36,11 +36,13 @@ class Display {
 
   /* The callback being provided. Essentially, 'what to do' after the panorama data get's fetched. */
   processSVData(data, status) {
+    // console.log(data);
     if (status === "OK") {
       const location = data.location;
-      panorama.setPano(location.pano);
-      panorama.setPov({ heading: 180, pitch: 0 });
-      panorama.setVisible(true);
+      _panorama.setPano(location.pano);
+      this.pitch = 0;
+      _panorama.setPov({ heading: this.heading, pitch: this.pitch });
+      _panorama.setVisible(true);
     } else {
       console.error("Street View data not found for this location.");
     }
