@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,15 +23,15 @@
           </a>
         </li>
         <li class="selection" id="mainMenu">
-          <a href="#mainMenu" class="button">Main Menu</a>
+          <a href="#mainMenu" id = "1" class="button">Main Menu</a>
           <div class="subMenu">
             <a href="drive.html">Drive!</a>
-            <a href="">Selection 2</a>
-            <a href="#">Close</a>
+            <a href="https://library.pdx.edu/about/hours/" id = "MMS2">Selection 2</a>
+            <a href="index.html">Close</a>
           </div>
         </li>
         <li class="selection" id="apiKey">
-          <a href="#apiKey" class="button">API Key</a>
+          <a href="#apiKey" id = "2" class="button">API Key</a>
           <div class="subMenu">
             <!-- Button trigger modal -->
             <button
@@ -81,38 +83,48 @@
           </div>
         </li>
         <li class="selection" id="controller">
-          <a href="#controller" class="button">Controller</a>
+          <a href="#controller" id = "3" class="button">Controller</a>
           <div class="subMenu">
-            <a href="">Selection 1</a>
-            <a href="">Selection 2</a>
-            <a href="">Selection 3</a>
-            <a href="#">Close</a>
+            <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 1</a>
+            <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 2</a>
+            <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 3</a>
+            <a href="index.html">Close</a>
           </div>
         </li>
         <li class="selection" id="about">
-          <a href="#about" class="button">About</a>
+          <a href="#about" id = "4" class="button">About</a>
           <div class="subMenu">
-            <a href="">Selection 1</a>
-            <a href="">Selection 2</a>
-            <a href="">Selection 3</a>
-            <a href="#">Close</a>
+            <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 1</a>
+            <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 2</a>
+            <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 3</a>
+            <a href="index.html">Close</a>
           </div>
         </li>
         <li class="selection" id="support">
-          <a href="#support" class="button">Support</a>
+          <a href="#support" id = "0" class="button">Support</a>
           <div class="subMenu">
-            <a href="">Selection 1</a>
-            <a href="">Selection 2</a>
-            <a href="">Selection 3</a>
-            <a href="#">Close</a>
+            <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 1</a>
+            <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 2</a>
+            <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 3</a>
+            <a href="index.html">Close</a>
           </div>
         </li>
         <li class="selection" id="collapse">
-          <a href="#" class="button"></a>
+          <a href="index.html" class="button"></a>
         </li>
       </ui>
     </div>
-  </body>
+</body>
+<div class="HUD-Navigation-Element">
+    <div class="col-sm gamepad">
+        <!-- <label>Controller Statu</label> -->
+        <svg id="statusButton" width="215" height="50">
+            <text fill="rgb(121, 84, 105)" font-size="22" x="0" y="30">Controller Status</text>
+            <circle cx="190" cy="25" r="15" fill="red" />
+        </svg>
+        <p id="picture"> </p>
+    </div>
+
 </html>
 
 <link rel="stylesheet" href="../CSS/menu.css" />
@@ -121,3 +133,4 @@
   integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
   crossorigin="anonymous"
 ></script>
+<script src="../src/gamepad.js"></script>
