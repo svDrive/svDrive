@@ -116,7 +116,7 @@ function pollGamepads() {
 			subMenuidx = (Math.abs(botidx) - 1) % 5;
 			if (subMenuflag === 1) {
 
-				if (urllist[0].id === "EK" && urllist[0].style.fontSize === "large" && controller.buttons[0].pressed) {
+				if (urllist[0].id === "EK") {
 					EK.click();
 				}
 				else if (Math.abs(hrefidx) % urllist.length == urllist.length - 1)
@@ -128,7 +128,8 @@ function pollGamepads() {
 				if (subMenuflag === 0) {
 					for (var i = 0; i < subMenulst[subMenuidx].childNodes.length; i++) {
 						if (subMenulst[subMenuidx].childNodes[i].nodeType == 1) {
-							urllist.push(subMenulst[subMenuidx].childNodes[i]);
+							if(subMenulst[subMenuidx].childNodes[i].id != "exampleModal")
+								urllist.push(subMenulst[subMenuidx].childNodes[i]);
 						}
 					}
 					subMenuflag = 1;
