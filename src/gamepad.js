@@ -11,13 +11,11 @@ const deadzone = 0.8;
 let id = 0;
 
 window.addEventListener("gamepadconnected", (e) => {
-	if (path === "drive") 
 		controllerStatus.setAttribute("fill", "green");
 		id = setInterval(pollGamepads, 150);
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
-	if (path === "drive")
 		controllerStatus.setAttribute("fill", "red");
 	clearInterval(id);
 });

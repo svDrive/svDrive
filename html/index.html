@@ -26,7 +26,24 @@
             <li class="selection" id="apiKey">
                 <a href="#apiKey" id = "2" class="button">API Key</a>
                 <div class="subMenu">
-                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg" id = "EK">Enter Key</a>
+                    <button id = "EK" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Enter Key</button>
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">       
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">API KEY</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                                </div>
+                                <div class="modal-body">
+                                    <label for="enterkey">Enter Key: </label>
+                                    <input type="text" />
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg" id = "AK">Acquire Key</a>
                     <a href="index.html">Close</a>
                 </div>
@@ -64,6 +81,15 @@
         </ui>
     </div>
 </body>
+<div class="HUD-Navigation-Element">
+    <div class="col-sm gamepad">
+        <!-- <label>Controller Statu</label> -->
+        <svg id="statusButton" width="215" height="50">
+            <text fill="rgb(121, 84, 105)" font-size="22" x="0" y="30">Controller Status</text>
+            <circle cx="190" cy="25" r="15" fill="red" />
+        </svg>
+        <p id="picture"> </p>
+    </div>
 </html>
 <script src="../src/gamepad.js"></script>
 <link rel="stylesheet" href="../CSS/menu.css" />
