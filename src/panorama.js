@@ -21,13 +21,7 @@ class Display {
     }
     _panorama.setOptions(this.mapOptions);
     this.setNewPanorama(this.startingLocation);
-    this.setEventListeners();
   }
-  
-  setEventListeners() {
-    document.getElementById("API-Key-Button").addEventListener("click", () => { this.setAPIKey();});
-    document.getElementById("Starting-Location-Button").addEventListener("click", () => { this.setStartingLocation() });
-  } 
 
   /* Updates the pre-existing panorama with new StreetView data. Specfically, a new position. */
   setNewPanorama(position) {
