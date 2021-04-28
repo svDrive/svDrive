@@ -1,123 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Street View Drive - A Google Maps Driving Simulator</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous"/>
+</head>
+<body id = "menuBody">
     <div class="wrapper">
-      <ui class="menu">
-        <li class="selection" id="logo">
-          <a href="#" class="button">
-            <img src="/assets/transparentlogo.png" alt="logo" />
-          </a>
-        </li>
-        <li class="selection" id="mainMenu">
-          <a href="#mainMenu" class="button">Main Menu</a>
-          <div class="subMenu">
-            <a href="drive.html">Drive!</a>
-            <a href="">Selection 2</a>
-            <a href="#">Close</a>
-          </div>
-        </li>
-        <li class="selection" id="apiKey">
-          <a href="#apiKey" class="button">API Key</a>
-          <div class="subMenu">
-            <!-- Button trigger modal -->
-            <button
-              type="button"
-              class="btn"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-            >
-              Enter Key
-            </button>
-
-            <!-- Modal -->
-            <div
-              class="modal fade"
-              id="exampleModal"
-              tabindex="-1"
-              aria-labelledby="exampleModalLabel"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">API KEY</h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <label for="enterkey">Enter Key: </label>
-                    <input type="text" />
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-bs-dismiss="modal"
-                    >
-                      Close
-                    </button>
-                  </div>
+        <ui class="menu">
+            <li class="selection" id="logo">
+                <a href="#" class="button">
+                    <img src="/assets/transparentlogo.png" alt="logo" />
+                </a>
+            </li>
+            <li class="selection" id="mainMenu">
+                <a href="#mainMenu" id = "1" class="button">Main Menu</a>
+                <div class="subMenu">
+                    <a href="drive.html" id = "MMD">Drive!</a>
+                    <a href="https://library.pdx.edu/about/hours/" id = "MMS2">Selection 2</a>
+                    <a href="index.html">Close</a>
                 </div>
-              </div>
-            </div>
-            <a href="">Acquire Key</a>
-            <a href="#">Close</a>
-          </div>
-        </li>
-        <li class="selection" id="controller">
-          <a href="#controller" class="button">Controller</a>
-          <div class="subMenu">
-            <a href="">Selection 1</a>
-            <a href="">Selection 2</a>
-            <a href="">Selection 3</a>
-            <a href="#">Close</a>
-          </div>
-        </li>
-        <li class="selection" id="about">
-          <a href="#about" class="button">About</a>
-          <div class="subMenu">
-            <a href="">Selection 1</a>
-            <a href="">Selection 2</a>
-            <a href="">Selection 3</a>
-            <a href="#">Close</a>
-          </div>
-        </li>
-        <li class="selection" id="support">
-          <a href="#support" class="button">Support</a>
-          <div class="subMenu">
-            <a href="">Selection 1</a>
-            <a href="">Selection 2</a>
-            <a href="">Selection 3</a>
-            <a href="#">Close</a>
-          </div>
-        </li>
-        <li class="selection" id="collapse">
-          <a href="#" class="button"></a>
-        </li>
-      </ui>
+            </li>
+            <li class="selection" id="apiKey">
+                <a href="#apiKey" id = "2" class="button">API Key</a>
+                <div class="subMenu">
+                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg" id = "EK">Enter Key</a>
+                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg" id = "AK">Acquire Key</a>
+                    <a href="index.html">Close</a>
+                </div>
+            </li>
+            <li class="selection" id="controller">
+                <a href="#controller" id="3" class="button">Controller</a>
+                <div class="subMenu">
+                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 1</a>
+                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 2</a>
+                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 3</a>
+                    <a href="index.html">Close</a>
+                </div>
+            </li>
+            <li class="selection" id="about">
+                <a href="#about"  id="4" class="button">About</a>
+                <div class="subMenu">
+                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 1</a>
+                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 2</a>
+                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 3</a>
+                    <a href="index.html">Close</a>
+                </div>
+            </li>
+            <li class="selection" id="support">
+                <a href="#support" id="0" class="button">Support</a>
+                <div class="subMenu">
+                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 1</a>
+                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 2</a>
+                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 3</a>
+                    <a href="index.html">Close</a>
+                </div>
+            </li>
+            <li class="selection" id="collapse">
+                <a href="index.html" class="button"></a>
+            </li>
+        </ui>
     </div>
-  </body>
+</body>
 </html>
-
+<script src="../src/gamepad.js"></script>
 <link rel="stylesheet" href="../CSS/menu.css" />
-<script
-  src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
-  crossorigin="anonymous"
-></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
