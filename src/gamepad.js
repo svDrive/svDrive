@@ -11,12 +11,14 @@ const deadzone = 0.8;
 let id = 0;
 
 window.addEventListener("gamepadconnected", (e) => {
-	controllerStatus.setAttribute("fill", "green");
-	id = setInterval(pollGamepads, 150);
+	if (path === "drive") 
+		controllerStatus.setAttribute("fill", "green");
+		id = setInterval(pollGamepads, 150);
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
-	controllerStatus.setAttribute("fill", "red");
+	if (path === "drive")
+		controllerStatus.setAttribute("fill", "red");
 	clearInterval(id);
 });
 
@@ -139,24 +141,7 @@ function pollGamepads() {
 		else if (controller.buttons[1].pressed) {
 			Backtomenu();
 		}
-
-		//BUTTONS
-		if (controller.buttons[8].pressed || controller.buttons[9].pressed) {
-			let xboxScheme = document.getElementById("picture");
-			if (isSchemeOn === true) {
-				let image = document.getElementById("controller-scheme");
-				xboxScheme.removeChild(image);
-				isSchemeOn = false;
-			} else {
-				let image = new Image();
-				image.src = "../assets/svDriveGamepad.png";
-				image.id = "controller-scheme";
-				xboxScheme.appendChild(image);
-
-				isSchemeOn = true;
-			}
-		}
-
+		
 		//AXES
 		const leftStickXAxis = Math.abs(controller.axes[0]);
 		const leftStickYAxis = Math.abs(controller.axes[1]);
@@ -182,6 +167,7 @@ function pollGamepads() {
 			window.location.href="index.html";
 		}
 	}
+
 	//Do things if on the drive page
 	if (path === "drive") {
 		//BUTTONS
@@ -215,19 +201,77 @@ function pollGamepads() {
 		const rightStickXAxis = Math.abs(controller.axes[2]);
 		const rightStickYAxis = Math.abs(controller.axes[3]);
 		if (leftStickXAxis > deadzone) {
-			console.log(controller.axes[0]);
+			let heading;
+			let links = _panorama.getLinks();
+
+			if (controller.axes[1] > 0) {
+				heading = _display.vehicleHeading + 90;
+				if (heading > 360) heading = heading - 360;
+			}
+			else {
+				heading = _display.vehicleHeading - 90;
+				if (heading <= 0) heading = 360 + heading;
+			}
+
+			let minDifferenceIndex;
+			let minDifference = 360;
+			for (let i = 0; i < links.length; ++i){
+				let leftDiff = Math.abs(heading - links[i].heading);
+				let rightDiff = 360 - leftDiff;
+				let diff = Math.min(leftDiff, rightDiff);
+				if (diff < minDifference && diff < 45) {
+					minDifference = diff;
+					minDifferenceIndex = i;
+				}
+			}
+			if (minDifferenceIndex === undefined) return;
+			
+			if (controller.axes[1] > 0)
+				_display.heading += minDifference;
+			else
+				_display.heading -= minDifference;
+			
+			_display.vehicleHeading = links[minDifferenceIndex].heading;
+			_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 		}
 		if (leftStickYAxis > deadzone) {
-			console.log(controller.axes[1]);
+			let heading;
+			let links = _panorama.getLinks();
+			if (controller.axes[1] > 0) heading = _display.vehicleHeading - 180;
+			else heading = _display.vehicleHeading;
+			
+			let minDifferenceIndex;
+			let minDifference = 360;
+			for (let i = 0; i < links.length; ++i){
+				let leftDiff = Math.abs(heading - links[i].heading);
+				let rightDiff = 360 - leftDiff;
+				let diff = Math.min(leftDiff, rightDiff);
+				if (diff < minDifference && diff < 45) {
+					minDifference = diff;
+					minDifferenceIndex = i;
+				}
+			}
+
+			if (minDifferenceIndex === undefined) return;
+			_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 		}
 		if (rightStickXAxis > deadzone) {
-			console.log(controller.axes[2]);
+			_display.heading += controller.axes[2] * 10;
+			_panorama.setPov({ heading: _display.heading, pitch: _display.pitch })
 		}
 		if (rightStickYAxis > deadzone) {
-			console.log(controller.axes[3]);
+			let pitch = _display.pitch - controller.axes[3] * 10;
+			if (pitch > 90) {
+				pitch = 90
+			}
+			if (pitch < -90) {
+				pitch = -90
+			}
+			_display.pitch = pitch;
+			_panorama.setPov({ heading: _display.heading, pitch: _display.pitch })
 		}
 	}
-}
+} // End pollGamepads
 
 function Dpadchange(flag){
 	//preidx: indx of prenode 

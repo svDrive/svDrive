@@ -62,7 +62,8 @@ body {
   max-height: 0;
 }
 
-.subMenu a {
+.subMenu a,
+.btn {
   display: block;
   padding: 15px 20px;
   color: white;
@@ -152,4 +153,15 @@ img[alt="logo"] {
   padding: none;
   width: 60%;
   height: width;
+}
+
+/* Modal elements */
+.modal-backdrop {
+  display: none;
+  z-index: 1040 !important;
+}
+
+.modal-content {
+  margin: 2px auto;
+  z-index: 1100 !important;
 }
