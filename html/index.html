@@ -7,7 +7,7 @@
     <title>Street View Drive - A Google Maps Driving Simulator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous"/>
 </head>
-<body id = "menuBody">
+<body>
     <div class="wrapper">
         <ui class="menu">
             <li class="selection" id="logo">
@@ -63,6 +63,18 @@
             </li>
         </ui>
     </div>
+
+    <!-- This needs to be moved to wherever the team thinks it's neccesary -->
+    <div class="HUD-Navigation-Element">
+      <div class="col-sm gamepad">
+          <!-- <label>Controller Status</label> -->
+          <svg id="statusButton" width="215" height="50">
+              <text fill="rgb(121, 84, 105)" font-size="22" x="0" y="30">Controller Status</text>
+              <circle cx="190" cy="25" r="15" fill="red" />
+          </svg>
+          <p id="picture"> </p>
+      </div>
+
 </body>
 </html>
 <script src="../src/gamepad.js"></script>

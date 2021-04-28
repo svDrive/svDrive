@@ -50,7 +50,7 @@ class Display {
   
     /* Work in progress - Roadblock. */
   setAPIKey() {
-    alert("Feature is in progress. - for the time, manually set your API Key in the index.html file.")
+    alert("Feature is in progress. - for the time, manually set your API Key in the drive.html file.")
     // let inputField = document.getElementById("API-Key-Input");
     // const newKey = inputField.value;
     // inputField.value = '';
