@@ -73,8 +73,10 @@ let preurl;
 let cururl;
 let subMenulst = document.getElementsByClassName("subMenu");
 let subMenuflag = 0;
+let modallist;
+let modalcontent=[]
 let urllist = [];
-
+let modal=document.getElementById('exampleModal');
 function pollGamepads() {
 	let controller = navigator.getGamepads()[0];
 
@@ -96,28 +98,45 @@ function pollGamepads() {
 		//Dpad Down
 		if (controller.buttons[13].pressed) {
 			//set flag or Dpadchange function , 0 is go down
-			if (subMenuflag === 1)
-				Urlchange(0);
-			else
-				Dpadchange(0);
+			if(subMenuflag === 1 && urllist[Math.abs(hrefidx) % urllist.length].id === "EK"  ){
+				if (subMenuflag === 1 && modal.style.display =="none")
+					Urlchange(0);
+				if (subMenuflag ===0 && modal.style.display =="none")
+					Dpadchange(0);
+			}
+			else{
+				if (subMenuflag === 1)
+					Urlchange(0);
+				if (subMenuflag ===0)
+					Dpadchange(0);
+			}
+			
 		}
 
 		//Dpad UP
 		else if (controller.buttons[12].pressed) {
 			//set flag or Dpadchange function , 0 is go up
-			if (subMenuflag === 1)
-				Urlchange(1);
-			else
-				Dpadchange(1);
+			if(subMenuflag === 1 && urllist[Math.abs(hrefidx) % urllist.length].id === "EK" ){
+				if (subMenuflag === 1 && modal.style.display =="none")
+					Urlchange(1);
+				if (subMenuflag === 0 && modal.style.display =="none")
+					Dpadchange(1);
+			}
+			else{
+				if (subMenuflag === 1)
+					Urlchange(0);
+				if (subMenuflag ===0)
+					Dpadchange(0);
+			}
 		}
-
+		
 		else if (controller.buttons[0].pressed) {
 			var subMenuidx;
 			subMenuidx = (Math.abs(botidx) - 1) % 5;
 			if (subMenuflag === 1) {
 
 				if (urllist[Math.abs(hrefidx) % urllist.length].id === "EK") {
-					urllist[Math.abs(hrefidx) % urllist.length].click();
+					urllist[Math.abs(hrefidx) % urllist.length].click();						
 				}
 				else if (Math.abs(hrefidx) % urllist.length == urllist.length - 1)
 					Backtomenu();
@@ -142,6 +161,10 @@ function pollGamepads() {
 		}
 
 		else if (controller.buttons[1].pressed) {
+			if (urllist[Math.abs(hrefidx) % urllist.length].id === "EK") {
+				modal.style.display = "none";
+			}
+			else
 			Backtomenu();
 		}
 
