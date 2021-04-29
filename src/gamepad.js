@@ -8,19 +8,19 @@ let isSchemeOn = false;
 const deadzone = 0.8;
 
 //setInterval id (used in clearInterval())
-let id = 0;
+let pollControlsEventId = 0;
 
 window.addEventListener("gamepadconnected", (e) => {
 	controllerStatus.setAttribute("fill", "green");
-	id = setInterval(pollGamepads, 150);
+	pollControlsEventId = setInterval(pollControls, 150);
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
 	controllerStatus.setAttribute("fill", "red");
-	clearInterval(id);
+	clearInterval(pollControlsEventId);
 });
 
-/*Controller Scheme Xbox/PS4
+/*Controller Scheme Xbox/PS4 TODO: define these!
 A/X = 0
 B/Circle = 1
 X/Square = 2
@@ -75,18 +75,21 @@ let subMenulst = document.getElementsByClassName("subMenu");
 let subMenuflag = 0;
 let urllist = [];
 
+//** CONTROLLER INPUT **//
 function pollControls() {
 	let controller = navigator.getGamepads()[0];
 	if (controller === undefined) {
-		clearInterval(id);
+		clearInterval(pollControlsEventId);
 		return;
 	}
 
 	if (path === "index") {
 		menuControls(controller);
 	}
+	else if(path === "drive") {
+		svDriveControls(controller);
+	}
 }
-
 
 function menuControls(controller) {
 	if (loadedMenu === false) {
@@ -163,22 +166,16 @@ function menuControls(controller) {
 	}
 }
 
-//If not in menu path, press 'b' to goback to menu page
-if (path != "index") {
-	if (controller.buttons[1].pressed) {
-		window.location.href = "index.html";
-	}
-}
-
 //Do things if on the drive page
-if (path === "drive") {
-	//BUTTONS
+function svDriveControls(controller) {
 	if (controller.buttons[0].pressed) {
 		console.log(`Button 0 pressed`);
 	}
 
-	if (controller.buttons[1].pressed) {
-		console.log(`Button 1 pressed`);
+	if (controller.buttons[1].pressed) { //TODO: verify I work!
+		if(window.confirm('Are you sure you would like to return to the menu?') === true) {
+			window.location.href = "index.html";
+		}
 	}
 
 	if (controller.buttons[8].pressed || controller.buttons[9].pressed) {
@@ -197,83 +194,98 @@ if (path === "drive") {
 		}
 	}
 
-	//AXES
+	//collect axes values, and then check their validity
 	const leftStickXAxis = Math.abs(controller.axes[0]);
 	const leftStickYAxis = Math.abs(controller.axes[1]);
 	const rightStickXAxis = Math.abs(controller.axes[2]);
 	const rightStickYAxis = Math.abs(controller.axes[3]);
+
 	if (leftStickXAxis > deadzone) {
-		let heading;
-		let links = _panorama.getLinks();
-
-		if (controller.axes[1] > 0) {
-			heading = _display.vehicleHeading + 90;
-			if (heading > 360) heading = heading - 360;
-		}
-		else {
-			heading = _display.vehicleHeading - 90;
-			if (heading <= 0) heading = 360 + heading;
-		}
-
-		let minDifferenceIndex;
-		let minDifference = 360;
-		for (let i = 0; i < links.length; ++i) {
-			let leftDiff = Math.abs(heading - links[i].heading);
-			let rightDiff = 360 - leftDiff;
-			let diff = Math.min(leftDiff, rightDiff);
-			if (diff < minDifference && diff < 45) {
-				minDifference = diff;
-				minDifferenceIndex = i;
-			}
-		}
-		if (minDifferenceIndex === undefined) return;
-
-		if (controller.axes[1] > 0)
-			_display.heading += minDifference;
-		else
-			_display.heading -= minDifference;
-
-		_display.vehicleHeading = links[minDifferenceIndex].heading;
-		_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
+		handleTurning(controller);
 	}
 	if (leftStickYAxis > deadzone) {
-		let heading;
-		let links = _panorama.getLinks();
-		if (controller.axes[1] > 0) heading = _display.vehicleHeading - 180;
-		else heading = _display.vehicleHeading;
-
-		let minDifferenceIndex;
-		let minDifference = 360;
-		for (let i = 0; i < links.length; ++i) {
-			let leftDiff = Math.abs(heading - links[i].heading);
-			let rightDiff = 360 - leftDiff;
-			let diff = Math.min(leftDiff, rightDiff);
-			if (diff < minDifference && diff < 45) {
-				minDifference = diff;
-				minDifferenceIndex = i;
-			}
-		}
-
-		if (minDifferenceIndex === undefined) return;
-		_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
+		handleThrottle(controller);
 	}
 	if (rightStickXAxis > deadzone) {
-		_display.heading += controller.axes[2] * 10;
-		_panorama.setPov({ heading: _display.heading, pitch: _display.pitch })
+		lookHorizontal(controller);
 	}
 	if (rightStickYAxis > deadzone) {
-		let pitch = _display.pitch - controller.axes[3] * 10;
-		if (pitch > 90) {
-			pitch = 90
-		}
-		if (pitch < -90) {
-			pitch = -90
-		}
-		_display.pitch = pitch;
-		_panorama.setPov({ heading: _display.heading, pitch: _display.pitch })
+		lookVertical(controller);
 	}
 }
-} // End pollGamepads
+
+//** BUTTON HANDLERS **//
+function lookVertical(controller) {
+	let pitch = _display.pitch - controller.axes[3] * 10;
+
+	//bound checks
+	if (pitch > 90) pitch = 90;
+	else if (pitch < -90) pitch = -90;
+
+	_display.pitch = pitch;
+	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
+}
+
+function lookHorizontal(controller) {
+	_display.heading += controller.axes[2] * 10;
+	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
+}
+
+function handleThrottle(controller){
+	let heading;
+	let links = _panorama.getLinks();
+	if (controller.axes[1] > 0) heading = _display.vehicleHeading - 180;
+	else heading = _display.vehicleHeading;
+
+	let minDifferenceIndex;
+	let minDifference = 360;
+	for (let i = 0; i < links.length; ++i) {
+		let leftDiff = Math.abs(heading - links[i].heading);
+		let rightDiff = 360 - leftDiff;
+		let diff = Math.min(leftDiff, rightDiff);
+		if (diff < minDifference && diff < 45) {
+			minDifference = diff;
+			minDifferenceIndex = i;
+		}
+	}
+
+	if (minDifferenceIndex === undefined) return;
+	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
+}
+function handleTurning(controller){
+	let heading;
+	let links = _panorama.getLinks();
+
+	if (controller.axes[1] > 0) { //TODO: abstract these to their specific turns
+		heading = _display.vehicleHeading + 90;
+		if (heading > 360) heading = heading - 360;
+	}
+	else {
+		heading = _display.vehicleHeading - 90;
+		if (heading <= 0) heading = 360 + heading;
+	}
+
+	let minDifferenceIndex;
+	let minDifference = 360;
+	for (let i = 0; i < links.length; ++i) {
+		let leftDiff = Math.abs(heading - links[i].heading);
+		let rightDiff = 360 - leftDiff;
+		let diff = Math.min(leftDiff, rightDiff);
+		if (diff < minDifference && diff < 45) {
+			minDifference = diff;
+			minDifferenceIndex = i;
+		}
+	}
+	if (minDifferenceIndex === undefined) return;
+
+	if (controller.axes[1] > 0)
+		_display.heading += minDifference;
+	else
+		_display.heading -= minDifference;
+
+	_display.vehicleHeading = links[minDifferenceIndex].heading;
+	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
+}
 
 function Dpadchange(flag) {
 	//preidx: indx of prenode 
