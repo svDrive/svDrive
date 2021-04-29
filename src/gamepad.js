@@ -99,10 +99,8 @@ function pollGamepads() {
 		if (controller.buttons[13].pressed) {
 			//set flag or Dpadchange function , 0 is go down
 			if(subMenuflag === 1 && urllist[Math.abs(hrefidx) % urllist.length].id === "EK"  ){
-				if (subMenuflag === 1 && modal.style.display =="none")
+				if (subMenuflag === 1 && modal.style.display =="none" || modal.style.display.length === 0)
 					Urlchange(0);
-				if (subMenuflag ===0 && modal.style.display =="none")
-					Dpadchange(0);
 			}
 			else{
 				if (subMenuflag === 1)
@@ -117,16 +115,14 @@ function pollGamepads() {
 		else if (controller.buttons[12].pressed) {
 			//set flag or Dpadchange function , 0 is go up
 			if(subMenuflag === 1 && urllist[Math.abs(hrefidx) % urllist.length].id === "EK" ){
-				if (subMenuflag === 1 && modal.style.display =="none")
+				if (subMenuflag === 1 && modal.style.display =="none" || modal.style.display.length === 0)
 					Urlchange(1);
-				if (subMenuflag === 0 && modal.style.display =="none")
-					Dpadchange(1);
 			}
 			else{
 				if (subMenuflag === 1)
-					Urlchange(0);
+					Urlchange(1);
 				if (subMenuflag ===0)
-					Dpadchange(0);
+					Dpadchange(1);
 			}
 		}
 		
