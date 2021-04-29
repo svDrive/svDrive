@@ -116,8 +116,8 @@ function pollGamepads() {
 			subMenuidx = (Math.abs(botidx) - 1) % 5;
 			if (subMenuflag === 1) {
 
-				if (urllist[0].id === "EK") {
-					EK.click();
+				if (urllist[Math.abs(hrefidx) % urllist.length].id === "EK") {
+					urllist[Math.abs(hrefidx) % urllist.length].click();
 				}
 				else if (Math.abs(hrefidx) % urllist.length == urllist.length - 1)
 					Backtomenu();
