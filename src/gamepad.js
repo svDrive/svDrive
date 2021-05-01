@@ -12,6 +12,10 @@ let pollControlsEventId = 0;
 
 window.addEventListener("gamepadconnected", (e) => {
 	controllerStatus.setAttribute("fill", "green");
+	// TODO: conditional logic for controller vs steering wheel
+	// slurp the user input about controller
+	//if (controller) pollControlsEventId = setInterval(pollControls, 150);
+	//else if (steeringWheel) 
 	pollControlsEventId = setInterval(pollControls, 150);
 });
 
@@ -37,6 +41,23 @@ Dpad U = 12
 Dpad D = 13
 Start = 9
 Options = 8
+*/
+
+/* Steering Wheel Controller Scheme
+A = 0
+B = 1
+X = 2
+Y = 3
+Right bumper = 4
+Left bumper = 5
+Start = 6
+Select = 7
+Right stick = 8
+Left stick = 9
+Home button = 10
+Wheel = axis 0
+Gas pedal = axis 1
+Brake pedal = axis 2
 */
 
 //Determine html page we're on
@@ -87,7 +108,23 @@ function pollControls() {
 		menuControls(controller);
 	}
 	else if(path === "drive") {
-		svDriveControls(controller);
+		//svDriveController(controller);
+		svDriveSteeringWheel(controller);
+	}
+}
+
+function pollSteeringWheel() {
+	let steeringWheel = navigator.getGamepads()[0];
+	if (steeringWheel === undefined) {
+		clearInterval(pollControlsEventId);
+		return;
+	}
+
+	if (path === "index") {
+		menuControls(controller);
+	}
+	else if(path === "drive") {
+		svDriveController(controller);
 	}
 }
 
@@ -166,8 +203,58 @@ function menuControls(controller) {
 	}
 }
 
+function svDriveSteeringWheel(controller) {
+	if (controller.buttons[0]) {
+		console.log('A button pressed')
+	}
+	if (controller.buttons[1]) {
+		console.log('B button pressed')
+	}
+	if (controller.buttons[2]) {
+		console.log('X button pressed')
+	}
+	if (controller.buttons[3]) {
+		console.log('Y button pressed')
+	}
+	if (controller.buttons[4]) {
+		console.log('Right bumper pressed')
+	}
+	if (controller.buttons[5]) {
+		console.log('Left bumper pressed')
+	}
+	if (controller.buttons[6].pressed || controller.buttons[7].pressed) {
+		let xboxScheme = document.getElementById("picture");
+		if (isSchemeOn === true) {
+			let image = document.getElementById("controller-scheme");
+			xboxScheme.removeChild(image);
+			isSchemeOn = false;
+		} else {
+			let image = new Image();
+			image.src = "../assets/svDriveGamepad.png";
+			image.id = "controller-scheme";
+			xboxScheme.appendChild(image);
+			isSchemeOn = true;
+		}
+	}
+	if (controller.buttons[8]) {
+		console.log('Right stick pressed')
+	}
+	if (controller.buttons[9]) {
+		console.log('Left stick pressed')
+	}
+	if (controller.axes[0] !== 0) {
+		console.log(`Wheel rotated: ${controller.axes[0]}`)
+	}
+	if (controller.axes[1] !== 0) {
+		console.log(`Gas pedal pressed: ${controller.axes[1]}`)
+	}
+	if (controller.axes[2] !== 0) {
+		console.log(`Brake pedal pressed: ${controller.axes[2]}`)
+	}
+}
+
 //Do things if on the drive page
-function svDriveControls(controller) {
+function svDriveController(controller) {
 	if (controller.buttons[0].pressed) {
 		console.log(`Button 0 pressed`);
 	}
