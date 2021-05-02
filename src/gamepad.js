@@ -98,6 +98,7 @@ function pollGamepads() {
 		//Dpad Down
 		if (controller.buttons[13].pressed) {
 			//set flag or Dpadchange function , 0 is go down
+			//when the user is in the aipkey submenu, user only can move after closed the modal or firsttime enter the submenu
 			if(subMenuflag === 1 && urllist[Math.abs(hrefidx) % urllist.length].id === "EK"  ){
 				if (subMenuflag === 1 && modal.style.display =="none" || modal.style.display.length === 0)
 					Urlchange(0);
@@ -130,12 +131,20 @@ function pollGamepads() {
 			var subMenuidx;
 			subMenuidx = (Math.abs(botidx) - 1) % 5;
 			if (subMenuflag === 1) {
-
+				//If user is in apikey submenu, open modal
 				if (urllist[Math.abs(hrefidx) % urllist.length].id === "EK") {
-					urllist[Math.abs(hrefidx) % urllist.length].click();						
+					
+					if(apiInput.value.length != 0){
+						setAPIKey(apiInput.value);
+						apiInput.value = "";
+					}
+					else
+						urllist[Math.abs(hrefidx) % urllist.length].click();						
 				}
+				//If user is in the end of each submenu
 				else if (Math.abs(hrefidx) % urllist.length == urllist.length - 1)
 					Backtomenu();
+				//If user is in other submenus, access the href
 				else
 					window.location.href = urllist[Math.abs(hrefidx) % urllist.length].href;
 			}
