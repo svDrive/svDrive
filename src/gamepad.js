@@ -189,12 +189,15 @@ function svDriveSteeringWheel(controller) {
 	}
 	if (controller.axes[0] !== 0) {
 		console.log(`Wheel rotated: ${controller.axes[0]}`)
+		handleTurningSteeringWheel(controller)
 	}
 	if (controller.axes[1] !== 0) {
 		console.log(`Gas pedal pressed: ${controller.axes[1]}`)
+		handleThrottleSteeringWheel(controller)
 	}
 	if (controller.axes[2] !== 0) {
 		console.log(`Brake pedal pressed: ${controller.axes[2]}`)
+		handleThrottleSteeringWheel(controller)
 	}
 }
 
