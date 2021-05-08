@@ -218,9 +218,11 @@ function svDriveSteeringWheel(controller) {
 	}
 	if (controller.buttons[4]) {
 		console.log('Right bumper pressed')
+		// TODO: look left
 	}
 	if (controller.buttons[5]) {
 		console.log('Left bumper pressed')
+		// TODO: look right
 	}
 	if (controller.buttons[6].pressed || controller.buttons[7].pressed) {
 		let xboxScheme = document.getElementById("picture");
@@ -315,6 +317,12 @@ function lookVertical(controller) {
 
 function lookHorizontal(controller) {
 	_display.heading += controller.axes[2] * 10;
+	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
+}
+
+function lookHorizontalSteeringWheel(controller) {
+	if (controller.buttons[4].pressed) _display.heading -= 10;
+	else if (controller.buttons[5].pressed) _display.heading += 10;
 	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
 }
 
