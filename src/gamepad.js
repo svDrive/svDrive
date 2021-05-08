@@ -10,11 +10,14 @@ const deadzone = 0.8;
 //setInterval id (used in clearInterval())
 let pollControlsEventId = 0;
 
+//throttle is binary, if it was set to on then maintain throttle, otherwise don't move
+let isThrottleOn = false;
+
 //stock functions to be binded to wheel or gamepad functions
-function handleTurning(controller);
-function handleThrottle(controller);
-function lookHorizontal(controller);
-function lookVertical(controller);
+function handleTurning() {};
+function handleThrottle(controller) {};
+function lookHorizontal(controller) {};
+function lookVertical(controller) {};
 
 //MMD: Main Menu Drive!
 let MM = document.getElementById("1");
@@ -151,16 +154,16 @@ function menuControls(controller) {
 }
 
 function svDriveSteeringWheel(controller) {
-	if (controller.buttons[0]) {
+	if (controller.buttons[0].pressed) {
 		console.log('A button pressed')
 	}
-	if (controller.buttons[1]) {
+	if (controller.buttons[1].pressed) {
 		console.log('B button pressed')
 	}
-	if (controller.buttons[2]) {
+	if (controller.buttons[2].pressed) {
 		console.log('X button pressed')
 	}
-	if (controller.buttons[3]) {
+	if (controller.buttons[3].pressed) {
 		console.log('Y button pressed')
 	}
 	if (controller.buttons[4].pressed || controller.buttons[5].pressed) {
@@ -181,23 +184,23 @@ function svDriveSteeringWheel(controller) {
 			isSchemeOn = true;
 		}
 	}
-	if (controller.buttons[8]) {
+	if (controller.buttons[8].pressed) {
 		console.log('Right stick pressed')
 	}
-	if (controller.buttons[9]) {
+	if (controller.buttons[9].pressed) {
 		console.log('Left stick pressed')
 	}
 	if (controller.axes[0] !== 0) {
-		console.log(`Wheel rotated: ${controller.axes[0]}`)
-		handleTurningSteeringWheel(controller)
+		handleTurning(controller);
 	}
-	if (controller.axes[1] !== 0) {
-		console.log(`Gas pedal pressed: ${controller.axes[1]}`)
-		handleThrottleSteeringWheel(controller)
+	if (controller.axes[1] < 0) {
+		isThrottleOn = true;
 	}
-	if (controller.axes[2] !== 0) {
-		console.log(`Brake pedal pressed: ${controller.axes[2]}`)
-		handleThrottleSteeringWheel(controller)
+	if (controller.axes[2] < 0.5) {
+		isThrottleOn = false;
+	}
+	if(isThrottleOn) {
+		handleThrottle(controller);
 	}
 }
 
@@ -329,7 +332,7 @@ function HandleTurningController(controller){
 	let heading;
 	let links = _panorama.getLinks();
 
-	if (controller.axes[1] > 0) { //TODO: abstract these to their specific turns
+	if (controller.axes[1] > 0) {
 		heading = _display.vehicleHeading + 90;
 		if (heading > 360) heading = heading - 360;
 	}
@@ -368,11 +371,28 @@ function lookHorizontalSteeringWheel(controller) {
 }
 
 function handleThrottleSteeringWheel(controller) {
-	console.log("throttle pressed! ", controller.axis[1]);
+	console.log("throttle pressed! ", controller.axes[1]);
+	let heading = _display.heading;
+	let links = _panorama.getLinks();
+
+	let minDifferenceIndex;
+	let minDifference = 360;
+	for (let i = 0; i < links.length; ++i) {
+		let leftDiff = Math.abs(heading - links[i].heading);
+		let rightDiff = 360 - leftDiff;
+		let diff = Math.min(leftDiff, rightDiff);
+		if (diff < minDifference && diff < 45) {
+			minDifference = diff;
+			minDifferenceIndex = i;
+		}
+	}
+
+	if (minDifferenceIndex === undefined) return;
+	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 }
 
 function handleTurningSteeringWheel(controller) {
-	console.log("steering wheel value: ", controller.axis[0]);
+	console.log("steering wheel value: ", controller.axes[0]);
 
 }
 
