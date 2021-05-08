@@ -16,72 +16,6 @@ function handleThrottle(controller);
 function lookHorizontal(controller);
 function lookVertical(controller);
 
-window.addEventListener("gamepadconnected", (e) => {
-	controllerStatus.setAttribute("fill", "green");
-	// TODO: conditional logic for controller vs steering wheel
-	// slurp the user input about controller
-	//if (controller) pollControlsEventId = setInterval(pollControls, 150);
-	//else if (steeringWheel)
-	handleTurning = handleTurningSteeringWheel;
-	handleThrottle = handleThrottleSteeringWheel;
-	lookHorizontal = lookHorizontalSteeringWheel;
-
-	pollControlsEventId = setInterval(pollControls, 150);
-});
-
-window.addEventListener("gamepaddisconnected", (event) => {
-	controllerStatus.setAttribute("fill", "red");
-	clearInterval(pollControlsEventId);
-});
-
-/*Controller Scheme Xbox/PS4 TODO: define these!
-A/X = 0
-B/Circle = 1
-X/Square = 2
-Y/Triangle = 3
-R1 = 5
-R2 = 7
-RS = 11
-L1 = 4
-L2 = 6
-LS = 10
-Dpad L = 14
-Dpad R = 15
-Dpad U = 12
-Dpad D = 13
-Start = 9
-Options = 8
-*/
-
-/* Steering Wheel Controller Scheme
-A = 0
-B = 1
-X = 2
-Y = 3
-Right bumper = 4
-Left bumper = 5
-Start = 6
-Select = 7
-Right stick = 8
-Left stick = 9
-Home button = 10
-Wheel = axis 0
-Gas pedal = axis 1
-Brake pedal = axis 2
-*/
-
-//Determine html page we're on
-function getPath() {
-	if (window.location.pathname === "/html/index.html" || window.location.pathname === "/svDrive/html/index.html") {
-		return "index";
-	} else if (window.location.pathname === "/html/drive.html" || window.location.pathname === "/svDrive/html/drive.html") {
-		return "drive";
-	} else {
-		alert("unknow path");
-		return "unknown";
-	}
-}
-
 //MMD: Main Menu Drive!
 let MM = document.getElementById("1");
 let MMD = document.getElementById("MMD");
@@ -106,7 +40,25 @@ let subMenulst = document.getElementsByClassName("subMenu");
 let subMenuflag = 0;
 let urllist = [];
 
-//** CONTROLLER INPUT **//
+window.addEventListener("gamepadconnected", (e) => {
+	controllerStatus.setAttribute("fill", "green");
+	// TODO: conditional logic for controller vs steering wheel
+	// slurp the user input about controller
+	//if (controller) pollControlsEventId = setInterval(pollControls, 150);
+	//else if (steeringWheel)
+	handleTurning = handleTurningSteeringWheel;
+	handleThrottle = handleThrottleSteeringWheel;
+	lookHorizontal = lookHorizontalSteeringWheel;
+
+	pollControlsEventId = setInterval(pollControls, 150);
+});
+
+window.addEventListener("gamepaddisconnected", (event) => {
+	controllerStatus.setAttribute("fill", "red");
+	clearInterval(pollControlsEventId);
+});
+
+//** INPUT POLLING **//
 function pollControls() {
 	let controller = navigator.getGamepads()[0];
 	if (controller === undefined) {
@@ -122,21 +74,6 @@ function pollControls() {
 		svDriveSteeringWheel(controller);
 	}
 }
-
-// function pollSteeringWheel() {
-// 	let steeringWheel = navigator.getGamepads()[0];
-// 	if (steeringWheel === undefined) {
-// 		clearInterval(pollControlsEventId);
-// 		return;
-// 	}
-
-// 	if (path === "index") {
-// 		menuControls(controller);
-// 	}
-// 	else if(path === "drive") {
-// 		svDriveController(controller);
-// 	}
-// }
 
 function menuControls(controller) {
 	if (loadedMenu === false) {
@@ -310,6 +247,44 @@ function svDriveController(controller) {
 }
 
 //** BUTTON HANDLERS **//
+
+/*Controller Scheme Xbox/PS4 TODO: define these!
+A/X = 0
+B/Circle = 1
+X/Square = 2
+Y/Triangle = 3
+R1 = 5
+R2 = 7
+RS = 11
+L1 = 4
+L2 = 6
+LS = 10
+Dpad L = 14
+Dpad R = 15
+Dpad U = 12
+Dpad D = 13
+Start = 9
+Options = 8
+*/
+
+/* Steering Wheel Controller Scheme
+A = 0
+B = 1
+X = 2
+Y = 3
+Right bumper = 4
+Left bumper = 5
+Start = 6
+Select = 7
+Right stick = 8
+Left stick = 9
+Home button = 10
+Wheel = axis 0
+Gas pedal = axis 1
+Brake pedal = axis 2
+*/
+
+// controlller implementation
 function LookVerticalController(controller) {
 	let pitch = _display.pitch - controller.axes[3] * 10;
 
@@ -326,7 +301,6 @@ function LookHorizontalController(controller) {
 	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
 }
 
-// function handleThrottle(controller){
 function HandleThrottleController(controller){
 	let heading;
 	let links = _panorama.getLinks();
@@ -383,6 +357,7 @@ function HandleTurningController(controller){
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 }
 
+// steering wheel implementation
 function lookHorizontalSteeringWheel(controller) {
 	if (controller.buttons[4].pressed) _display.heading -= 10;
 	else if (controller.buttons[5].pressed) _display.heading += 10;
@@ -390,11 +365,24 @@ function lookHorizontalSteeringWheel(controller) {
 }
 
 function handleThrottleSteeringWheel(controller) {
-
+	console.log("throttle pressed! ", controller.axis[1]);
 }
 
 function handleTurningSteeringWheel(controller) {
+	console.log("steering wheel value: ", controller.axis[0]);
 
+}
+
+// menu implementation
+function getPath() {
+	if (window.location.pathname === "/html/index.html" || window.location.pathname === "/svDrive/html/index.html") {
+		return "index";
+	} else if (window.location.pathname === "/html/drive.html" || window.location.pathname === "/svDrive/html/drive.html") {
+		return "drive";
+	} else {
+		alert("unknow path");
+		return "unknown";
+	}
 }
 
 function Dpadchange(flag) {
