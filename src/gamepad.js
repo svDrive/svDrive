@@ -10,12 +10,22 @@ const deadzone = 0.8;
 //setInterval id (used in clearInterval())
 let pollControlsEventId = 0;
 
+//stock functions to be binded to wheel or gamepad functions
+function handleTurning(controller);
+function handleThrottle(controller);
+function lookHorizontal(controller);
+function lookVertical(controller);
+
 window.addEventListener("gamepadconnected", (e) => {
 	controllerStatus.setAttribute("fill", "green");
 	// TODO: conditional logic for controller vs steering wheel
 	// slurp the user input about controller
 	//if (controller) pollControlsEventId = setInterval(pollControls, 150);
-	//else if (steeringWheel) 
+	//else if (steeringWheel)
+	handleTurning = handleTurningSteeringWheel;
+	handleThrottle = handleThrottleSteeringWheel;
+	lookHorizontal = lookHorizontalSteeringWheel;
+
 	pollControlsEventId = setInterval(pollControls, 150);
 });
 
@@ -113,20 +123,20 @@ function pollControls() {
 	}
 }
 
-function pollSteeringWheel() {
-	let steeringWheel = navigator.getGamepads()[0];
-	if (steeringWheel === undefined) {
-		clearInterval(pollControlsEventId);
-		return;
-	}
+// function pollSteeringWheel() {
+// 	let steeringWheel = navigator.getGamepads()[0];
+// 	if (steeringWheel === undefined) {
+// 		clearInterval(pollControlsEventId);
+// 		return;
+// 	}
 
-	if (path === "index") {
-		menuControls(controller);
-	}
-	else if(path === "drive") {
-		svDriveController(controller);
-	}
-}
+// 	if (path === "index") {
+// 		menuControls(controller);
+// 	}
+// 	else if(path === "drive") {
+// 		svDriveController(controller);
+// 	}
+// }
 
 function menuControls(controller) {
 	if (loadedMenu === false) {
@@ -304,7 +314,7 @@ function svDriveController(controller) {
 }
 
 //** BUTTON HANDLERS **//
-function lookVertical(controller) {
+function LookVerticalController(controller) {
 	let pitch = _display.pitch - controller.axes[3] * 10;
 
 	//bound checks
@@ -315,18 +325,13 @@ function lookVertical(controller) {
 	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
 }
 
-function lookHorizontal(controller) {
+function LookHorizontalController(controller) {
 	_display.heading += controller.axes[2] * 10;
 	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
 }
 
-function lookHorizontalSteeringWheel(controller) {
-	if (controller.buttons[4].pressed) _display.heading -= 10;
-	else if (controller.buttons[5].pressed) _display.heading += 10;
-	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
-}
-
-function handleThrottle(controller){
+// function handleThrottle(controller){
+function HandleThrottleController(controller){
 	let heading;
 	let links = _panorama.getLinks();
 	if (controller.axes[1] > 0) heading = _display.vehicleHeading - 180;
@@ -347,7 +352,7 @@ function handleThrottle(controller){
 	if (minDifferenceIndex === undefined) return;
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 }
-function handleTurning(controller){
+function HandleTurningController(controller){
 	let heading;
 	let links = _panorama.getLinks();
 
@@ -380,6 +385,20 @@ function handleTurning(controller){
 
 	_display.vehicleHeading = links[minDifferenceIndex].heading;
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
+}
+
+function lookHorizontalSteeringWheel(controller) {
+	if (controller.buttons[4].pressed) _display.heading -= 10;
+	else if (controller.buttons[5].pressed) _display.heading += 10;
+	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
+}
+
+function handleThrottleSteeringWheel(controller) {
+
+}
+
+function handleTurningSteeringWheel(controller) {
+
 }
 
 function Dpadchange(flag) {
