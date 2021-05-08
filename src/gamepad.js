@@ -362,8 +362,8 @@ function HandleTurningController(controller){
 
 // steering wheel implementation
 function lookHorizontalSteeringWheel(controller) {
-	if (controller.buttons[4].pressed) _display.heading -= 10;
-	else if (controller.buttons[5].pressed) _display.heading += 10;
+	if (controller.buttons[4].pressed) _display.heading += 15;
+	else if (controller.buttons[5].pressed) _display.heading -= 15;
 	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
 }
 
