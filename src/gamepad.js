@@ -226,13 +226,9 @@ function svDriveSteeringWheel(controller) {
 	if (controller.buttons[3]) {
 		console.log('Y button pressed')
 	}
-	if (controller.buttons[4]) {
-		console.log('Right bumper pressed')
-		// TODO: look left
-	}
-	if (controller.buttons[5]) {
-		console.log('Left bumper pressed')
-		// TODO: look right
+	if (controller.buttons[4].pressed || controller.buttons[5].pressed) {
+		console.log('Bumper pressed')
+		lookHorizontalSteeringWheel(controller);
 	}
 	if (controller.buttons[6].pressed || controller.buttons[7].pressed) {
 		let xboxScheme = document.getElementById("picture");
