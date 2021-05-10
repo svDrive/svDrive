@@ -53,7 +53,7 @@ window.addEventListener("gamepadconnected", (e) => {
 	handleThrottle = handleThrottleSteeringWheel;
 	lookHorizontal = lookHorizontalSteeringWheel;
 
-	pollControlsEventId = setInterval(pollControls, 150);
+	pollControlsEventId = setInterval(pollControls, 1000);
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
@@ -190,9 +190,8 @@ function svDriveSteeringWheel(controller) {
 	if (controller.buttons[9].pressed) {
 		console.log('Left stick pressed')
 	}
-	if (controller.axes[0] !== 0) {
-		handleTurning(controller);
-	}
+	// if (controller.axes[0] !== 0) {
+	// }
 	if (controller.axes[1] < 0) {
 		isThrottleOn = true;
 	}
@@ -200,7 +199,8 @@ function svDriveSteeringWheel(controller) {
 		isThrottleOn = false;
 	}
 	if(isThrottleOn) {
-		handleThrottle(controller);
+		handleTurning(controller);
+		// handleThrottle(controller);
 	}
 }
 
@@ -371,7 +371,6 @@ function lookHorizontalSteeringWheel(controller) {
 }
 
 function handleThrottleSteeringWheel(controller) {
-	console.log("throttle pressed! ", controller.axes[1]);
 	let heading = _display.heading;
 	let links = _panorama.getLinks();
 
@@ -392,7 +391,29 @@ function handleThrottleSteeringWheel(controller) {
 }
 
 function handleTurningSteeringWheel(controller) {
-	console.log("steering wheel value: ", controller.axes[0]);
+	let links = _panorama.getLinks();
+	let wheelDiff = controller.axes[0] * 90;
+	let newHeading = _display.heading + wheelDiff;
+	if(newHeading <= 0) newHeading += 360;
+	else if(newHeading > 360) newHeading -= 360;
+	
+
+	let minDifferenceIndex;
+	let minDifference = 360;
+	for (let i = 0; i < links.length; ++i) {
+		let leftDiff = Math.abs(newHeading - links[i].heading);
+		let rightDiff = 360 - leftDiff;
+		let diff = Math.min(leftDiff, rightDiff);
+		if (diff < minDifference && diff < 90) {
+			minDifference = diff;
+			minDifferenceIndex = i;
+		}
+	}
+
+	if (minDifferenceIndex === undefined) return;
+	_display.vehicleHeading = links[minDifferenceIndex].heading;
+	_display.heading = _display.vehicleHeading;
+	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 
 }
 
