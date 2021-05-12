@@ -1,3 +1,6 @@
+//TODO: move ME!
+let isGamepad = false;
+
 //circle indicating the status of the controller
 const controllerStatus = document.querySelector("circle");
 
@@ -10,12 +13,37 @@ const deadzone = 0.8;
 //setInterval id (used in clearInterval())
 let pollControlsEventId = 0;
 
-//throttle is binary, if it was set to on then maintain throttle, otherwise don't move
+//flag to engage or disengage throttle
 let isThrottleOn = false;
 
+//button indeces dependent on wheel or gamepad
+let a;
+let b; 
+let x;
+let y;
+let r1;
+let rsB;
+let l1;
+let lsB;
+let start;
+let options;
+let dpadUp;
+let dpadDown;
+let dpadLeft;
+let dpadRight;
+
+//axes indeces dependent on wheel or gamepad
+let r2;
+let rsX;
+let rsY;
+let l2;
+let lsX;
+let lsY;
+
 //stock functions to be binded to wheel or gamepad functions
-function handleTurning() {};
-function handleThrottle(controller) {};
+function handleDirection(controller) {};
+function handleXMovement(controller) {};
+function handleYMovement(controller) {};
 function lookHorizontal(controller) {};
 function lookVertical(controller) {};
 
@@ -44,16 +72,66 @@ let subMenuflag = 0;
 let urllist = [];
 
 window.addEventListener("gamepadconnected", (e) => {
+	//TODO: sort out Dpad for steering wheel
 	controllerStatus.setAttribute("fill", "green");
-	// TODO: conditional logic for controller vs steering wheel
-	// slurp the user input about controller
-	//if (controller) pollControlsEventId = setInterval(pollControls, 150);
-	//else if (steeringWheel)
-	handleTurning = handleTurningSteeringWheel;
-	handleThrottle = handleThrottleSteeringWheel;
-	lookHorizontal = lookHorizontalSteeringWheel;
+	if(isGamepad) {
+		//button indeces
+		a = 0;
+		b = 1;
+		x = 2;
+		y = 3;
+		r1 = 5;
+		rsB = 11;
+		l1 = 4;
+		lsB = 10;
+		dpadLeft = 14;
+		dpadRight= 15;
+		dpadUp = 12;
+		dpadDown = 13;
+		start = 9;
+		options = 8;
 
-	pollControlsEventId = setInterval(pollControls, 1000);
+		//axis indeces
+		lsX = 0;
+		lsY = 1;
+		rsX = 2;
+		rsY = 3;
+		l2 = 6;
+		r2 = 7;
+
+		// handleDirection = handleDirectionGamepad;
+		handleXMovement = handleXMovementGamepad;
+		handleYMovement = handleYMovementGamepad;
+		handleDirection = handleDirectionGamepad;
+		lookHorizontal = lookHorizontalGamepad;
+		lookVertical = lookVerticalGamepad;
+	} 
+	else if(!isGamepad) {
+		//button indeces
+		a = 0;
+		b = 1;
+		x = 2;
+		y = 3;
+		r1 = 4;
+		rsB = 8;
+		l1 = 5;
+		lsB = 9;
+		start = 6;
+		options = 7;
+
+		//axis indeces
+		lsX = 0;
+		r2 = 1;
+		l2 = 2;
+
+		handleDirection = handleDirectionSteeringWheel;
+		lookHorizontal = lookHorizontalSteeringWheel;
+	}
+	else{
+		//TODO: error condition... undefined controller
+	}
+
+	pollControlsEventId = setInterval(pollControls, 750);
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
@@ -73,7 +151,7 @@ function pollControls() {
 		menuControls(controller);
 	}
 	else if(path === "drive") {
-		//svDriveController(controller);
+		// svDriveController(controller);
 		svDriveSteeringWheel(controller);
 	}
 }
@@ -86,26 +164,21 @@ function menuControls(controller) {
 		window.location.href = "#";
 		loadedMenu = true;
 	}
-
-	//Dpad Down
-	if (controller.buttons[13].pressed) {
+	if (controller.buttons[dpadDown].pressed) {
 		//set flag or Dpadchange function , 0 is go down
 		if (subMenuflag === 1)
 			Urlchange(0);
 		else
 			Dpadchange(0);
 	}
-
-	//Dpad UP
-	else if (controller.buttons[12].pressed) {
+	else if (controller.buttons[dpadUp].pressed) {
 		//set flag or Dpadchange function , 0 is go up
 		if (subMenuflag === 1)
 			Urlchange(1);
 		else
 			Dpadchange(1);
 	}
-
-	else if (controller.buttons[0].pressed) {
+	else if (controller.buttons[a].pressed) {
 		var subMenuidx;
 		subMenuidx = (Math.abs(botidx) - 1) % 5;
 		if (subMenuflag === 1) {
@@ -129,94 +202,52 @@ function menuControls(controller) {
 				phrefidx += urllist.length * 200;
 			}
 	}
-
-	else if (controller.buttons[1].pressed) {
+	else if(controller.buttons[b].pressed) {
 		Backtomenu();
-	}
-
-	//AXES
-	const leftStickXAxis = Math.abs(controller.axes[0]);
-	const leftStickYAxis = Math.abs(controller.axes[1]);
-	const rightStickXAxis = Math.abs(controller.axes[2]);
-	const rightStickYAxis = Math.abs(controller.axes[3]);
-	if (leftStickXAxis > deadzone) {
-		console.log(controller.axes[0]);
-	}
-	if (leftStickYAxis > deadzone) {
-		console.log(controller.axes[1]);
-	}
-	if (rightStickXAxis > deadzone) {
-		console.log(controller.axes[2]);
-	}
-	if (rightStickYAxis > deadzone) {
-		console.log(controller.axes[3]);
 	}
 }
 
 function svDriveSteeringWheel(controller) {
-	if (controller.buttons[0].pressed) {
-		console.log('A button pressed')
-	}
-	if (controller.buttons[1].pressed) {
-		console.log('B button pressed')
-	}
-	if (controller.buttons[2].pressed) {
-		console.log('X button pressed')
-	}
-	if (controller.buttons[3].pressed) {
-		console.log('Y button pressed')
-	}
-	if (controller.buttons[4].pressed || controller.buttons[5].pressed) {
-		console.log('Bumper pressed')
-		lookHorizontalSteeringWheel(controller);
-	}
-	if (controller.buttons[6].pressed || controller.buttons[7].pressed) {
-		let xboxScheme = document.getElementById("picture");
-		if (isSchemeOn === true) {
-			let image = document.getElementById("controller-scheme");
-			xboxScheme.removeChild(image);
-			isSchemeOn = false;
-		} else {
-			let image = new Image();
-			image.src = "../assets/svDriveGamepad.png";
-			image.id = "controller-scheme";
-			xboxScheme.appendChild(image);
-			isSchemeOn = true;
-		}
-	}
-	if (controller.buttons[8].pressed) {
-		console.log('Right stick pressed')
-	}
-	if (controller.buttons[9].pressed) {
-		console.log('Left stick pressed')
-	}
-	// if (controller.axes[0] !== 0) {
-	// }
-	if (controller.axes[1] < 0) {
-		isThrottleOn = true;
-	}
-	if (controller.axes[2] < 0.5) {
-		isThrottleOn = false;
-	}
-	if(isThrottleOn) {
-		handleTurning(controller);
-		// handleThrottle(controller);
-	}
-}
-
-//Do things if on the drive page
-function svDriveController(controller) {
-	if (controller.buttons[0].pressed) {
-		console.log(`Button 0 pressed`);
-	}
-
-	if (controller.buttons[1].pressed) { //TODO: verify I work!
+	if (controller.buttons[b].pressed) {
 		if(window.confirm('Are you sure you would like to return to the menu?') === true) {
 			window.location.href = "index.html";
 		}
 	}
+	if (controller.buttons[l1].pressed || controller.buttons[r1].pressed) {
+		lookHorizontal(controller);
+	}
+	if (controller.buttons[options].pressed || controller.buttons[start].pressed) {
+		let xboxScheme = document.getElementById("picture");
+		if (isSchemeOn === true) {
+			let image = document.getElementById("controller-scheme");
+			xboxScheme.removeChild(image);
+			isSchemeOn = false;
+		} else {
+			let image = new Image();
+			image.src = "../assets/svDriveGamepad.png";
+			image.id = "controller-scheme";
+			xboxScheme.appendChild(image);
+			isSchemeOn = true;
+		}
+	}
+	if (controller.axes[r2] < 0) {
+		isThrottleOn = true;
+	}
+	if (controller.axes[l2] < 0.5) {
+		isThrottleOn = false;
+	}
+	if(isThrottleOn) {
+		handleDirection(controller);
+	}
+}
 
-	if (controller.buttons[8].pressed || controller.buttons[9].pressed) {
+function svDriveController(controller) {
+	if (controller.buttons[b].pressed) {
+		if(window.confirm('Are you sure you would like to return to the menu?') === true) {
+			window.location.href = "index.html";
+		}
+	}
+	if (controller.buttons[options].pressed || controller.buttons[start].pressed) {
 		let xboxScheme = document.getElementById("picture");
 		if (isSchemeOn === true) {
 			let image = document.getElementById("controller-scheme");
@@ -231,68 +262,39 @@ function svDriveController(controller) {
 			isSchemeOn = true;
 		}
 	}
+	const leftStickXAxis = Math.abs(controller.axes[lsX]);
+	const leftStickYAxis = Math.abs(controller.axes[lsY]);
+	const rightStickXAxis = Math.abs(controller.axes[rsX]);
+	const rightStickYAxis = Math.abs(controller.axes[rsY]);
 
-	//collect axes values, and then check their validity
-	const leftStickXAxis = Math.abs(controller.axes[0]);
-	const leftStickYAxis = Math.abs(controller.axes[1]);
-	const rightStickXAxis = Math.abs(controller.axes[2]);
-	const rightStickYAxis = Math.abs(controller.axes[3]);
-
-	if (leftStickXAxis > deadzone) {
-		handleTurning(controller);
-	}
-	if (leftStickYAxis > deadzone) {
-		handleThrottle(controller);
-	}
 	if (rightStickXAxis > deadzone) {
 		lookHorizontal(controller);
 	}
-	if (rightStickYAxis > deadzone) {
+	if(rightStickYAxis > deadzone) {
 		lookVertical(controller);
 	}
+	if(leftStickXAxis > deadzone) {
+		handleXMovement(controller);
+	}
+	if(leftStickYAxis > deadzone) {
+		handleYMovement(controller);
+	}
+	if (controller.buttons[r2].touched === true) {
+		isThrottleOn = true;
+	}
+	if (controller.buttons[l2].touched === true) {
+		isThrottleOn = false;
+	}
+	if(isThrottleOn) {
+		handleDirection(controller);
+	}
+
 }
 
 //** BUTTON HANDLERS **//
-
-/*Controller Scheme Xbox/PS4 TODO: define these!
-A/X = 0
-B/Circle = 1
-X/Square = 2
-Y/Triangle = 3
-R1 = 5
-R2 = 7
-RS = 11
-L1 = 4
-L2 = 6
-LS = 10
-Dpad L = 14
-Dpad R = 15
-Dpad U = 12
-Dpad D = 13
-Start = 9
-Options = 8
-*/
-
-/* Steering Wheel Controller Scheme
-A = 0
-B = 1
-X = 2
-Y = 3
-Right bumper = 4
-Left bumper = 5
-Start = 6
-Select = 7
-Right stick = 8
-Left stick = 9
-Home button = 10
-Wheel = axis 0
-Gas pedal = axis 1
-Brake pedal = axis 2
-*/
-
 // controlller implementation
-function LookVerticalController(controller) {
-	let pitch = _display.pitch - controller.axes[3] * 10;
+function lookVerticalGamepad(controller) {
+	let pitch = _display.pitch - controller.axes[rsY] * 10;
 
 	//bound checks
 	if (pitch > 90) pitch = 90;
@@ -302,15 +304,15 @@ function LookVerticalController(controller) {
 	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
 }
 
-function LookHorizontalController(controller) {
-	_display.heading += controller.axes[2] * 10;
+function lookHorizontalGamepad(controller) {
+	_display.heading += controller.axes[rsX] * 10;
 	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
 }
 
-function HandleThrottleController(controller){
+function handleYMovementGamepad(controller){
 	let heading;
 	let links = _panorama.getLinks();
-	if (controller.axes[1] > 0) heading = _display.vehicleHeading - 180;
+	if (controller.axes[lsY] > 0) heading = _display.vehicleHeading - 180;
 	else heading = _display.vehicleHeading;
 
 	let minDifferenceIndex;
@@ -328,11 +330,11 @@ function HandleThrottleController(controller){
 	if (minDifferenceIndex === undefined) return;
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 }
-function HandleTurningController(controller){
+function handleXMovementGamepad(controller){
 	let heading;
 	let links = _panorama.getLinks();
 
-	if (controller.axes[1] > 0) {
+	if (controller.axes[lsX] > 0) {
 		heading = _display.vehicleHeading + 90;
 		if (heading > 360) heading = heading - 360;
 	}
@@ -354,7 +356,7 @@ function HandleTurningController(controller){
 	}
 	if (minDifferenceIndex === undefined) return;
 
-	if (controller.axes[1] > 0)
+	if (controller.axes[lsX] > 0)
 		_display.heading += minDifference;
 	else
 		_display.heading -= minDifference;
@@ -363,36 +365,42 @@ function HandleTurningController(controller){
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 }
 
-// steering wheel implementation
-function lookHorizontalSteeringWheel(controller) {
-	if (controller.buttons[4].pressed) _display.heading += 15;
-	else if (controller.buttons[5].pressed) _display.heading -= 15;
-	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
-}
-
-function handleThrottleSteeringWheel(controller) {
-	let heading = _display.heading;
+function handleDirectionGamepad(controller) {
 	let links = _panorama.getLinks();
+	let wheelDiff = controller.axes[lsX] * 90;
+	let newHeading = _display.heading + wheelDiff;
+	if(newHeading <= 0) newHeading += 360;
+	else if(newHeading > 360) newHeading -= 360;
+	
 
 	let minDifferenceIndex;
 	let minDifference = 360;
 	for (let i = 0; i < links.length; ++i) {
-		let leftDiff = Math.abs(heading - links[i].heading);
+		let leftDiff = Math.abs(newHeading - links[i].heading);
 		let rightDiff = 360 - leftDiff;
 		let diff = Math.min(leftDiff, rightDiff);
-		if (diff < minDifference && diff < 45) {
+		if (diff < minDifference && diff < 90) {
 			minDifference = diff;
 			minDifferenceIndex = i;
 		}
 	}
 
 	if (minDifferenceIndex === undefined) return;
+	_display.vehicleHeading = links[minDifferenceIndex].heading;
+	_display.heading = _display.vehicleHeading;
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
+
+}
+// steering wheel implementation
+function lookHorizontalSteeringWheel(controller) {
+	if (controller.buttons[r1].pressed) _display.heading += 15;
+	else if (controller.buttons[l1].pressed) _display.heading -= 15;
+	_panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
 }
 
-function handleTurningSteeringWheel(controller) {
+function handleDirectionSteeringWheel(controller) {
 	let links = _panorama.getLinks();
-	let wheelDiff = controller.axes[0] * 90;
+	let wheelDiff = controller.axes[lsX] * 90;
 	let newHeading = _display.heading + wheelDiff;
 	if(newHeading <= 0) newHeading += 360;
 	else if(newHeading > 360) newHeading -= 360;
