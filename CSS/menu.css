@@ -81,6 +81,8 @@ body {
   font-size: 14px;
   border-bottom: 1px solid rgb(22, 30, 50);
   position: relative;
+  margin: auto;
+  text-decoration: none;
 }
 
 .subMenu a:before {
@@ -154,7 +156,7 @@ body {
 }
 
 .selection:target .subMenu {
-  max-height: 15em;
+  max-height: 17em;
 }
 
 img[alt="logo"] {
