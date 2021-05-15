@@ -1,5 +1,3 @@
-//circle indicating the status of the controller
-const controllerStatus = document.querySelector("circle");
 
 //flag to display the controller scheme or not
 let isSchemeOn = false;
@@ -10,13 +8,26 @@ const deadzone = 0.8;
 //setInterval id (used in clearInterval())
 let id = 0;
 
+//controller warning flag, true on controller disconnect
+let controllerWarning = true;
+
+//Where to insert warning text for controller disconnect
+const gamepadWarning = document.getElementById("gamepadStatus");
+
+if(controllerWarning === true){
+	gamepadWarning.textContent = "Please Connect a\r\nGamepad or Steering Wheel";
+}
+
 window.addEventListener("gamepadconnected", (e) => {
-	controllerStatus.setAttribute("fill", "green");
 	id = setInterval(pollGamepads, 150);
+	controllerWarning = false;
+	gamepadWarning.textContent = "";
+
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
-	controllerStatus.setAttribute("fill", "red");
+	controllerWarning = true;
+	gamepadWarning.textContent = "Please Connect a\r\nGamepad or Steering Wheel";
 	clearInterval(id);
 });
 
@@ -210,7 +221,7 @@ function pollGamepads() {
 			console.log(`Button 1 pressed`);
 		}
 
-		if (controller.buttons[8].pressed) {
+		if (controller.buttons[9].pressed) {
 			let xboxScheme = document.getElementById("picture");
 			if (isSchemeOn === true) {
 				let image = document.getElementById("controller-scheme");

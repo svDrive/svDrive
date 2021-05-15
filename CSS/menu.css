@@ -146,7 +146,7 @@ body {
   max-height: 15em;
 }
 
-img[alt="logo"] {
+img{
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -165,3 +165,11 @@ img[alt="logo"] {
   margin: 2px auto;
   z-index: 1100 !important;
 }
+
+.gamepadStatus{
+  white-space: pre;
+  font-size: xx-large;
+  text-align: center;
+  color:red;
+}
+
