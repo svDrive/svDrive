@@ -15,29 +15,17 @@
         <div id="pano"> </div>
     </div>
     </div class="HUD-Overlay">
-        <div class="HUD-Navigation">
-            <div class="HUD-Navigation-Element">
-                <div class="menu">
+        <section class="topHUD-Dashboard">
+                <div class="flex-item menu">
                     <a href="index.html" id="menu">Menu</a>
                 </div>
-            </div>
-            <div class="HUD-Navigation-Element">
-                <div class="col-sm gamepad">
-                        <svg id = "statusButton" width = "215" height = "50">
-                            <text fill = "rgb(121, 84, 105)" font-size = "22" x = "0" y = "30">Controller Status</text>
-                            <circle cx = "190" cy = "25" r = "15" fill = "red" />
-                        </svg>
-                        <p id = "picture"> </p>
+                <div class="flex-item gamepadStatus" >
+                    <p id = "gamepadStatus">
+                    <p id = "picture"> </p>
                 </div>
+                <img src="../assets/transparentlogo.png" class = "flex-item logo" alt="svDrive Logo">
             </div>
-        </div>
-        <div class="HUD-Dashboard">
-            <div class="HUD-Dashboard-Element">
-                <div>
-                    <img src="../assets/transparentlogo.png" alt="SV Drive Logo">
-                </div>
-            </div>
-        </div>
+        </section>
         <footer>
             <!--  Section is designed to contain links to various support/resources that a user would find helpful. Not for 'svDrive' features. -->
             <div>About Us</div>

@@ -22,7 +22,6 @@ window.addEventListener("gamepadconnected", (e) => {
 	id = setInterval(pollGamepads, 150);
 	controllerWarning = false;
 	gamepadWarning.textContent = "";
-
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
