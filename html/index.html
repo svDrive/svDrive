@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Street View Drive - A Google Maps Driving Simulator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body id = "menuBody">
     <div class="wrapper">
@@ -15,70 +16,123 @@
                     <img src="/assets/transparentlogo.png" alt="logo" />
                 </a>
             </li>
-            <li class="selection" id="mainMenu">
-                <a href="#mainMenu" id = "1" class="button">Main Menu</a>
-                <div class="subMenu">
-                    <a href="drive.html" id = "MMD">Drive!</a>
-                    <a href="https://library.pdx.edu/about/hours/" id = "MMS2">Selection 2</a>
-                    <a href="index.html">Close</a>
-                </div>
+            <li class="selection" id="drive">
+                <a href="#" id = "1" class="button" onclick="drive()">Drive!</a>
             </li>
-            <li class="selection" id="apiKey">
-                <a href="#apiKey" id = "2" class="button">API Key</a>
+            <li class="selection" id="config">
+                <a href="#config" id = "2" class="button">Configuration</a>
                 <div class="subMenu">
-                    <button id = "EK" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Enter Key</button>
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">       
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">API KEY</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
-                                </div>
-                                <div class="modal-body">
-                                    <label for="enterkey">Enter Key: </label>
-                                    <input id="API-Key" type="text" />
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg" id = "AK">Acquire Key</a>
-                    <a href="index.html">Close</a>
-                </div>
-            </li>
-            <li class="selection" id="controller">
-                <a href="#controller" id="3" class="button">Controller</a>
-                <div class="subMenu">
-                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 1</a>
-                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 2</a>
-                    <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 3</a>
+                    <button id = "EK" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#apiKeyModal">Enter API Key</button>
+                    <a href="https://developers.google.com/maps/documentation/maps-static/get-api-key" id = "AK">Acquire API Key</a>
+                    <button id = "EK" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#controllerModal">Set Controller Type</button>
+                    <button id = "EK" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#apiListModal">Required APIs</button>
                     <a href="index.html">Close</a>
                 </div>
             </li>
             <li class="selection" id="about">
                 <a href="#about"  id="4" class="button">About</a>
-                <div class="subMenu">
+                <!-- <div class="subMenu">
                     <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 1</a>
                     <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 2</a>
                     <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 3</a>
                     <a href="index.html">Close</a>
-                </div>
+                </div> -->
             </li>
             <li class="selection" id="support">
                 <a href="#support" id="0" class="button">Support</a>
-                <div class="subMenu">
+                <!-- <div class="subMenu">
                     <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 1</a>
                     <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 2</a>
                     <a href="https://media2.govtech.com/images/940*920/GOOGLE_MAPS_LOGO_JPG.jpg">Selection 3</a>
                     <a href="index.html">Close</a>
-                </div>
+                </div> -->
             </li>
             <li class="selection" id="collapse">
                 <a href="index.html" class="button"></a>
             </li>
         </ui>
+    </div>
+    <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">       
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title mx-auto" id="welcomeModalLabel">Welcome!</h5>
+                </div>
+                <div class="modal-body">
+                    <label for="API-Key1">Enter Key: </label>
+                    <input id="API-Key1" type="text" />
+                    <hr>
+                    <form>
+                        <input type="radio" id="controller1" name="controllerType1" value="xbox" checked>
+                        <label for="controller1">Xbox Controller</label>
+                        <input type="radio" id="steeringWheel1" name="controllerType1" value="wheel">
+                        <label for="steeringWheel1">Steering Wheel</label>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="welcomeSet">Set</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="apiKeyModal" tabindex="-1" aria-labelledby="apiKeyModalLabel" aria-hidden="true">       
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="apiModalLabel">API KEY</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                </div>
+                <div class="modal-body">
+                    <label for="API-Key2">Enter Key: </label>
+                    <input id="API-Key2" type="text" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="apiSet">Set</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="controllerModal" tabindex="-1" aria-labelledby="controllerModalLabel" aria-hidden="true">       
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="apiModalLabel">Controller Type</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input type="radio" id="controller2" name="controllerType2" value="xbox" checked>
+                        <label for="controller">Xbox Controller</label>
+                        <input type="radio" id="steeringWheel2" name="controllerType2" value="wheel">
+                        <label for="steeringWheel">Steering Wheel</label>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="controllerSet">Set</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="apiListModal" tabindex="-1" aria-labelledby="apiListModalLabel" aria-hidden="true">       
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="apiModalLabel">Required APIs</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>API 1</li>
+                        <li>API 2</li>
+                        <li>API 3</li>
+                        <li>API 4</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="apiListCloseButton">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 <div class="HUD-Navigation-Element">
