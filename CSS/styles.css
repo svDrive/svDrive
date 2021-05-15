@@ -86,7 +86,8 @@ a:hover {
 
 .menu{
   display: flex;
-  margin: 2%;
+  align-self:center;
+  margin: 0.5%;
 }
 
 .logo{
