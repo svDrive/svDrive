@@ -41,9 +41,9 @@ Options = 8
 
 //Determine html page we're on
 function getPath() {
-	if (window.location.pathname === "/html/index.html" || window.location.pathname === "/svDrive/html/index.html") {
+	if (window.location.pathname.search("index") >= 0) {
 		return "index";
-	} else if (window.location.pathname === "/html/drive.html" || window.location.pathname === "/svDrive/html/drive.html") {
+	} else if (window.location.pathname.search("drive") >= 0) {
 		return "drive";
 	} else {
 		alert("unknow path");
@@ -210,7 +210,7 @@ function pollGamepads() {
 			console.log(`Button 1 pressed`);
 		}
 
-		if (controller.buttons[8].pressed || controller.buttons[9].pressed) {
+		if (controller.buttons[8].pressed) {
 			let xboxScheme = document.getElementById("picture");
 			if (isSchemeOn === true) {
 				let image = document.getElementById("controller-scheme");
