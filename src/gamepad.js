@@ -11,7 +11,7 @@ let isSchemeOn = false;
 const deadzone = 0.8;
 
 //setInterval id (used in clearInterval())
-let pollControlsEventId = 0;
+let chooseControlsEventId = 0;
 
 //flag to engage or disengage throttle
 let isThrottleOn = false;
@@ -47,30 +47,7 @@ function handleYMovement(controller) {};
 function lookHorizontal(controller) {};
 function lookVertical(controller) {};
 
-//MMD: Main Menu Drive!
-let MM = document.getElementById("1");
-let MMD = document.getElementById("MMD");
-let MMS2 = document.getElementById("MMS2");
-let API = document.getElementById("2");
-let EK = document.getElementById("EK");
-let AK = document.getElementById("AK");
-let option;
-let loadedMenu = false;
-let path = getPath();
-let botidx = 2001;
-let preidx = 2001;
-let hrefidx = 0;
-let phrefidx = 0;
-let botlen = 5;
-
-let prebot;
-let curbot;
-let preurl;
-let cururl;
-let subMenulst = document.getElementsByClassName("subMenu");
-let subMenuflag = 0;
-let urllist = [];
-
+// Upon controller detection assign abstracted variables and functions appropriately
 window.addEventListener("gamepadconnected", (e) => {
 	//TODO: sort out Dpad for steering wheel
 	controllerStatus.setAttribute("fill", "green");
@@ -127,23 +104,20 @@ window.addEventListener("gamepadconnected", (e) => {
 		handleDirection = handleDirectionSteeringWheel;
 		lookHorizontal = lookHorizontalSteeringWheel;
 	}
-	else{
-		//TODO: error condition... undefined controller
-	}
 
-	pollControlsEventId = setInterval(pollControls, 750);
+	chooseControlsEventId = setInterval(chooseControls, 750);
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
 	controllerStatus.setAttribute("fill", "red");
-	clearInterval(pollControlsEventId);
+	clearInterval(chooseControlsEventId);
 });
 
-//** INPUT POLLING **//
-function pollControls() {
+// Determine which control scheme to use based on page and controller type
+function chooseControls() {
 	let controller = navigator.getGamepads()[0];
 	if (controller === undefined) {
-		clearInterval(pollControlsEventId);
+		clearInterval(chooseControlsEventId);
 		return;
 	}
 
@@ -151,10 +125,37 @@ function pollControls() {
 		menuControls(controller);
 	}
 	else if(path === "drive") {
-		// svDriveController(controller);
-		svDriveSteeringWheel(controller);
+		if (isGamepad) svDriveGamepad(controller);
+		else if (!isGamepad) svDriveSteeringWheel(controller);
+		// TODO: decide if button assignment should be here instead of gamepadConnected
 	}
 }
+
+//** INPUT POLLING **//
+
+//variables for navigating menu
+let MM = document.getElementById("1");
+let MMD = document.getElementById("MMD");
+let MMS2 = document.getElementById("MMS2");
+let API = document.getElementById("2");
+let EK = document.getElementById("EK");
+let AK = document.getElementById("AK");
+let option;
+let loadedMenu = false;
+let path = getPath();
+let botidx = 2001;
+let preidx = 2001;
+let hrefidx = 0;
+let phrefidx = 0;
+let botlen = 5;
+
+let prebot;
+let curbot;
+let preurl;
+let cururl;
+let subMenulst = document.getElementsByClassName("subMenu");
+let subMenuflag = 0;
+let urllist = [];
 
 function menuControls(controller) {
 	if (loadedMenu === false) {
@@ -165,25 +166,25 @@ function menuControls(controller) {
 		loadedMenu = true;
 	}
 	if (controller.buttons[dpadDown].pressed) {
-		//set flag or Dpadchange function , 0 is go down
+		//set flag or DpadChange function , 0 is go down
 		if (subMenuflag === 1)
-			Urlchange(0);
+			urlChange(0);
 		else
-			Dpadchange(0);
+			DpadChange(0);
 	}
 	else if (controller.buttons[dpadUp].pressed) {
-		//set flag or Dpadchange function , 0 is go up
+		//set flag or DpadChange function , 0 is go up
 		if (subMenuflag === 1)
-			Urlchange(1);
+			urlChange(1);
 		else
-			Dpadchange(1);
+			DpadChange(1);
 	}
 	else if (controller.buttons[a].pressed) {
 		var subMenuidx;
 		subMenuidx = (Math.abs(botidx) - 1) % 5;
 		if (subMenuflag === 1) {
 			if (Math.abs(hrefidx) % urllist.length == urllist.length - 1)
-				Backtomenu();
+				backToMenu();
 			else
 				window.location.href = urllist[Math.abs(hrefidx) % urllist.length].href;
 		}
@@ -203,14 +204,14 @@ function menuControls(controller) {
 			}
 	}
 	else if(controller.buttons[b].pressed) {
-		Backtomenu();
+		backToMenu();
 	}
 }
 
 function svDriveSteeringWheel(controller) {
 	if (controller.buttons[b].pressed) {
 		if(window.confirm('Are you sure you would like to return to the menu?') === true) {
-			window.location.href = "index.html";
+			backToMenu();
 		}
 	}
 	if (controller.buttons[l1].pressed || controller.buttons[r1].pressed) {
@@ -241,7 +242,7 @@ function svDriveSteeringWheel(controller) {
 	}
 }
 
-function svDriveController(controller) {
+function svDriveGamepad(controller) {
 	if (controller.buttons[b].pressed) {
 		if(window.confirm('Are you sure you would like to return to the menu?') === true) {
 			window.location.href = "index.html";
@@ -292,7 +293,8 @@ function svDriveController(controller) {
 }
 
 //** BUTTON HANDLERS **//
-// controlller implementation
+
+// gamepad implementation
 function lookVerticalGamepad(controller) {
 	let pitch = _display.pitch - controller.axes[rsY] * 10;
 
@@ -391,6 +393,7 @@ function handleDirectionGamepad(controller) {
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 
 }
+
 // steering wheel implementation
 function lookHorizontalSteeringWheel(controller) {
 	if (controller.buttons[r1].pressed) _display.heading += 15;
@@ -437,7 +440,7 @@ function getPath() {
 	}
 }
 
-function Dpadchange(flag) {
+function DpadChange(flag) {
 	//preidx: indx of prenode 
 	preidx = botidx;
 	if (flag == 1)
@@ -450,7 +453,7 @@ function Dpadchange(flag) {
 	curbot.style.fontSize = "large";
 }
 
-function Urlchange(flag) {
+function urlChange(flag) {
 	//preidx: indx of prenode 
 	phrefidx = hrefidx;
 	if (flag == 1)
@@ -463,7 +466,7 @@ function Urlchange(flag) {
 	cururl.style.fontSize = "large";
 }
 
-function Backtomenu() {
+function backToMenu() {
 	urllist.length = 0;
 	subMenuflag = 0;
 	window.location.href = "#";
