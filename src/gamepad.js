@@ -1,28 +1,12 @@
-//TODO: move ME!
-let isGamepad = false;
+//** ESTABLISHING CONTROLLER SETUP **//
 
-//circle indicating the status of the controller
-const controllerStatus = document.querySelector("circle");
-
-//flag to display the controller scheme or not
-let isSchemeOn = false;
-
-//Defines the deadzone for controller axes
-const deadzone = 0.8;
-
-//setInterval id (used in clearInterval())
-let chooseControlsEventId = 0;
-
-//flag to engage or disengage throttle
-let isThrottleOn = false;
-
-//button indeces dependent on wheel or gamepad
-let a;
+// Variables and functions for abstracting controls \\
+let a;		
 let b; 
 let x;
 let y;
 let r1;
-let rsB;
+let rsB;		//buttons
 let l1;
 let lsB;
 let start;
@@ -32,25 +16,32 @@ let dpadDown;
 let dpadLeft;
 let dpadRight;
 
-//axes indeces dependent on wheel or gamepad
 let r2;
 let rsX;
-let rsY;
+let rsY;		//axes
 let l2;
 let lsX;
 let lsY;
 
-//stock functions to be binded to wheel or gamepad functions
+//abstracted functions to be binded to controller type specific functions
 function handleDirection(controller) {};
 function handleXMovement(controller) {};
 function handleYMovement(controller) {};
 function lookHorizontal(controller) {};
 function lookVertical(controller) {};
 
-// Upon controller detection assign abstracted variables and functions appropriately
+// Gamepad control scheme management \\
+let isGamepad;
+let chooseControlsEventId = 0;					//setInterval id (used in clearInterval())
+const controllerStatus = document.querySelector("circle");	//circle indicating the status of the controller
+
+//upon controller detection assign abstracted controls appropriately
 window.addEventListener("gamepadconnected", (e) => {
-	//TODO: sort out Dpad for steering wheel
 	controllerStatus.setAttribute("fill", "green");
+	//fetch controller type
+	if(localStorage.getItem("Deviceflag") === "1") isGamepad = true;
+	else if(localStorage.getItem("Deviceflag") === "-1") isGamepad = false;
+	//assign abstracted variables and functions
 	if(isGamepad) {
 		//button indeces
 		a = 0;
@@ -76,7 +67,7 @@ window.addEventListener("gamepadconnected", (e) => {
 		l2 = 6;
 		r2 = 7;
 
-		// handleDirection = handleDirectionGamepad;
+		//handleDirection = handleDirectionGamepad;
 		handleXMovement = handleXMovementGamepad;
 		handleYMovement = handleYMovementGamepad;
 		handleDirection = handleDirectionGamepad;
@@ -95,7 +86,8 @@ window.addEventListener("gamepadconnected", (e) => {
 		lsB = 9;
 		start = 6;
 		options = 7;
-
+		//TODO: sort out Dpad for steering wheel
+		
 		//axis indeces
 		lsX = 0;
 		r2 = 1;
@@ -113,7 +105,7 @@ window.addEventListener("gamepaddisconnected", (event) => {
 	clearInterval(chooseControlsEventId);
 });
 
-// Determine which control scheme to use based on page and controller type
+//on an interval determine which control scheme to use based on page and controller type
 function chooseControls() {
 	let controller = navigator.getGamepads()[0];
 	if (controller === undefined) {
@@ -131,9 +123,9 @@ function chooseControls() {
 	}
 }
 
-//** INPUT POLLING **//
+//** CONTROLLER TYPE NON-SPECIFIC INPUT POLLING **//
 
-//variables for navigating menu
+// Menu navigation implementation \\
 let MM = document.getElementById("1");
 let MMD = document.getElementById("MMD");
 let MMS2 = document.getElementById("MMS2");
@@ -148,7 +140,6 @@ let preidx = 2001;
 let hrefidx = 0;
 let phrefidx = 0;
 let botlen = 5;
-
 let prebot;
 let curbot;
 let preurl;
@@ -207,6 +198,57 @@ function menuControls(controller) {
 		backToMenu();
 	}
 }
+
+function getPath() {
+	if (window.location.pathname === "/html/index.html" || window.location.pathname === "/svDrive/html/index.html") {
+		return "index";
+	} else if (window.location.pathname === "/html/drive.html" || window.location.pathname === "/svDrive/html/drive.html") {
+		return "drive";
+	} else {
+		alert("unknow path");
+		return "unknown";
+	}
+}
+
+function DpadChange(flag) {
+	//preidx: indx of prenode 
+	preidx = botidx;
+	if (flag == 1)
+		botidx -= 1;
+	else
+		botidx += 1;
+	prebot = document.getElementById((Math.abs(preidx) % botlen).toString());
+	curbot = document.getElementById((Math.abs(botidx) % botlen).toString());
+	prebot.style.fontSize = "medium";
+	curbot.style.fontSize = "large";
+}
+
+function urlChange(flag) {
+	//preidx: indx of prenode 
+	phrefidx = hrefidx;
+	if (flag == 1)
+		hrefidx -= 1;
+	else
+		hrefidx += 1;
+	preurl = urllist[Math.abs(phrefidx) % urllist.length];
+	cururl = urllist[Math.abs(hrefidx) % urllist.length];
+	preurl.style.fontSize = "medium";
+	cururl.style.fontSize = "large";
+}
+
+function backToMenu() {
+	urllist.length = 0;
+	subMenuflag = 0;
+	window.location.href = "#";
+	cururl.style.fontSize = "medium";
+	hrefidx = 0;
+	phrefidx = 0;
+}
+
+// Driving implementation \\
+let isThrottleOn = false;		//flag to engage or disengage throttle
+let isSchemeOn = false;			//flag to display the controller scheme or not
+const deadzone = 0.8;			//Defines the deadzone for controller axes
 
 function svDriveSteeringWheel(controller) {
 	if (controller.buttons[b].pressed) {
@@ -292,9 +334,9 @@ function svDriveGamepad(controller) {
 
 }
 
-//** BUTTON HANDLERS **//
+//** CONTROLLER TYPE SPECIFIC INPUT POLLING **//
 
-// gamepad implementation
+// Gamepad implementation \\
 function lookVerticalGamepad(controller) {
 	let pitch = _display.pitch - controller.axes[rsY] * 10;
 
@@ -332,6 +374,7 @@ function handleYMovementGamepad(controller){
 	if (minDifferenceIndex === undefined) return;
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 }
+
 function handleXMovementGamepad(controller){
 	let heading;
 	let links = _panorama.getLinks();
@@ -394,7 +437,7 @@ function handleDirectionGamepad(controller) {
 
 }
 
-// steering wheel implementation
+// Steering wheel implementation \\
 function lookHorizontalSteeringWheel(controller) {
 	if (controller.buttons[r1].pressed) _display.heading += 15;
 	else if (controller.buttons[l1].pressed) _display.heading -= 15;
@@ -426,51 +469,4 @@ function handleDirectionSteeringWheel(controller) {
 	_display.heading = _display.vehicleHeading;
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 
-}
-
-// menu implementation
-function getPath() {
-	if (window.location.pathname === "/html/index.html" || window.location.pathname === "/svDrive/html/index.html") {
-		return "index";
-	} else if (window.location.pathname === "/html/drive.html" || window.location.pathname === "/svDrive/html/drive.html") {
-		return "drive";
-	} else {
-		alert("unknow path");
-		return "unknown";
-	}
-}
-
-function DpadChange(flag) {
-	//preidx: indx of prenode 
-	preidx = botidx;
-	if (flag == 1)
-		botidx -= 1;
-	else
-		botidx += 1;
-	prebot = document.getElementById((Math.abs(preidx) % botlen).toString());
-	curbot = document.getElementById((Math.abs(botidx) % botlen).toString());
-	prebot.style.fontSize = "medium";
-	curbot.style.fontSize = "large";
-}
-
-function urlChange(flag) {
-	//preidx: indx of prenode 
-	phrefidx = hrefidx;
-	if (flag == 1)
-		hrefidx -= 1;
-	else
-		hrefidx += 1;
-	preurl = urllist[Math.abs(phrefidx) % urllist.length];
-	cururl = urllist[Math.abs(hrefidx) % urllist.length];
-	preurl.style.fontSize = "medium";
-	cururl.style.fontSize = "large";
-}
-
-function backToMenu() {
-	urllist.length = 0;
-	subMenuflag = 0;
-	window.location.href = "#";
-	cururl.style.fontSize = "medium";
-	hrefidx = 0;
-	phrefidx = 0;
 }
