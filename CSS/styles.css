@@ -86,7 +86,7 @@ a:hover {
 
 .menu{
   display: flex;
-  align-self:center;
+  align-self:baseline;
   margin: 0.5%;
 }
 
@@ -97,7 +97,7 @@ a:hover {
 
 .gamepadStatus{
   white-space: pre;
-  font-size: xx-large;
+  font-size: 70px;
   text-align: center;
   color:red;
   font-weight: bold;
