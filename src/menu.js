@@ -86,3 +86,41 @@ controllerSetButton.addEventListener("click", function () {
   }
   $("#controllerModal").modal("hide");
 });
+
+
+/*********************************
+ Starting Location modal 
+ *********************************/
+function startDrive(){
+
+  const startInput = document.getElementById("start-Point"); 
+
+  if(startInput.value){
+    setStartingLocation(startInput.value);
+    startInput.value = "";
+    $("#apiKeyModal").modal("hide"); 
+  }
+
+
+  // TO-DO: work in-progess Dynamically load the address panaroma frame on the drive.html page. 
+
+}
+
+
+// Santize the starting address string.
+function setStartingLocation(unsanitizedInput) {
+  let sanitizedInput = sanitizeAddress(unsanitizedInput);
+  localStorage.setItem("STARTING-ADDRESS", sanitizedInput);
+}
+
+// Removes all charcaters which are invalid for starting address from the input string.
+// Aggressively eleminates XXS attempts, as nearly every special character is removed.
+function sanitizeAddress(unsanitizedInput) {
+  let cleanInput = String();
+  let testChar = "";
+  for (var pos = 0; pos < unsanitizedInput.length; pos++) {
+    testChar = unsanitizedInput.charAt(pos);
+    if (_validAddress.includes(testChar)) cleanInput += testChar;
+  }
+  return cleanInput;
+}
