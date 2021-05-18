@@ -19,8 +19,15 @@
             <li class="selection" id="drive">
                 <a href="#" id = "1" class="button" onclick="drive()">Drive!</a>
             </li>
+            <li class="selection" id="start">
+                <a href="#start" id = "2" class="button">Starting Location</a>
+                <div class="subMenu">
+                    <button id = "EK" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#startPointModal">Starting Point</button>
+                    <a href="#">Close</a>
+                </div>
+            </li>
             <li class="selection" id="config">
-                <a href="#config" id = "2" class="button">Configuration</a>
+                <a href="#config" id = "3" class="button">Configuration</a>
                 <div class="subMenu">
                     <button id = "EK" type="button" class="btn" data-bs-toggle="modal" data-bs-target="#apiKeyModal">Enter API Key</button>
                     <a href="https://developers.google.com/maps/documentation/maps-static/get-api-key" id = "AK" target="_blank" rel="noopener noreferrer">Acquire API Key</a>
@@ -92,6 +99,23 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="startPointModal" tabindex="-1" aria-labelledby="startpointModalLabel" aria-hidden="true">       
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="startPointLabel">Starting Point</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                </div>
+                <div class="modal-body">
+                    <label for="start-Point">Enter Location: </label>
+                    <input id="start-Point" type="text" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="apiSet" onclick="startDrive()">Drive</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="controllerModal" tabindex="-1" aria-labelledby="controllerModalLabel" aria-hidden="true">       
         <div class="modal-dialog">
             <div class="modal-content">
@@ -145,6 +169,7 @@
         <p id="picture"> </p>
     </div>
 </html>
+<script> src="../src/app.js"</script>
 <script src="../src/gamepad.js"></script>
 <link rel="stylesheet" href="../CSS/menu.css" />
 <script src="../src/menu.js"></script>
