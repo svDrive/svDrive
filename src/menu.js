@@ -3,7 +3,10 @@ function setAPIKey(unsanitizedInput) {
   let sanitizedInput = sanitizeGMapKey(unsanitizedInput);
   localStorage.setItem("API-KEY", sanitizedInput);
 }
-
+// Sets a deviceflag to swtich between controller or steeringwheel.
+function setDeviceflag(flag){
+  localStorage.setItem("Deviceflag",flag);
+}
 // Removes all charcaters which are invalid for a Google Maps API Key from the input string.
 // Aggressively eleminates XXS attempts, as nearly every special character is removed.
 function sanitizeGMapKey(unsanitizedInput) {
