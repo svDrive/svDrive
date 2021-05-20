@@ -40,6 +40,7 @@ window.addEventListener("load", function () {
   }
 });
 
+const welcomeModal = document.getElementById("welcomeModal");
 const welcomeApiInput = document.querySelector("#API-Key1");
 const welcomeControllerInput = document.getElementsByName("controllerType1");
 const welcomeSetButton = document.querySelector("#welcomeSet");
