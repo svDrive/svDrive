@@ -171,23 +171,27 @@ function menuControls(controller) {
       else
         window.location.href = urllist[Math.abs(hrefidx) % urllist.length].href;
     } else if (subMenuflag === 0) {
-      for (var i = 0; i < subMenulst[subMenuidx].childNodes.length; i++) {
-        if (subMenulst[subMenuidx].childNodes[i].nodeType == 1) {
-          urllist.push(subMenulst[subMenuidx].childNodes[i]);
+      if(curbot.id=="1"){
+        curbot.click();
+      }else
+      {
+        for (var i = 0; i < subMenulst[subMenuidx].childNodes.length; i++) {
+          if (subMenulst[subMenuidx].childNodes[i].nodeType == 1) {
+            urllist.push(subMenulst[subMenuidx].childNodes[i]);
+          }
         }
+        subMenuflag = 1;
+        cururl = urllist[0];
+        cururl.style.fontSize = "large";
+        window.location.href = curbot.href;
+        hrefidx += urllist.length * 200;
+        phrefidx += urllist.length * 200;
       }
-      subMenuflag = 1;
-      cururl = urllist[0];
-      cururl.style.fontSize = "large";
-      window.location.href = curbot.href;
-      hrefidx += urllist.length * 200;
-      phrefidx += urllist.length * 200;
     }
   } else if (controller.buttons[b].pressed) {
     backToMenu();
   }
 }
-
 function getPath() {
   if (
     window.location.pathname === "/html/index.html" ||
