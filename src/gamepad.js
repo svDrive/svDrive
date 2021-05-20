@@ -39,8 +39,8 @@ const controllerStatus = document.querySelector("circle"); //circle indicating t
 window.addEventListener("gamepadconnected", (e) => {
   controllerStatus.setAttribute("fill", "green");
   //fetch controller type
-  if (localStorage.getItem("Deviceflag") === "1") isGamepad = true;
-  else if (localStorage.getItem("Deviceflag") === "-1") isGamepad = false;
+  if (localStorage.getItem("CONTROLLER-TYPE") === "gamepad") isGamepad = true;
+  else if (localStorage.getItem("CONTROLLER-TYPE") === "wheel") isGamepad = false;
   //assign abstracted variables and functions
   if (isGamepad) {
     //button indeces
@@ -247,7 +247,7 @@ function svDriveSteeringWheel(controller) {
       window.confirm("Are you sure you would like to return to the menu?") ===
       true
     ) {
-      backToMenu();
+      window.location.href = "index.html";
     }
   }
   if (controller.buttons[l1].pressed || controller.buttons[r1].pressed) {
