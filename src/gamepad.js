@@ -159,20 +159,7 @@ function menuControls(controller) {
   } else if (controller.buttons[a].pressed) {
     var subMenuidx;
 		subMenuidx = ((Math.abs(botidx) - 1) % 4)-1;
-		if(localStorage.getItem("API-KEY") == undefined ||localStorage.getItem("CONTROLLER-TYPE") == undefined){
-			if (welcomeApiInput.value != "") {
-				setAPIKey(welcomeApiInput.value);
-				for (let i = 0; i < welcomeControllerInput.length; i++) {
-					if (welcomeControllerInput[i].checked) {
-					  localStorage.setItem("CONTROLLER-TYPE", welcomeControllerInput[i].value);
-					}
-				}
-				$("#welcomeModal").modal("hide");
-			  } else {
-				window.alert("Must enter an API Key!");
-			  }
-		}
-		else if (subMenuflag === 1) {
+		if (subMenuflag === 1) {
 			//If user is in apikey submenu, open modal
 			if (urllist[Math.abs(hrefidx) % urllist.length].id === "setKey") {
 				if(apiInput.value.length != 0){
@@ -249,12 +236,12 @@ function menuControls(controller) {
 		else
       backToMenu()
   } else if((controller.buttons[x].pressed)){//press x to allow user to use gamepad.
-    if((urllist.length!=0&&urllist[Math.abs(hrefidx) % urllist.length].id === "setDevice")||welcomeModal.style.display=="block"){
+    if((urllist.length!=0&&urllist[Math.abs(hrefidx) % urllist.length].id === "setDevice")){
 			useGamepad();
 		}
   }
   else if(controller.buttons[y].pressed){// press y to allow user to use sterrignwheel
-		if((urllist.length!=0&&urllist[Math.abs(hrefidx) % urllist.length].id === "setDevice")||welcomeModal.style.display=="block"){
+		if((urllist.length!=0&&urllist[Math.abs(hrefidx) % urllist.length].id === "setDevice")){
 			useSteeringwheel();
 		}
 	}
@@ -312,26 +299,16 @@ function useGamepad() {
 	console.log("gamepad");
 	//document.getElementById("controller1").checked = true;
 	//document.getElementById("steeringWheel1").checked = false;
-	if(welcomeModal.style.display=="block"){
-		$("#controller1").prop('checked',true);
-		$("#steeringWheel1").prop('checked',false);
-	}else{
-		$("#controller2").prop('checked',true);
-		$("#steeringWheel2").prop('checked',false);
-	}
+	$("#controller2").prop('checked',true);
+	$("#steeringWheel2").prop('checked',false);
 	switchFlag = 1;
 }
 function useSteeringwheel(){
 	console.log("steeringwheel");
 	//document.getElementById("controller1").checked = false;
 	//document.getElementById("steeringWheel1").checked = true;
-	if(welcomeModal.style.display=="block"){
-		$("#controller1").prop('checked',false);
-		$("#steeringWheel1").prop('checked',true);
-	}else{
-		$("#controller2").prop('checked',false);
-		$("#steeringWheel2").prop('checked',true);
-	}
+	$("#controller2").prop('checked',false);
+	$("#steeringWheel2").prop('checked',true);
 	switchFlag = -1;
 }
 
