@@ -5,7 +5,10 @@ function setAPIKey(unsanitizedInput) {
 }
 // Sets a deviceflag to swtich between controller or steeringwheel.
 function setDeviceflag(flag){
-  localStorage.setItem("Deviceflag",flag);
+  if(flag === 1)
+    localStorage.setItem("CONTROLLER-TYPE","gamepad");
+  else
+    localStorage.setItem("CONTROLLER-TYPE","wheel");
 }
 // Removes all charcaters which are invalid for a Google Maps API Key from the input string.
 // Aggressively eleminates XXS attempts, as nearly every special character is removed.

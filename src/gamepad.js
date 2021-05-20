@@ -124,13 +124,6 @@ function chooseControls() {
 //** CONTROLLER TYPE NON-SPECIFIC INPUT POLLING **//
 
 // Menu navigation implementation \\
-let MM = document.getElementById("1");
-let MMD = document.getElementById("MMD");
-let MMS2 = document.getElementById("MMS2");
-let API = document.getElementById("2");
-let EK = document.getElementById("EK");
-let AK = document.getElementById("AK");
-let option;
 let loadedMenu = false;
 let path = getPath();
 let botidx = 2001;
@@ -145,14 +138,15 @@ let cururl;
 let subMenulst = document.getElementsByClassName("subMenu");
 let subMenuflag = 0;
 let urllist = [];
+let modalFlag = false;
 
 function menuControls(controller) {
   if (loadedMenu === false) {
-    option = MM;
-    option.style.fontSize = "large";
-    //close the accordian menu
-    window.location.href = "#";
-    loadedMenu = true;
+    curbot = document.getElementById("1");
+		curbot.style.fontSize = "large";
+		//close the accordian menu
+		window.location.href = "#";
+		loadedMenu = true;
   }
   if (controller.buttons[dpadDown].pressed) {
     //set flag or DpadChange function , 0 is go down
@@ -164,33 +158,106 @@ function menuControls(controller) {
     else DpadChange(1);
   } else if (controller.buttons[a].pressed) {
     var subMenuidx;
-    subMenuidx = (Math.abs(botidx) - 1) % 5;
-    if (subMenuflag === 1) {
-      if (Math.abs(hrefidx) % urllist.length == urllist.length - 1)
-        backToMenu();
-      else
-        window.location.href = urllist[Math.abs(hrefidx) % urllist.length].href;
-    } else if (subMenuflag === 0) {
-      if(curbot.id=="1"){
-        curbot.click();
-      }else
-      {
-        for (var i = 0; i < subMenulst[subMenuidx].childNodes.length; i++) {
-          if (subMenulst[subMenuidx].childNodes[i].nodeType == 1) {
-            urllist.push(subMenulst[subMenuidx].childNodes[i]);
-          }
-        }
-        subMenuflag = 1;
-        cururl = urllist[0];
-        cururl.style.fontSize = "large";
-        window.location.href = curbot.href;
-        hrefidx += urllist.length * 200;
-        phrefidx += urllist.length * 200;
-      }
-    }
+		subMenuidx = ((Math.abs(botidx) - 1) % 4)-1;
+		if(localStorage.getItem("API-KEY") == undefined ||localStorage.getItem("CONTROLLER-TYPE") == undefined){
+			if (welcomeApiInput.value != "") {
+				setAPIKey(welcomeApiInput.value);
+				for (let i = 0; i < welcomeControllerInput.length; i++) {
+					if (welcomeControllerInput[i].checked) {
+					  localStorage.setItem("CONTROLLER-TYPE", welcomeControllerInput[i].value);
+					}
+				}
+				$("#welcomeModal").modal("hide");
+			  } else {
+				window.alert("Must enter an API Key!");
+			  }
+		}
+		else if (subMenuflag === 1) {
+			//If user is in apikey submenu, open modal
+			if (urllist[Math.abs(hrefidx) % urllist.length].id === "setKey") {
+				if(apiInput.value.length != 0){
+					setAPIKey(apiInput.value);
+					apiInput.value = "";
+				}
+				else{
+					urllist[Math.abs(hrefidx) % urllist.length].click();
+					//$("#apiKeyModal").modal("show");
+					modalFlag = true;	
+				}
+									
+			}
+			else if (urllist[Math.abs(hrefidx) % urllist.length].id === "setDevice"){
+				if(modalFlag === false){
+					urllist[Math.abs(hrefidx) % urllist.length].click();
+					modalFlag = true;
+				}
+				else{
+					setDeviceflag(switchFlag);
+				}
+			}
+			else if (urllist[Math.abs(hrefidx) % urllist.length].id === "requiredAPI"){
+				urllist[Math.abs(hrefidx) % urllist.length].click();
+				modalFlag = true;
+				//$("#apiListModal").modal("show");
+			}
+			else if (urllist[Math.abs(hrefidx) % urllist.length].id === "startPoint"){
+				if(modalFlag === false){
+					urllist[Math.abs(hrefidx) % urllist.length].click();
+					modalFlag = true;
+				}else{
+					startDrive();
+				}
+			}
+			else if (Math.abs(hrefidx) % urllist.length == urllist.length - 1)
+        backToMenu()
+			else
+				window.location.href = urllist[Math.abs(hrefidx) % urllist.length].href;
+		}
+		else if((Math.abs(botidx) % botlen) === 1){
+			window.location.href = "drive.html";
+		}
+		else if(subMenuflag === 0) {
+				for (var i = 0; i < subMenulst[subMenuidx].childNodes.length; i++) {
+					if (subMenulst[subMenuidx].childNodes[i].nodeType == 1) {
+						//if(subMenulst[subMenuidx].childNodes[i].id != "modal")
+							urllist.push(subMenulst[subMenuidx].childNodes[i]);
+					}
+				}
+				subMenuflag = 1;
+				cururl = urllist[0];
+				cururl.style.fontSize = "large";
+				window.location.href = curbot.href;
+				hrefidx += urllist.length * 200;
+				phrefidx += urllist.length * 200;
+			}
   } else if (controller.buttons[b].pressed) {
-    backToMenu();
+    if(modalFlag === true){
+			switch(urllist[Math.abs(hrefidx) % urllist.length].id){
+				case("setKey"):
+					$("#apiKeyModal").modal("hide");
+				case("setDevice"):
+					$("#controllerModal").modal("hide");
+				case("requiredAPI"):
+					$("#apiListModal").modal("hide");
+				case("startPoint"):
+					$("#startPointModal").modal("hide");
+				default:
+					modalFlag = false;
+					break;
+			} 
+		}
+		else
+      backToMenu()
+  } else if((controller.buttons[x].pressed)){//press x to allow user to use gamepad.
+    if((urllist.length!=0&&urllist[Math.abs(hrefidx) % urllist.length].id === "setDevice")||welcomeModal.style.display=="block"){
+			useGamepad();
+		}
   }
+  else if(controller.buttons[y].pressed){// press y to allow user to use sterrignwheel
+		if((urllist.length!=0&&urllist[Math.abs(hrefidx) % urllist.length].id === "setDevice")||welcomeModal.style.display=="block"){
+			useSteeringwheel();
+		}
+	}
 }
 function getPath() {
   if (
@@ -239,6 +306,36 @@ function backToMenu() {
   hrefidx = 0;
   phrefidx = 0;
 }
+
+let switchFlag = 0;
+function useGamepad() {
+	console.log("gamepad");
+	//document.getElementById("controller1").checked = true;
+	//document.getElementById("steeringWheel1").checked = false;
+	if(welcomeModal.style.display=="block"){
+		$("#controller1").prop('checked',true);
+		$("#steeringWheel1").prop('checked',false);
+	}else{
+		$("#controller2").prop('checked',true);
+		$("#steeringWheel2").prop('checked',false);
+	}
+	switchFlag = 1;
+}
+function useSteeringwheel(){
+	console.log("steeringwheel");
+	//document.getElementById("controller1").checked = false;
+	//document.getElementById("steeringWheel1").checked = true;
+	if(welcomeModal.style.display=="block"){
+		$("#controller1").prop('checked',false);
+		$("#steeringWheel1").prop('checked',true);
+	}else{
+		$("#controller2").prop('checked',false);
+		$("#steeringWheel2").prop('checked',true);
+	}
+	switchFlag = -1;
+}
+
+
 
 // Driving implementation \\
 let isThrottleOn = false; //flag to engage or disengage throttle
