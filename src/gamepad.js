@@ -264,25 +264,33 @@ function getPath() {
 }
 
 function DpadChange(flag) {
+  if($('body').hasClass('modal-open')){
+		console.log("can not move");
+	}else{
   //preidx: indx of prenode
-  preidx = botidx;
-  if (flag == 1) botidx -= 1;
-  else botidx += 1;
-  prebot = document.getElementById((Math.abs(preidx) % botlen).toString());
-  curbot = document.getElementById((Math.abs(botidx) % botlen).toString());
-  prebot.style.fontSize = "medium";
-  curbot.style.fontSize = "large";
+    preidx = botidx;
+    if (flag == 1) botidx -= 1;
+    else botidx += 1;
+    prebot = document.getElementById((Math.abs(preidx) % botlen).toString());
+    curbot = document.getElementById((Math.abs(botidx) % botlen).toString());
+    prebot.style.fontSize = "medium";
+    curbot.style.fontSize = "large";
+  }
 }
 
 function urlChange(flag) {
   //preidx: indx of prenode
-  phrefidx = hrefidx;
-  if (flag == 1) hrefidx -= 1;
-  else hrefidx += 1;
-  preurl = urllist[Math.abs(phrefidx) % urllist.length];
-  cururl = urllist[Math.abs(hrefidx) % urllist.length];
-  preurl.style.fontSize = "medium";
-  cururl.style.fontSize = "large";
+  if($('body').hasClass('modal-open')){
+		console.log("can not move");
+	}else{
+    phrefidx = hrefidx;
+    if (flag == 1) hrefidx -= 1;
+    else hrefidx += 1;
+    preurl = urllist[Math.abs(phrefidx) % urllist.length];
+    cururl = urllist[Math.abs(hrefidx) % urllist.length];
+    preurl.style.fontSize = "medium";
+    cururl.style.fontSize = "large";
+  }
 }
 
 function backToMenu() {
