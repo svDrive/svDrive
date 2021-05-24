@@ -12,7 +12,7 @@ body {
 /* Background Panoramic Display */
 .DisplayArea {
   z-index: 1;
-  position: relative;
+  position: absolute;
   width: 100%;
   height: 100%;
 }
@@ -28,6 +28,8 @@ body {
 .HUD-Overlay {
   z-index: 2;
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 /* Top Navigation HUD*/
@@ -41,7 +43,7 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 /* Container for elements in Navigation-HUD */
@@ -76,7 +78,7 @@ a:hover {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 25vh;
+  height: 15vh;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -86,12 +88,9 @@ a:hover {
 
 /* Container for elements in Dashboard HUD*/
 .HUD-Dashboard-Element {
-  margin: 0.5%;
+  padding-left: 0.5%;
+  padding-right: 0.5%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 /* Restrict elements that are contained, to the container */
