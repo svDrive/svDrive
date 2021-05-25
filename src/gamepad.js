@@ -42,7 +42,7 @@ let controllerWarning = true;
 const gamepadWarning = document.getElementById("gamepadStatus");
 
 if(controllerWarning === true){
-	gamepadWarning.textContent = "Please Connect a\r\nGamepad or Steering Wheel";
+	gamepadWarning.textContent = "Please Press a Button or\r\nConnect a Gamepad";
 }
 
 //upon controller detection assign abstracted controls appropriately
@@ -112,7 +112,7 @@ window.addEventListener("gamepadconnected", (e) => {
 
 window.addEventListener("gamepaddisconnected", (event) => {
   controllerWarning = true;
-	gamepadWarning.textContent = "Please Connect a\r\nGamepad or Steering Wheel";
+	gamepadWarning.textContent = "Please Press a Button or\r\nConnect a Gamepad";
   clearInterval(chooseControlsEventId);
 });
 
@@ -347,7 +347,7 @@ function svDriveSteeringWheel(controller) {
   if (controller.buttons[l1].pressed || controller.buttons[r1].pressed) {
     lookHorizontal(controller);
   }
-  if (controller.buttons[options].pressed) {
+  if (controller.buttons[start].pressed) {
     let xboxScheme = document.getElementById("picture");
     if (isSchemeOn === true) {
       let image = document.getElementById("controller-scheme");
@@ -382,7 +382,6 @@ function svDriveGamepad(controller) {
     }
   }
   if (
-    controller.buttons[options].pressed ||
     controller.buttons[start].pressed
   ) {
     let xboxScheme = document.getElementById("picture");

@@ -23,6 +23,14 @@ body {
   border-radius: 15px;
 }
 
+#gamepadStatus{
+  white-space: pre;
+  font-size: 60px;
+  text-align: center;
+  color:red;
+  font-weight: bold;
+}
+
 /* Menu */
 .menu {
   width: 22vw;
