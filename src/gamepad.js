@@ -35,9 +35,20 @@ let isGamepad;
 let chooseControlsEventId = 0; //setInterval id (used in clearInterval())
 const controllerStatus = document.querySelector("circle"); //circle indicating the status of the controller
 
+//controller warning flag, true on controller disconnect
+let controllerWarning = true;
+
+//Where to insert warning text for controller disconnect
+const gamepadWarning = document.getElementById("gamepadStatus");
+
+if(controllerWarning === true){
+	gamepadWarning.textContent = "Please Connect a\r\nGamepad or Steering Wheel";
+}
+
 //upon controller detection assign abstracted controls appropriately
 window.addEventListener("gamepadconnected", (e) => {
-  controllerStatus.setAttribute("fill", "green");
+	controllerWarning = false;
+	gamepadWarning.textContent = "";
   //fetch controller type
   if (localStorage.getItem("CONTROLLER-TYPE") === "gamepad") isGamepad = true;
   else if (localStorage.getItem("CONTROLLER-TYPE") === "wheel") isGamepad = false;
@@ -100,7 +111,8 @@ window.addEventListener("gamepadconnected", (e) => {
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
-  controllerStatus.setAttribute("fill", "red");
+  controllerWarning = true;
+	gamepadWarning.textContent = "Please Connect a\r\nGamepad or Steering Wheel";
   clearInterval(chooseControlsEventId);
 });
 
