@@ -339,10 +339,7 @@ function svDriveSteeringWheel(controller) {
   if (controller.buttons[l1].pressed || controller.buttons[r1].pressed) {
     lookHorizontal(controller);
   }
-  if (
-    controller.buttons[options].pressed ||
-    controller.buttons[start].pressed
-  ) {
+  if (controller.buttons[options].pressed) {
     let xboxScheme = document.getElementById("picture");
     if (isSchemeOn === true) {
       let image = document.getElementById("controller-scheme");
