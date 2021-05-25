@@ -1,4 +1,5 @@
 let panoDiv = document.getElementById("pano");
+let mapDiv = document.getElementById("map");
 
 class Display {
   constructor(startingLocation) {
@@ -7,9 +8,10 @@ class Display {
     this.pitch = 0;
     this.sv = new google.maps.StreetViewService();
     _panorama = new google.maps.StreetViewPanorama(panoDiv);
+    _map = new google.maps.Map(mapDiv);
     this.geocoder = new google.maps.Geocoder();
     this.startingLocation = startingLocation;
-    this.mapOptions = {
+    this.panoOptions = {
       clickToGo: true,
       addressControl: false,
       fullscreenControl: false,
@@ -19,7 +21,17 @@ class Display {
       showRoadLabels: true,
       zoomControl: false,
     }
-    _panorama.setOptions(this.mapOptions);
+    this.mapOptions = {
+      center: startingLocation,
+      zoom: 18,
+      clickableIcons: false,
+      disableDefaultUI: true,
+      disableDoubleClickZoom: true,
+      gestureHandling: "none",
+      keyboardShortcuts: false,
+    }
+    _map.setOptions(this.mapOptions)
+    _panorama.setOptions(this.panoOptions);
     this.setNewPanorama(this.startingLocation);
   }
 
