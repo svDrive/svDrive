@@ -246,21 +246,17 @@ function menuControls(controller) {
 		}
 	}
 }
+
+//Determine html page we're on
 function getPath() {
-  if (
-    window.location.pathname === "/html/index.html" ||
-    window.location.pathname === "/svDrive/html/index.html"
-  ) {
-    return "index";
-  } else if (
-    window.location.pathname === "/html/drive.html" ||
-    window.location.pathname === "/svDrive/html/drive.html"
-  ) {
-    return "drive";
-  } else {
-    alert("unknow path");
-    return "unknown";
-  }
+	if (window.location.pathname.search("index") >= 0) {
+		return "index";
+	} else if (window.location.pathname.search("drive") >= 0) {
+		return "drive";
+	} else {
+		alert("unknow path");
+		return "unknown";
+	}
 }
 
 function DpadChange(flag) {
