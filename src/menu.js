@@ -111,7 +111,7 @@ let getGeoCodeInfo = function (address) {
   let apikey = localStorage.getItem("API-KEY");
 
   if (address === "") {
-    window.alert("!!! REQUIRED !!!\n\nStarting address require");
+    window.alert("!!! REQUIRE !!!\n\nStarting address require");
   } else {
     const request = new Request(
       "https://maps.googleapis.com/maps/api/geocode/json?address=" +
@@ -134,7 +134,9 @@ let getGeoCodeInfo = function (address) {
           localStorage.setItem("LATITUDE", lat);
           localStorage.setItem("LONGITUDE", lng);
           localStorage.setItem("START-ADDRESS", formatedAddress);
-          window.location = "drive.html";
+
+          // Call nearstRoadcoordinate
+          getNearestRoadCoordinate();
         } else if (data.status === "ZERO_RESULTS") {
           window.alert(
             "!!! WARNING !!!\n\nStatus code: ZERO_RESULTS\n\n\u2022Geocode was successful but returned no results"
@@ -148,4 +150,47 @@ let getGeoCodeInfo = function (address) {
 
       .catch((err) => window.alert("!!! WARNING !!!\n\n" + err.message));
   }
+};
+
+// This function usage Google Nearest Roads api.
+// More information can be found here: https://developers.google.com/maps/documentation/roads/nearest
+let getNearestRoadCoordinate = function () {
+  let lat = parseFloat(localStorage.getItem("LATITUDE"));
+  let lon = parseFloat(localStorage.getItem("LONGITUDE"));
+  let apiKey = localStorage.getItem("API-KEY");
+
+  if (lat && lon && apiKey) {
+    const request = new Request(
+      "https://roads.googleapis.com/v1/nearestRoads?points=" +
+        lat +
+        "," +
+        lon +
+        "&key=" +
+        apiKey
+    );
+
+    fetch(request)
+      .then((response) => response.json())
+      .then((data) => {
+        let split = data.snappedPoints;
+        let lat = split[0].location.latitude;
+        let lon = split[0].location.longitude;
+
+        // Modify latitude and longitude in local storage
+        localStorage.setItem("LATITUDE", lat);
+        localStorage.setItem("LONGITUDE", lon);
+
+        // Load drive.html page with new starting location
+        loadDriveHTML();
+      })
+      .catch((err) => window.alert("!!! WARNING !!!\n\n" + err.message));
+  } else {
+    window.alert(
+      "!!! WARNING !!!\n\nLatitude, Longitude, or Google API key not available in local storage"
+    );
+  }
+};
+
+let loadDriveHTML = function () {
+  window.location = "drive.html";
 };
