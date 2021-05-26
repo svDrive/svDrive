@@ -96,7 +96,7 @@ window.addEventListener("gamepadconnected", (e) => {
     lookHorizontal = lookHorizontalSteeringWheel;
   }
 
-  chooseControlsEventId = setInterval(chooseControls, 150);
+  chooseControlsEventId = setInterval(chooseControls, 100);
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
@@ -117,7 +117,6 @@ function chooseControls() {
   } else if (path === "drive") {
     if (isGamepad) svDriveGamepad(controller);
     else if (!isGamepad) svDriveSteeringWheel(controller);
-    // TODO: decide if button assignment should be here instead of gamepadConnected
   }
 }
 
@@ -330,7 +329,7 @@ const deadzone = 0.8;			//Defines the deadzone for controller axes
 
 function svDriveSteeringWheel(controller) {
 	if (controller.buttons[b].pressed) {
-		if(window.confirm('Are you sure you would like to return to the menu?') === true) {
+		if(window.confirm('Are you sure you would like to return to the menu? (use mouse to select)') === true) {
 			backToMenu();
 		}
 	}
@@ -353,20 +352,20 @@ function svDriveSteeringWheel(controller) {
 	}
 	if (controller.axes[r2] < 0) {
 		isThrottleOn = true;
-    if(throttleIntervalId != 0) {
-      throttleIntervalId = setInterval(handleDirection, 750);
-    }
+		if(throttleIntervalId == 0) {
+			throttleIntervalId = setInterval(handleDirection, 750);
+    	}
 	}
 	if (controller.axes[l2] < 0.5) {
 		isThrottleOn = false;
-    clearInterval(throttleIntervalId);
-    throttleIntervalId = 0;
+    	clearInterval(throttleIntervalId);
+    	throttleIntervalId = 0;
 	}
 }
 
 function svDriveGamepad(controller) {
 	if (controller.buttons[b].pressed) {
-		if(window.confirm('Are you sure you would like to return to the menu?') === true) {
+		if(window.confirm('Are you sure you would like to return to the menu? (use mouse to select)') === true) {
 			window.location.href = "index.html";
 		}
 	}
@@ -389,20 +388,20 @@ function svDriveGamepad(controller) {
 	const leftStickYAxis = Math.abs(controller.axes[lsY]);
 	const rightStickXAxis = Math.abs(controller.axes[rsX]);
 	const rightStickYAxis = Math.abs(controller.axes[rsY]);
-  if(!isThrottleOn){
-    if (rightStickXAxis > deadzone) {
-      lookHorizontal(controller);
-    }
-    if(rightStickYAxis > deadzone) {
-      lookVertical(controller);
-    }
-    if(leftStickXAxis > deadzone) {
-      handleXMovement(controller);
-    }
-    if(leftStickYAxis > deadzone) {
-      handleYMovement(controller);
-    }
-  }
+	if (rightStickXAxis > deadzone) {
+		lookHorizontal(controller);
+	}
+	if(rightStickYAxis > deadzone) {
+		lookVertical(controller);
+	}
+  	if(!isThrottleOn){
+		if(leftStickXAxis > deadzone) {
+		handleXMovement(controller);
+		}
+		if(leftStickYAxis > deadzone) {
+		handleYMovement(controller);
+		}
+  	}
 	if (controller.buttons[r2].touched === true) {
 		isThrottleOn = true;
     if(throttleIntervalId == 0) {
@@ -410,9 +409,9 @@ function svDriveGamepad(controller) {
     }
 	}
 	if (controller.buttons[l2].touched === true) {
-    isThrottleOn = false;
-    clearInterval(throttleIntervalId);
-    throttleIntervalId = 0;
+		isThrottleOn = false;
+		clearInterval(throttleIntervalId);
+		throttleIntervalId = 0;
 	}
 }
 
@@ -503,7 +502,7 @@ function handleDirectionGamepad() {
   let controller = navigator.getGamepads()[0];
 	let links = _panorama.getLinks();
 	let wheelDiff = controller.axes[lsX] * 90;
-	let newHeading = _display.heading + wheelDiff;
+	let newHeading = _display.vehicleHeading + wheelDiff;
 	if(newHeading <= 0) newHeading += 360;
 	else if(newHeading > 360) newHeading -= 360;
 	
@@ -521,8 +520,12 @@ function handleDirectionGamepad() {
 	}
 
 	if (minDifferenceIndex === undefined) return;
+
+	//TODO: talk to team about heading
+	// if (controller.axes[lsX] > 0) _display.heading += minDifference;
+  	// else _display.heading -= minDifference;
+
 	_display.vehicleHeading = links[minDifferenceIndex].heading;
-	_display.heading = _display.vehicleHeading;
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 
 }
@@ -538,7 +541,7 @@ function handleDirectionSteeringWheel() {
   let controller = navigator.getGamepads()[0];
 	let links = _panorama.getLinks();
 	let wheelDiff = controller.axes[lsX] * 90;
-	let newHeading = _display.heading + wheelDiff;
+	let newHeading = _display.vehicleHeading + wheelDiff;
 	if(newHeading <= 0) newHeading += 360;
 	else if(newHeading > 360) newHeading -= 360;
 	
@@ -556,8 +559,12 @@ function handleDirectionSteeringWheel() {
 	}
 
 	if (minDifferenceIndex === undefined) return;
+
+	//TODO: talk to team about heading
+	// if (controller.axes[lsX] > 0) _display.heading += minDifference;
+  	// else _display.heading -= minDifference;
+
 	_display.vehicleHeading = links[minDifferenceIndex].heading;
-	_display.heading = _display.vehicleHeading;
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 
 }
