@@ -464,6 +464,8 @@ function handleYMovementGamepad(controller) {
     { location: { pano: `${links[minDifferenceIndex].pano}` } },
     "OK"
   );
+  let currentPosition = _panorama.getLocation();
+  _map.setCenter(currentPosition.latLng);
 }
 
 function handleXMovementGamepad(controller) {
@@ -499,6 +501,8 @@ function handleXMovementGamepad(controller) {
     { location: { pano: `${links[minDifferenceIndex].pano}` } },
     "OK"
   );
+  let currentPosition = _panorama.getLocation();
+  _map.setCenter(currentPosition.latLng);
 }
 
 function handleDirectionGamepad(controller) {
@@ -527,6 +531,8 @@ function handleDirectionGamepad(controller) {
     { location: { pano: `${links[minDifferenceIndex].pano}` } },
     "OK"
   );
+  let currentPosition = _panorama.getLocation();
+  _map.setCenter(currentPosition.latLng);
 }
 
 // Steering wheel implementation \\
@@ -562,4 +568,6 @@ function handleDirectionSteeringWheel(controller) {
     { location: { pano: `${links[minDifferenceIndex].pano}` } },
     "OK"
   );
+  let currentPosition = _panorama.getLocation();
+  _map.setCenter(currentPosition.latLng);
 }
