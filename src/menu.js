@@ -96,13 +96,11 @@ controllerSetButton.addEventListener("click", function () {
  Starting Location modal 
  *********************************/
 function startDrive() {
-  const startInput = document.getElementById("start-Point");
+  let startInput = document.getElementById("start-Point");
 
   getGeoCodeInfo(startInput.value);
   startInput.value = "";
   $("#apiKeyModal").modal("hide");
-
-  // TO-DO: work in-progess Dynamically load the address panaroma frame on the drive.html page.
 }
 
 // Pass user entered starting address as single argument
@@ -111,37 +109,43 @@ function startDrive() {
 // More information can be found here: https://developers.google.com/maps/documentation/geocoding/overview
 let getGeoCodeInfo = function (address) {
   let apikey = localStorage.getItem("API-KEY");
-  const request = new Request(
-    "https://maps.googleapis.com/maps/api/geocode/json?address=" +
-      address +
-      "&key=" +
-      apikey
-  );
 
-  fetch(request)
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status === "OK") {
-        let split = data.results[0].geometry;
-        let lat = split.location.lat;
-        let lng = split.location.lng;
-        let formatedAddress = data.results[0].formatted_address;
+  if (address === "") {
+    window.alert("!!! REQUIRED !!!\n\nStarting address require");
+  } else {
+    const request = new Request(
+      "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+        address +
+        "&key=" +
+        apikey
+    );
 
-        localStorage.setItem("LATITUDE", lat);
-        localStorage.setItem("LONGITUDE", lng);
-        localStorage.setItem("START-ADDRESS", formatedAddress);
+    fetch(request)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "OK") {
+          let split = data.results[0].geometry;
+          let lat = split.location.lat;
 
-        // TODO: Load drive.html page based on the formatted address
-      } else if (data.status === "ZERO_RESULTS") {
-        window.alert(
-          "!!! WARNING !!!\n\nStatus code: ZERO_RESULTS\n\n\u2022Geocode was successful but returned no results"
-        );
-      } else if (data.status === "OVER_DAILY_LIMIT") {
-        window.alert(
-          "!!! WARNING !!!\n\nStatus code: OVER_DAILY_LIMIT\n\n\u2022The API key is missing or invalid.\n\u2022Billing has not been enabled on your account.\n\u2022A self-imposed usage cap has been exceeded.\n\u2022The provided method of payment is no longer valid (for example, a credit card has expired)."
-        );
-      }
-    })
+          let lng = split.location.lng;
 
-    .catch((err) => window.alert("!!! WARNING !!!\n\n" + err.message));
+          let formatedAddress = data.results[0].formatted_address;
+
+          localStorage.setItem("LATITUDE", lat);
+          localStorage.setItem("LONGITUDE", lng);
+          localStorage.setItem("START-ADDRESS", formatedAddress);
+          window.location = "drive.html";
+        } else if (data.status === "ZERO_RESULTS") {
+          window.alert(
+            "!!! WARNING !!!\n\nStatus code: ZERO_RESULTS\n\n\u2022Geocode was successful but returned no results"
+          );
+        } else if (data.status === "OVER_DAILY_LIMIT") {
+          window.alert(
+            "!!! WARNING !!!\n\nStatus code: OVER_DAILY_LIMIT\n\n\u2022The API key is missing or invalid.\n\u2022Billing has not been enabled on your account.\n\u2022A self-imposed usage cap has been exceeded.\n\u2022The provided method of payment is no longer valid (for example, a credit card has expired)."
+          );
+        }
+      })
+
+      .catch((err) => window.alert("!!! WARNING !!!\n\n" + err.message));
+  }
 };
