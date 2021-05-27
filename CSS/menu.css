@@ -177,8 +177,9 @@ img[alt="logo"] {
 .modal-content {
   margin: 2px auto;
   z-index: 1100 !important;
-  text-align: center;
 }
+
 .modal-header h5 {
   width: 100%;
+  text-align: center;
 }
