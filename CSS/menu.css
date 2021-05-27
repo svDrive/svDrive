@@ -23,6 +23,14 @@ body {
   border-radius: 15px;
 }
 
+#gamepadStatus{
+  white-space: pre;
+  font-size: 60px;
+  text-align: center;
+  color:red;
+  font-weight: bold;
+}
+
 /* Menu */
 .menu {
   width: 22vw;
@@ -159,7 +167,7 @@ body {
   max-height: 17em;
 }
 
-img[alt="logo"] {
+img{
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -177,4 +185,8 @@ img[alt="logo"] {
 .modal-content {
   margin: 2px auto;
   z-index: 1100 !important;
+  text-align: center;
+}
+.modal-header h5 {
+  width: 100%;
 }

@@ -9,11 +9,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body id = "menuBody">
+    <p id = "gamepadStatus">
     <div class="wrapper">
         <ui class="menu">
             <li class="selection" id="logo">
                 <a href="#" class="button">
-                    <img src="/assets/transparentlogo.png" alt="logo" />
+                    <img src="/assets/transparentlogo.png" onerror = "this.src='../assets/transparentlogo.png'" alt="svDrive logo" />
                 </a>
             </li>
             <li class="selection" id="drive">
@@ -63,15 +64,18 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title mx-auto" id="welcomeModalLabel">Welcome!</h5>
+                    <h5 class="modal-title mx-auto" id="welcomeModalLabel">Welcome to svDrive!</h5>
                 </div>
                 <div class="modal-body">
+                    <p>Please enter your Google API key</p>
                     <label for="API-Key1">Enter Key: </label>
                     <input id="API-Key1" type="text" />
                     <hr>
                     <form>
+                        <p>Please choose your controller type</p>
                         <input type="radio" id="controller1" name="controllerType1" value="gamepad" checked>
                         <label for="controller1">Gamepad</label>
+                        <br>
                         <input type="radio" id="steeringWheel1" name="controllerType1" value="wheel">
                         <label for="steeringWheel1">Steering Wheel</label>
                     </form>
@@ -141,15 +145,14 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="apiModalLabel">Required APIs</h5>
+                    <h5 class="modal-title" id="apiModalLabel">Required Google APIs</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                 </div>
                 <div class="modal-body">
                     <ul>
-                        <li>API 1</li>
-                        <li>API 2</li>
-                        <li>API 3</li>
-                        <li>API 4</li>
+                        <li>Maps Javascript API</li>
+                        <li>Geocoding API</li>
+                        <li>Places API</li>
                     </ul>
                 </div>
                 <div class="modal-footer">
@@ -159,15 +162,6 @@
         </div>
     </div>
 </body>
-<div class="HUD-Navigation-Element">
-    <div class="col-sm gamepad">
-        <!-- <label>Controller Statu</label> -->
-        <svg id="statusButton" width="215" height="50">
-            <text fill="rgb(121, 84, 105)" font-size="22" x="0" y="30">Controller Status</text>
-            <circle cx="190" cy="25" r="15" fill="red" />
-        </svg>
-        <p id="picture"> </p>
-    </div>
 </html>
 <script> src="../src/app.js"</script>
 <script src="../src/gamepad.js"></script>
