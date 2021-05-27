@@ -107,7 +107,7 @@ window.addEventListener("gamepadconnected", (e) => {
     lookHorizontal = lookHorizontalSteeringWheel;
   }
 
-  chooseControlsEventId = setInterval(chooseControls, 750);
+  chooseControlsEventId = setInterval(chooseControls, 100);
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
@@ -129,7 +129,6 @@ function chooseControls() {
   } else if (path === "drive") {
     if (isGamepad) svDriveGamepad(controller);
     else if (!isGamepad) svDriveSteeringWheel(controller);
-    // TODO: decide if button assignment should be here instead of gamepadConnected
   }
 }
 
@@ -331,99 +330,97 @@ function useSteeringwheel(){
 
 
 // Driving implementation \\
-let isThrottleOn = false; //flag to engage or disengage throttle
-let isSchemeOn = false; //flag to display the controller scheme or not
-const deadzone = 0.8; //Defines the deadzone for controller axes
+let isThrottleOn = false;		//flag to engage or disengage throttle
+let throttleIntervalId = 0;
+let isSchemeOn = false;			//flag to display the controller scheme or not
+const deadzone = 0.8;			//Defines the deadzone for controller axes
 
 function svDriveSteeringWheel(controller) {
-  if (controller.buttons[b].pressed) {
-    if (
-      window.confirm("Are you sure you would like to return to the menu?") ===
-      true
-    ) {
-      window.location.href = "index.html";
-    }
-  }
-  if (controller.buttons[l1].pressed || controller.buttons[r1].pressed) {
-    lookHorizontal(controller);
-  }
-  if (controller.buttons[start].pressed) {
-    let xboxScheme = document.getElementById("picture");
-    if (isSchemeOn === true) {
-      let image = document.getElementById("controller-scheme");
-      xboxScheme.removeChild(image);
-      isSchemeOn = false;
-    } else {
-      let image = new Image();
-      image.src = "../assets/svDriveGamepad.png";
-      image.id = "controller-scheme";
-      xboxScheme.appendChild(image);
-      isSchemeOn = true;
-    }
-  }
-  if (controller.axes[r2] < 0) {
-    isThrottleOn = true;
-  }
-  if (controller.axes[l2] < 0.5) {
-    isThrottleOn = false;
-  }
-  if (isThrottleOn) {
-    handleDirection(controller);
-  }
+	if (controller.buttons[b].pressed) {
+		if(window.confirm('Are you sure you would like to return to the menu? (use mouse to select)') === true) {
+			backToMenu();
+		}
+	}
+	if (controller.buttons[l1].pressed || controller.buttons[r1].pressed) {
+		lookHorizontal(controller);
+	}
+	if (controller.buttons[start].pressed) {
+		let xboxScheme = document.getElementById("picture");
+		if (isSchemeOn === true) {
+			let image = document.getElementById("controller-scheme");
+			xboxScheme.removeChild(image);
+			isSchemeOn = false;
+		} else {
+			let image = new Image();
+			image.src = "../assets/svDriveGamepad.png";
+			image.id = "controller-scheme";
+			xboxScheme.appendChild(image);
+			isSchemeOn = true;
+		}
+	}
+	if (controller.axes[r2] < 0) {
+		isThrottleOn = true;
+		if(throttleIntervalId == 0) {
+			throttleIntervalId = setInterval(handleDirection, 750);
+    	}
+	}
+	if (controller.axes[l2] < 0.5) {
+		isThrottleOn = false;
+    	clearInterval(throttleIntervalId);
+    	throttleIntervalId = 0;
+	}
 }
 
 function svDriveGamepad(controller) {
-  if (controller.buttons[b].pressed) {
-    if (
-      window.confirm("Are you sure you would like to return to the menu?") ===
-      true
-    ) {
-      window.location.href = "index.html";
-    }
-  }
-  if (
-    controller.buttons[start].pressed
-  ) {
-    let xboxScheme = document.getElementById("picture");
-    if (isSchemeOn === true) {
-      let image = document.getElementById("controller-scheme");
-      xboxScheme.removeChild(image);
-      isSchemeOn = false;
-    } else {
-      let image = new Image();
-      image.src = "../assets/svDriveGamepad.png";
-      image.id = "controller-scheme";
-      xboxScheme.appendChild(image);
+	if (controller.buttons[b].pressed) {
+		if(window.confirm('Are you sure you would like to return to the menu? (use mouse to select)') === true) {
+			window.location.href = "index.html";
+		}
+	}
+	if (controller.buttons[start].pressed) {
+		let xboxScheme = document.getElementById("picture");
+		if (isSchemeOn === true) {
+			let image = document.getElementById("controller-scheme");
+			xboxScheme.removeChild(image);
+			isSchemeOn = false;
+		} else {
+			let image = new Image();
+			image.src = "../assets/svDriveGamepad.png";
+			image.id = "controller-scheme";
+			xboxScheme.appendChild(image);
 
-      isSchemeOn = true;
+			isSchemeOn = true;
+		}
+	}
+	const leftStickXAxis = Math.abs(controller.axes[lsX]);
+	const leftStickYAxis = Math.abs(controller.axes[lsY]);
+	const rightStickXAxis = Math.abs(controller.axes[rsX]);
+	const rightStickYAxis = Math.abs(controller.axes[rsY]);
+	if (rightStickXAxis > deadzone) {
+		lookHorizontal(controller);
+	}
+	if(rightStickYAxis > deadzone) {
+		lookVertical(controller);
+	}
+  	if(!isThrottleOn){
+		if(leftStickXAxis > deadzone) {
+		handleXMovement(controller);
+		}
+		if(leftStickYAxis > deadzone) {
+		handleYMovement(controller);
+		}
+  	}
+	if (controller.buttons[r2].touched === true) {
+		isThrottleOn = true;
+    if(throttleIntervalId == 0) {
+      throttleIntervalId = setInterval(handleDirection, 750);
     }
-  }
-  const leftStickXAxis = Math.abs(controller.axes[lsX]);
-  const leftStickYAxis = Math.abs(controller.axes[lsY]);
-  const rightStickXAxis = Math.abs(controller.axes[rsX]);
-  const rightStickYAxis = Math.abs(controller.axes[rsY]);
-
-  if (rightStickXAxis > deadzone) {
-    lookHorizontal(controller);
-  }
-  if (rightStickYAxis > deadzone) {
-    lookVertical(controller);
-  }
-  if (leftStickXAxis > deadzone) {
-    handleXMovement(controller);
-  }
-  if (leftStickYAxis > deadzone) {
-    handleYMovement(controller);
-  }
-  if (controller.buttons[r2].touched === true) {
-    isThrottleOn = true;
-  }
-  if (controller.buttons[l2].touched === true) {
-    isThrottleOn = false;
-  }
-  if (isThrottleOn) {
-    handleDirection(controller);
-  }
+	}
+	if (controller.buttons[l2].touched === true) {
+		isThrottleOn = false;
+		clearInterval(throttleIntervalId);
+		throttleIntervalId = 0;
+	}
 }
 
 //** CONTROLLER TYPE SPECIFIC INPUT POLLING **//
@@ -509,34 +506,33 @@ function handleXMovementGamepad(controller) {
   _map.setCenter(currentPosition.latLng);
 }
 
-function handleDirectionGamepad(controller) {
-  let links = _panorama.getLinks();
-  let wheelDiff = controller.axes[lsX] * 90;
-  let newHeading = _display.heading + wheelDiff;
-  if (newHeading <= 0) newHeading += 360;
-  else if (newHeading > 360) newHeading -= 360;
+function handleDirectionGamepad() {
+  let controller = navigator.getGamepads()[0];
+	let links = _panorama.getLinks();
+	let wheelDiff = controller.axes[lsX] * 90;
+	let newHeading = _display.vehicleHeading + wheelDiff;
+	if(newHeading <= 0) newHeading += 360;
+	else if(newHeading > 360) newHeading -= 360;
+	
 
-  let minDifferenceIndex;
-  let minDifference = 360;
-  for (let i = 0; i < links.length; ++i) {
-    let leftDiff = Math.abs(newHeading - links[i].heading);
-    let rightDiff = 360 - leftDiff;
-    let diff = Math.min(leftDiff, rightDiff);
-    if (diff < minDifference && diff < 90) {
-      minDifference = diff;
-      minDifferenceIndex = i;
-    }
-  }
+	let minDifferenceIndex;
+	let minDifference = 360;
+	for (let i = 0; i < links.length; ++i) {
+		let leftDiff = Math.abs(newHeading - links[i].heading);
+		let rightDiff = 360 - leftDiff;
+		let diff = Math.min(leftDiff, rightDiff);
+		if (diff < minDifference && diff < 90) {
+			minDifference = diff;
+			minDifferenceIndex = i;
+		}
+	}
 
-  if (minDifferenceIndex === undefined) return;
-  _display.vehicleHeading = links[minDifferenceIndex].heading;
-  _display.heading = _display.vehicleHeading;
-  _display.processSVData(
-    { location: { pano: `${links[minDifferenceIndex].pano}` } },
-    "OK"
-  );
-  let currentPosition = _panorama.getLocation();
-  _map.setCenter(currentPosition.latLng);
+	if (minDifferenceIndex === undefined) return;
+
+	_display.vehicleHeading = links[minDifferenceIndex].heading;
+	_display.heading = _display.vehicleHeading;
+	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
+
 }
 
 // Steering wheel implementation \\
@@ -546,32 +542,33 @@ function lookHorizontalSteeringWheel(controller) {
   _panorama.setPov({ heading: _display.heading, pitch: _display.pitch });
 }
 
-function handleDirectionSteeringWheel(controller) {
-  let links = _panorama.getLinks();
-  let wheelDiff = controller.axes[lsX] * 90;
-  let newHeading = _display.heading + wheelDiff;
-  if (newHeading <= 0) newHeading += 360;
-  else if (newHeading > 360) newHeading -= 360;
+function handleDirectionSteeringWheel() {
+  let controller = navigator.getGamepads()[0];
+	let links = _panorama.getLinks();
+	let wheelDiff = controller.axes[lsX] * 90;
+	let newHeading = _display.vehicleHeading + wheelDiff;
+	if(newHeading <= 0) newHeading += 360;
+	else if(newHeading > 360) newHeading -= 360;
+	
 
-  let minDifferenceIndex;
-  let minDifference = 360;
-  for (let i = 0; i < links.length; ++i) {
-    let leftDiff = Math.abs(newHeading - links[i].heading);
-    let rightDiff = 360 - leftDiff;
-    let diff = Math.min(leftDiff, rightDiff);
-    if (diff < minDifference && diff < 90) {
-      minDifference = diff;
-      minDifferenceIndex = i;
-    }
-  }
+	let minDifferenceIndex;
+	let minDifference = 360;
+	for (let i = 0; i < links.length; ++i) {
+		let leftDiff = Math.abs(newHeading - links[i].heading);
+		let rightDiff = 360 - leftDiff;
+		let diff = Math.min(leftDiff, rightDiff);
+		if (diff < minDifference && diff < 90) {
+			minDifference = diff;
+			minDifferenceIndex = i;
+		}
+	}
 
-  if (minDifferenceIndex === undefined) return;
-  _display.vehicleHeading = links[minDifferenceIndex].heading;
-  _display.heading = _display.vehicleHeading;
-  _display.processSVData(
-    { location: { pano: `${links[minDifferenceIndex].pano}` } },
-    "OK"
-  );
-  let currentPosition = _panorama.getLocation();
-  _map.setCenter(currentPosition.latLng);
+	if (minDifferenceIndex === undefined) return;
+
+	if (controller.axes[lsX] > 0) _display.heading += minDifference;
+  	else _display.heading -= minDifference;
+	_display.vehicleHeading = links[minDifferenceIndex].heading;
+	_display.heading = _display.vehicleHeading;
+	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
+
 }
