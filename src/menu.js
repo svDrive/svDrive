@@ -4,11 +4,9 @@ function setAPIKey(unsanitizedInput) {
   localStorage.setItem("API-KEY", sanitizedInput);
 }
 // Sets a deviceflag to swtich between controller or steeringwheel.
-function setDeviceflag(flag){
-  if(flag === 1)
-    localStorage.setItem("CONTROLLER-TYPE","gamepad");
-  else
-    localStorage.setItem("CONTROLLER-TYPE","wheel");
+function setDeviceflag(flag) {
+  if (flag === 1) localStorage.setItem("CONTROLLER-TYPE", "gamepad");
+  else localStorage.setItem("CONTROLLER-TYPE", "wheel");
 }
 // Removes all charcaters which are invalid for a Google Maps API Key from the input string.
 // Aggressively eleminates XXS attempts, as nearly every special character is removed.
@@ -94,40 +92,105 @@ controllerSetButton.addEventListener("click", function () {
   $("#controllerModal").modal("hide");
 });
 
-
 /*********************************
  Starting Location modal 
  *********************************/
-function startDrive(){
+function startDrive() {
+  let startInput = document.getElementById("start-Point");
 
-  const startInput = document.getElementById("start-Point"); 
+  getGeoCodeInfo(startInput.value);
+  startInput.value = "";
+  $("#apiKeyModal").modal("hide");
+}
 
-  if(startInput.value){
-    setStartingLocation(startInput.value);
-    startInput.value = "";
-    $("#apiKeyModal").modal("hide"); 
+// Pass user entered starting address as single argument
+// Save formatted starting address into local storage
+// This function usage Google geocode api.
+// More information can be found here: https://developers.google.com/maps/documentation/geocoding/overview
+let getGeoCodeInfo = function (address) {
+  let apikey = localStorage.getItem("API-KEY");
+
+  if (address === "") {
+    window.alert("!!! REQUIRE !!!\n\nStarting address require");
+  } else {
+    const request = new Request(
+      "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+        address +
+        "&key=" +
+        apikey
+    );
+
+    fetch(request)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "OK") {
+          let split = data.results[0].geometry;
+          let lat = split.location.lat;
+
+          let lng = split.location.lng;
+
+          let formatedAddress = data.results[0].formatted_address;
+
+          localStorage.setItem("LATITUDE", lat);
+          localStorage.setItem("LONGITUDE", lng);
+          localStorage.setItem("START-ADDRESS", formatedAddress);
+
+          // Call nearstRoadcoordinate
+          getNearestRoadCoordinate();
+        } else if (data.status === "ZERO_RESULTS") {
+          window.alert(
+            "!!! WARNING !!!\n\nStatus code: ZERO_RESULTS\n\n\u2022Geocode was successful but returned no results"
+          );
+        } else if (data.status === "OVER_DAILY_LIMIT") {
+          window.alert(
+            "!!! WARNING !!!\n\nStatus code: OVER_DAILY_LIMIT\n\n\u2022The API key is missing or invalid.\n\u2022Billing has not been enabled on your account.\n\u2022A self-imposed usage cap has been exceeded.\n\u2022The provided method of payment is no longer valid (for example, a credit card has expired)."
+          );
+        }
+      })
+
+      .catch((err) => window.alert("!!! WARNING !!!\n\n" + err.message));
   }
+};
 
+// This function usage Google Nearest Roads api.
+// More information can be found here: https://developers.google.com/maps/documentation/roads/nearest
+let getNearestRoadCoordinate = function () {
+  let lat = parseFloat(localStorage.getItem("LATITUDE"));
+  let lon = parseFloat(localStorage.getItem("LONGITUDE"));
+  let apiKey = localStorage.getItem("API-KEY");
 
-  // TO-DO: work in-progess Dynamically load the address panaroma frame on the drive.html page. 
+  if (lat && lon && apiKey) {
+    const request = new Request(
+      "https://roads.googleapis.com/v1/nearestRoads?points=" +
+        lat +
+        "," +
+        lon +
+        "&key=" +
+        apiKey
+    );
 
-}
+    fetch(request)
+      .then((response) => response.json())
+      .then((data) => {
+        let split = data.snappedPoints;
+        let lat = split[0].location.latitude;
+        let lon = split[0].location.longitude;
 
+        // Modify latitude and longitude in local storage
+        localStorage.setItem("LATITUDE", lat);
+        localStorage.setItem("LONGITUDE", lon);
 
-// Santize the starting address string.
-function setStartingLocation(unsanitizedInput) {
-  let sanitizedInput = sanitizeAddress(unsanitizedInput);
-  localStorage.setItem("STARTING-ADDRESS", sanitizedInput);
-}
-
-// Removes all charcaters which are invalid for starting address from the input string.
-// Aggressively eleminates XXS attempts, as nearly every special character is removed.
-function sanitizeAddress(unsanitizedInput) {
-  let cleanInput = String();
-  let testChar = "";
-  for (var pos = 0; pos < unsanitizedInput.length; pos++) {
-    testChar = unsanitizedInput.charAt(pos);
-    if (_validAddress.includes(testChar)) cleanInput += testChar;
+        // Load drive.html page with new starting location
+        loadDriveHTML();
+      })
+      .catch((err) => window.alert("!!! WARNING !!!\n\n" + err.message));
+  } else {
+    window.alert(
+      "!!! WARNING !!!\n\nLatitude, Longitude, or Google API key not available in local storage"
+    );
   }
-  return cleanInput;
-}
+};
+
+let loadDriveHTML = function () {
+  window.location = "drive.html";
+};
