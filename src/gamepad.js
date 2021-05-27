@@ -521,11 +521,8 @@ function handleDirectionGamepad() {
 
 	if (minDifferenceIndex === undefined) return;
 
-	//TODO: talk to team about heading
-	// if (controller.axes[lsX] > 0) _display.heading += minDifference;
-  	// else _display.heading -= minDifference;
-
 	_display.vehicleHeading = links[minDifferenceIndex].heading;
+	_display.heading = _display.vehicleHeading;
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 
 }
@@ -560,11 +557,10 @@ function handleDirectionSteeringWheel() {
 
 	if (minDifferenceIndex === undefined) return;
 
-	//TODO: talk to team about heading
-	// if (controller.axes[lsX] > 0) _display.heading += minDifference;
-  	// else _display.heading -= minDifference;
-
+	if (controller.axes[lsX] > 0) _display.heading += minDifference;
+  	else _display.heading -= minDifference;
 	_display.vehicleHeading = links[minDifferenceIndex].heading;
+	_display.heading = _display.vehicleHeading;
 	_display.processSVData({ location: { pano: `${links[minDifferenceIndex].pano}`, } }, "OK");
 
 }
