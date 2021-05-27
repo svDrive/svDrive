@@ -24,6 +24,7 @@ SVDrive is a web application that provides an immersive environment that makes i
 - Bootstrap
 - Google Map Javascript API
 - Google Geocoding API
+- Google Road API
 
 ## Documentation
 
