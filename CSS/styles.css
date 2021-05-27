@@ -11,8 +11,8 @@ body {
 
 /* Background Panoramic Display */
 .DisplayArea {
-  z-index: 1;
-  position: relative;
+  z-index: 0;
+  position: absolute;
   width: 100%;
   height: 100%;
 }
@@ -26,13 +26,15 @@ body {
 
 /* Foreground Heads-Up-Display */
 .HUD-Overlay {
-  z-index: 2;
+  z-index: 1;
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 /* Top Navigation HUD*/
 .HUD-Navigation {
-  z-index: 3;
+  z-index: 2;
   position: absolute;
   top: 0;
   left: 0;
@@ -41,7 +43,7 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 /* Container for elements in Navigation-HUD */
@@ -50,6 +52,14 @@ body {
   width: auto;
   height: 100%;
 }
+
+/* Overhead Map element */
+#map {
+  height:100%; 
+  width: 25vh;
+  margin: 0;
+  padding: 0;
+} 
 
 .menu {
   margin-right: 100px;
@@ -72,26 +82,23 @@ a:hover {
 
 /* Bottom Dashbord HUD */
 .HUD-Dashboard {
-  z-index: 3;
+  z-index: 2;
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 25vh;
+  height: 15vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: space-between;
-  background-color: rgb(143, 112, 133);
 }
 
 /* Container for elements in Dashboard HUD*/
 .HUD-Dashboard-Element {
-  margin: 0.5%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding-left: 0.5%;
+  padding-right: 0.5%;
+  height: 15vh;
+  width: auto;
 }
 
 /* Restrict elements that are contained, to the container */
@@ -99,6 +106,14 @@ a:hover {
 .HUD-Dashboard-Element * {
   max-height: 100%;
   width: auto;
+}
+
+#gamepadStatus{
+  white-space: pre;
+  font-size: 70px;
+  text-align: center;
+  color:red;
+  font-weight: bold;
 }
 
 /* Gamepad - Controller Image*/
@@ -109,7 +124,7 @@ a:hover {
 
 /* End of Page footer*/
 footer {
-  z-index: 3;
+  z-index: 2;
   position: absolute;
   bottom: 0;
   width: 100%;

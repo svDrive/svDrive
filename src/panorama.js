@@ -1,4 +1,5 @@
 let panoDiv = document.getElementById("pano");
+let mapDiv = document.getElementById("map");
 
 class Display {
   constructor(startingLocation) {
@@ -7,9 +8,10 @@ class Display {
     this.pitch = 0;
     this.sv = new google.maps.StreetViewService();
     _panorama = new google.maps.StreetViewPanorama(panoDiv);
+    _map = new google.maps.Map(mapDiv);
     this.geocoder = new google.maps.Geocoder();
     this.startingLocation = startingLocation;
-    this.mapOptions = {
+    this.panoOptions = {
       clickToGo: true,
       addressControl: false,
       fullscreenControl: false,
@@ -19,15 +21,19 @@ class Display {
       showRoadLabels: true,
       zoomControl: false,
     }
-    _panorama.setOptions(this.mapOptions);
+    this.mapOptions = {
+      center: startingLocation,
+      zoom: 18,
+      clickableIcons: false,
+      disableDefaultUI: true,
+      disableDoubleClickZoom: true,
+      gestureHandling: "none",
+      keyboardShortcuts: false,
+    }
+    _map.setOptions(this.mapOptions)
+    _panorama.setOptions(this.panoOptions);
     this.setNewPanorama(this.startingLocation);
-    this.setEventListeners();
   }
-  
-  setEventListeners() {
-    document.getElementById("API-Key-Button").addEventListener("click", () => { this.setAPIKey();});
-    document.getElementById("Starting-Location-Button").addEventListener("click", () => { this.setStartingLocation() });
-  } 
 
   /* Updates the pre-existing panorama with new StreetView data. Specfically, a new position. */
   setNewPanorama(position) {
@@ -46,27 +52,6 @@ class Display {
     } else {
       console.error("Street View data not found for this location.");
     }
-  }
-  
-    /* Work in progress - Roadblock. */
-  setAPIKey() {
-    alert("Feature is in progress. - for the time, manually set your API Key in the index.html file.")
-    // let inputField = document.getElementById("API-Key-Input");
-    // const newKey = inputField.value;
-    // inputField.value = '';
-    /*
-      * TODO: Sanitize input to prevent XSS. 
-      * TODO: verify key is valid before attempting to reload/store 
-      * */
-    // localStorage.setItem("API-KEY", newKey);
-    /*
-     * TODO: Dynamically reload, the various Google Map API / services, with the new API Key.
-     *  (1) unload the scripts, and reload them with the new key, or                       
-     *  (2) dynamically modify/adjust what key the app charges to, after the APIs have loaded. [Might not be possible]
-     *  */
-    // let scriptElement = document.getElementById("Google-Maps-API-Script");
-    // let newSrcAttribute = 'https://maps.googleapis.com/maps/api/js?key=' + key + '&callback=run';
-    // scriptElement.setAttribute("src", newSrcAttribute);
   }
 
   setStartingLocation() {
