@@ -35,9 +35,20 @@ let isGamepad;
 let chooseControlsEventId = 0; //setInterval id (used in clearInterval())
 const controllerStatus = document.querySelector("circle"); //circle indicating the status of the controller
 
+//controller warning flag, true on controller disconnect
+let controllerWarning = true;
+
+//Where to insert warning text for controller disconnect
+const gamepadWarning = document.getElementById("gamepadStatus");
+
+if(controllerWarning === true){
+	gamepadWarning.textContent = "Please Press a Button or\r\nConnect a Gamepad";
+}
+
 //upon controller detection assign abstracted controls appropriately
 window.addEventListener("gamepadconnected", (e) => {
-  controllerStatus.setAttribute("fill", "green");
+	controllerWarning = false;
+	gamepadWarning.textContent = "";
   //fetch controller type
   if (localStorage.getItem("CONTROLLER-TYPE") === "gamepad") isGamepad = true;
   else if (localStorage.getItem("CONTROLLER-TYPE") === "wheel") isGamepad = false;
@@ -100,7 +111,8 @@ window.addEventListener("gamepadconnected", (e) => {
 });
 
 window.addEventListener("gamepaddisconnected", (event) => {
-  controllerStatus.setAttribute("fill", "red");
+  controllerWarning = true;
+	gamepadWarning.textContent = "Please Press a Button or\r\nConnect a Gamepad";
   clearInterval(chooseControlsEventId);
 });
 
@@ -245,21 +257,17 @@ function menuControls(controller) {
 		}
 	}
 }
+
+//Determine html page we're on
 function getPath() {
-  if (
-    window.location.pathname === "/html/index.html" ||
-    window.location.pathname === "/svDrive/html/index.html"
-  ) {
-    return "index";
-  } else if (
-    window.location.pathname === "/html/drive.html" ||
-    window.location.pathname === "/svDrive/html/drive.html"
-  ) {
-    return "drive";
-  } else {
-    alert("unknow path");
-    return "unknown";
-  }
+	if (window.location.pathname.search("index") >= 0) {
+		return "index";
+	} else if (window.location.pathname.search("drive") >= 0) {
+		return "drive";
+	} else {
+		alert("unknow path");
+		return "unknown";
+	}
 }
 
 function DpadChange(flag) {
@@ -336,7 +344,7 @@ function svDriveSteeringWheel(controller) {
 	if (controller.buttons[l1].pressed || controller.buttons[r1].pressed) {
 		lookHorizontal(controller);
 	}
-	if (controller.buttons[options].pressed || controller.buttons[start].pressed) {
+	if (controller.buttons[start].pressed) {
 		let xboxScheme = document.getElementById("picture");
 		if (isSchemeOn === true) {
 			let image = document.getElementById("controller-scheme");
@@ -369,7 +377,7 @@ function svDriveGamepad(controller) {
 			window.location.href = "index.html";
 		}
 	}
-	if (controller.buttons[options].pressed || controller.buttons[start].pressed) {
+	if (controller.buttons[start].pressed) {
 		let xboxScheme = document.getElementById("picture");
 		if (isSchemeOn === true) {
 			let image = document.getElementById("controller-scheme");
