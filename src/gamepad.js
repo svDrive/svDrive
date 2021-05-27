@@ -336,6 +336,9 @@ let isSchemeOn = false;			//flag to display the controller scheme or not
 const deadzone = 0.8;			//Defines the deadzone for controller axes
 
 function svDriveSteeringWheel(controller) {
+	if (controller.buttons[a].pressed) {
+		_display.vehicleHeading = _display.heading;
+	}
 	if (controller.buttons[b].pressed) {
 		if(window.confirm('Are you sure you would like to return to the menu? (use mouse to select)') === true) {
 			backToMenu();
@@ -372,6 +375,9 @@ function svDriveSteeringWheel(controller) {
 }
 
 function svDriveGamepad(controller) {
+	if (controller.buttons[a].pressed) {
+		_display.vehicleHeading = _display.heading;
+	}
 	if (controller.buttons[b].pressed) {
 		if(window.confirm('Are you sure you would like to return to the menu? (use mouse to select)') === true) {
 			window.location.href = "index.html";
