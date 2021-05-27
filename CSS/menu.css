@@ -24,11 +24,13 @@ body {
 }
 
 #gamepadStatus{
+  z-index: 10;
   white-space: pre;
   font-size: 60px;
   text-align: center;
   color:red;
   font-weight: bold;
+  position: relative;
 }
 
 /* Menu */
