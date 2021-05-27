@@ -108,6 +108,14 @@ a:hover {
   width: auto;
 }
 
+#gamepadStatus{
+  white-space: pre;
+  font-size: 70px;
+  text-align: center;
+  color:red;
+  font-weight: bold;
+}
+
 /* Gamepad - Controller Image*/
 #gamepad * {
   max-height: 100%;
