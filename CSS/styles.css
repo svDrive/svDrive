@@ -10,7 +10,7 @@ body {
 }
 
 /* Background Panoramic Display */
-.DisplayArea {
+.HUD-Background {
   z-index: 0;
   position: absolute;
   width: 100%;
