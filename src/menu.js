@@ -23,6 +23,18 @@ function sanitizeGMapKey(unsanitizedInput) {
 }
 
 function drive() {
+  if (localStorage.getItem("API-KEY") == undefined) {
+    window.alert("Set your API KEY");
+    return;
+  }
+  if (localStorage.getItem("CONTROLLER-TYPE") == undefined) {
+    window.alert("Set your Controller Type");
+    return;
+  }
+  if (localStorage.getItem("START-ADDRESS") == undefined) {
+    window.alert("Set your starting address");
+    return;
+  }
   window.location.replace("drive.html");
 }
 
@@ -35,6 +47,7 @@ window.addEventListener("load", function () {
     backdrop: "static",
     keyboard: false,
   });
+
   if (
     localStorage.getItem("API-KEY") == undefined ||
     localStorage.getItem("CONTROLLER-TYPE") == undefined
@@ -50,9 +63,6 @@ const welcomeSetButton = document.querySelector("#welcomeSet");
 welcomeSetButton.addEventListener("click", function () {
   if (welcomeApiInput.value != "") {
     setAPIKey(welcomeApiInput.value);
-  } else {
-    window.alert("Must enter an API Key!");
-    return;
   }
   for (let i = 0; i < welcomeControllerInput.length; i++) {
     if (welcomeControllerInput[i].checked) {
@@ -109,7 +119,7 @@ function startDrive() {
 // Save formatted starting address into local storage
 // This function uses the Google Geocoder API.
 // More information can be found here: https://developers.google.com/maps/documentation/geocoding/overview
-let getGeoCodeInfo = function (address) {
+function getGeoCodeInfo (address) {
   let apikey = localStorage.getItem("API-KEY");
 
   if (address === "") {
@@ -156,7 +166,7 @@ let getGeoCodeInfo = function (address) {
 
 // This function usage Google Nearest Roads api.
 // More information can be found here: https://developers.google.com/maps/documentation/roads/nearest
-let getNearestRoadCoordinate = function () {
+function getNearestRoadCoordinate () {
   let lat = parseFloat(localStorage.getItem("LATITUDE"));
   let lon = parseFloat(localStorage.getItem("LONGITUDE"));
   let apiKey = localStorage.getItem("API-KEY");
@@ -183,7 +193,7 @@ let getNearestRoadCoordinate = function () {
         localStorage.setItem("LONGITUDE", lon);
 
         // Load drive.html page with new starting location
-        loadDriveHTML();
+        drive();
       })
       .catch((err) => window.alert("!!! WARNING !!!\n\n" + err.message));
   } else {

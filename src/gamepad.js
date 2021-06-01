@@ -202,7 +202,15 @@ function menuControls(controller) {
 			else window.location.href = urllist[Math.abs(hrefidx) % urllist.length].href;
 		}
 		else if((Math.abs(botidx) % botlen) === 1){
-			window.location.href = "drive.html";
+			drive();
+		}
+		else if((Math.abs(botidx) % botlen) === 4){
+			$("#aboutModal").modal("show");
+			modalFlag = true;
+		}
+		else if((Math.abs(botidx) % botlen) === 0){
+			$("#supportModal").modal("show");
+			modalFlag = true;
 		}
 		else if(subMenuflag === 0) {
 			for (var i = 0; i < subMenulst[subMenuidx].childNodes.length; i++) {
@@ -220,18 +228,28 @@ function menuControls(controller) {
 	}
 	else if (controller.buttons[b].pressed) {
 		if(modalFlag === true){
-			switch(urllist[Math.abs(hrefidx) % urllist.length].id){
-				case("setKey"):
-					$("#apiKeyModal").modal("hide");
-				case("setDevice"):
-					$("#controllerModal").modal("hide");
-				case("requiredAPI"):
-					$("#apiListModal").modal("hide");
-				case("startPoint"):
-					$("#startPointModal").modal("hide");
-				default:
-					modalFlag = false;
-					break;
+			if(curbot.id === "4" || curbot.id === "0"){
+				switch(curbot.id){
+				  case("4"):
+					$("#aboutModal").modal("hide");
+				  case("0"):
+					$("#supportModal").modal("hide");
+				}
+				modalFlag = false;
+			}else{
+				switch(urllist[Math.abs(hrefidx) % urllist.length].id){
+					case("setKey"):
+						$("#apiKeyModal").modal("hide");
+					case("setDevice"):
+						$("#controllerModal").modal("hide");
+					case("requiredAPI"):
+						$("#apiListModal").modal("hide");
+					case("startPoint"):
+						$("#startPointModal").modal("hide");
+					default:
+						modalFlag = false;
+						break;
+				}
 			}
 		}
 		else backToMenu()
