@@ -204,6 +204,13 @@ function menuControls(controller) {
 		else if((Math.abs(botidx) % botlen) === 1){
 			window.location.href = "drive.html";
 		}
+    //Open the About and Support modal
+    else if((Math.abs(botidx) % botlen) === 4){
+			curbot.click();
+		}
+    else if((Math.abs(botidx) % botlen) === 0){
+			curbot.click();
+		}
 		else if(subMenuflag === 0) {
 			for (var i = 0; i < subMenulst[subMenuidx].childNodes.length; i++) {
 				if (subMenulst[subMenuidx].childNodes[i].nodeType == 1) {
@@ -219,7 +226,15 @@ function menuControls(controller) {
 		}
 	}
 	else if (controller.buttons[b].pressed) {
-		if(modalFlag === true){
+    if(curbot.id === "4" || curbot.id === "0"){
+      switch(curbot.id){
+        case("4"):
+          $("#aboutModal").modal("hide");
+        case("0"):
+          $("#supportModal").modal("hide");
+      }
+    }
+		else if(modalFlag === true){
 			switch(urllist[Math.abs(hrefidx) % urllist.length].id){
 				case("setKey"):
 					$("#apiKeyModal").modal("hide");
