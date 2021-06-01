@@ -6,7 +6,7 @@ let b;
 let x;
 let y;
 let r1;
-let rsB; //buttons
+let rsB;
 let l1;
 let lsB;
 let start;
@@ -18,12 +18,12 @@ let dpadRight;
 
 let r2;
 let rsX;
-let rsY; //axes
+let rsY;
 let l2;
 let lsX;
 let lsY;
 
-//abstracted functions to be binded to controller type specific functions
+// Abstracted functions to be binded to controller type specific functions
 function handleDirection(controller) {}
 function handleXMovement(controller) {}
 function handleYMovement(controller) {}
@@ -35,7 +35,7 @@ let isGamepad;
 let chooseControlsEventId = 0; //setInterval id (used in clearInterval())
 const controllerStatus = document.querySelector("circle"); //circle indicating the status of the controller
 
-//controller warning flag, true on controller disconnect
+// Controller warning flag, true on controller disconnect
 let controllerWarning = true;
 
 //Where to insert warning text for controller disconnect
@@ -45,16 +45,15 @@ if(controllerWarning === true){
 	gamepadWarning.textContent = "Please Press a Button or\r\nConnect a Gamepad";
 }
 
-//upon controller detection assign abstracted controls appropriately
+// Upon controller detection assign abstracted controls appropriately
 window.addEventListener("gamepadconnected", (e) => {
 	controllerWarning = false;
 	gamepadWarning.textContent = "";
-	//fetch controller type
+	// Fetch controller type
 	if (localStorage.getItem("CONTROLLER-TYPE") === "gamepad") isGamepad = true;
 	else if (localStorage.getItem("CONTROLLER-TYPE") === "wheel") isGamepad = false;
-	//assign abstracted variables and functions
+	// Assign abstracted variables and functions
 	if (isGamepad) {
-		//button indeces
 		a = 0;
 		b = 1;
 		x = 2;
@@ -69,14 +68,12 @@ window.addEventListener("gamepadconnected", (e) => {
 		dpadDown = 13;
 		start = 9;
 		options = 8;
-		//axis indeces
 		lsX = 0;
 		lsY = 1;
 		rsX = 2;
 		rsY = 3;
 		l2 = 6;
 		r2 = 7;
-		//handleDirection = handleDirectionGamepad;
 		handleXMovement = handleXMovementGamepad;
 		handleYMovement = handleYMovementGamepad;
 		handleDirection = handleDirectionGamepad;
@@ -84,7 +81,6 @@ window.addEventListener("gamepadconnected", (e) => {
 		lookVertical = lookVerticalGamepad;
 	}
 	else if (!isGamepad) {
-		//button indeces
 		a = 0;
 		b = 1;
 		x = 2;
@@ -96,7 +92,6 @@ window.addEventListener("gamepadconnected", (e) => {
 		start = 6;
 		options = 7;
 		//TODO: sort out Dpad for steering wheel
-		//axis indeces
 		lsX = 0;
 		r2 = 1;
 		l2 = 2;
@@ -113,7 +108,7 @@ window.addEventListener("gamepaddisconnected", (event) => {
 	clearInterval(chooseControlsEventId);
 });
 
-//on an interval determine which control scheme to use based on page and controller type
+// On interval determine which control scheme to use based on page and controller type
 function chooseControls() {
 	let controller = navigator.getGamepads()[0];
 	if (controller === undefined) {
@@ -158,12 +153,12 @@ function menuControls(controller) {
 		loadedMenu = true;
 	}
 	if (controller.buttons[dpadDown].pressed) {
-		//set flag or DpadChange function , 0 is go down
+		// Set flag or DpadChange function , 0 is go down
 		if (subMenuflag === 1) urlChange(0);
 		else DpadChange(0);
 	}
 	else if (controller.buttons[dpadUp].pressed) {
-		//set flag or DpadChange function , 0 is go up
+		// Set flag or DpadChange function , 0 is go up
 		if (subMenuflag === 1) urlChange(1);
 		else DpadChange(1);
 	}
@@ -171,7 +166,7 @@ function menuControls(controller) {
 		var subMenuidx;
 		subMenuidx = ((Math.abs(botidx) - 1) % 4)-1;
 		if (subMenuflag === 1) {
-			//If user is in apikey submenu, open modal
+			// If user is in apikey submenu, open modal
 			if (urllist[Math.abs(hrefidx) % urllist.length].id === "setKey") {
 				if(apiInput.value.length != 0){
 					setAPIKey(apiInput.value);
@@ -179,7 +174,6 @@ function menuControls(controller) {
 				}
 				else{
 					urllist[Math.abs(hrefidx) % urllist.length].click();
-					//$("#apiKeyModal").modal("show");
 					modalFlag = true;
 				}
 			}
@@ -195,7 +189,6 @@ function menuControls(controller) {
 			else if (urllist[Math.abs(hrefidx) % urllist.length].id === "requiredAPI"){
 				urllist[Math.abs(hrefidx) % urllist.length].click();
 				modalFlag = true;
-				//$("#apiListModal").modal("show");
 			}
 			else if (urllist[Math.abs(hrefidx) % urllist.length].id === "startPoint"){
 				if(modalFlag === false){
@@ -214,7 +207,6 @@ function menuControls(controller) {
 		else if(subMenuflag === 0) {
 			for (var i = 0; i < subMenulst[subMenuidx].childNodes.length; i++) {
 				if (subMenulst[subMenuidx].childNodes[i].nodeType == 1) {
-					//if(subMenulst[subMenuidx].childNodes[i].id != "modal")
 					urllist.push(subMenulst[subMenuidx].childNodes[i]);
 				}
 			}
@@ -245,7 +237,7 @@ function menuControls(controller) {
 		else backToMenu()
 	}
 	else if ((controller.buttons[x].pressed)) {
-		// press x to allow user to use gamepad.
+		// Press x to allow user to use gamepad.
 		if((urllist.length!=0&&urllist[Math.abs(hrefidx) % urllist.length].id === "setDevice")){
 			useGamepad();
 		}
@@ -258,7 +250,7 @@ function menuControls(controller) {
 	}
 }
 
-//Determine html page we're on
+// Determine html page we're on
 function getPath() {
 	if (window.location.pathname.search("index") >= 0) {
 		return "index";
@@ -275,7 +267,7 @@ function DpadChange(flag) {
 		console.log("can not move");
 	}
 	else {
-		//preidx: indx of prenode
+		// preidx: index of prenode
 		preidx = botidx;
 		if (flag == 1) botidx -= 1;
 		else botidx += 1;
@@ -289,7 +281,6 @@ function DpadChange(flag) {
 }
 
 function urlChange(flag) {
-	//preidx: indx of prenode
 	if ($('body').hasClass('modal-open')) {
 		console.log("can not move");
 	}
@@ -316,8 +307,6 @@ function backToMenu() {
 let switchFlag = 0;
 function useGamepad() {
 	console.log("gamepad");
-	//document.getElementById("controller1").checked = true;
-	//document.getElementById("steeringWheel1").checked = false;
 	$("#controller2").prop('checked',true);
 	$("#steeringWheel2").prop('checked',false);
 	switchFlag = 1;
@@ -325,8 +314,6 @@ function useGamepad() {
 
 function useSteeringwheel(){
 	console.log("steeringwheel");
-	//document.getElementById("controller1").checked = false;
-	//document.getElementById("steeringWheel1").checked = true;
 	$("#controller2").prop('checked',false);
 	$("#steeringWheel2").prop('checked',true);
 	switchFlag = -1;
@@ -437,7 +424,7 @@ function svDriveGamepad(controller) {
 function lookVerticalGamepad(controller) {
 	let pitch = _display.pitch - controller.axes[rsY] * 10;
 
-	//bound checks
+	// Bound checks
 	if (pitch > 90) pitch = 90;
 	else if (pitch < -90) pitch = -90;
 

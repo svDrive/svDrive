@@ -40,9 +40,8 @@ class Display {
     this.sv.getPanorama({ location: position, radius: 50 }, (data, status) => this.processSVData(data, status));
   }
 
-  /* The callback being provided. Essentially, 'what to do' after the panorama data get's fetched. */
+  /* The callback being provided to getPanorama. Essentially, 'what to do' after the panorama data get's fetched. */
   processSVData(data, status) {
-    // console.log(data);
     if (status === "OK") {
       const location = data.location;
       _panorama.setPano(location.pano);
