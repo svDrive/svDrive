@@ -206,9 +206,11 @@ function menuControls(controller) {
 		}
 		else if((Math.abs(botidx) % botlen) === 4){
 			$("#aboutModal").modal("show");
+			modalFlag = true;
 		}
 		else if((Math.abs(botidx) % botlen) === 0){
 			$("#supportModal").modal("show");
+			modalFlag = true;
 		}
 		else if(subMenuflag === 0) {
 			for (var i = 0; i < subMenulst[subMenuidx].childNodes.length; i++) {
