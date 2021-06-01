@@ -23,6 +23,18 @@ function sanitizeGMapKey(unsanitizedInput) {
 }
 
 function drive() {
+  if (localStorage.getItem("API-KEY") == undefined) {
+    window.alert("Set your API KEY");
+    return;
+  }
+  if (localStorage.getItem("CONTROLLER-TYPE") == undefined) {
+    window.alert("Set your Controller Type");
+    return;
+  }
+  if (localStorage.getItem("START-ADDRESS") == undefined) {
+    window.alert("Set your starting address");
+    return;
+  }
   window.location.replace("drive.html");
 }
 
@@ -183,7 +195,7 @@ let getNearestRoadCoordinate = function () {
         localStorage.setItem("LONGITUDE", lon);
 
         // Load drive.html page with new starting location
-        loadDriveHTML();
+        drive();
       })
       .catch((err) => window.alert("!!! WARNING !!!\n\n" + err.message));
   } else {
