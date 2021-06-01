@@ -119,7 +119,7 @@ function startDrive() {
 // Save formatted starting address into local storage
 // This function uses the Google Geocoder API.
 // More information can be found here: https://developers.google.com/maps/documentation/geocoding/overview
-let getGeoCodeInfo = function (address) {
+function getGeoCodeInfo (address) {
   let apikey = localStorage.getItem("API-KEY");
 
   if (address === "") {
@@ -166,7 +166,7 @@ let getGeoCodeInfo = function (address) {
 
 // This function usage Google Nearest Roads api.
 // More information can be found here: https://developers.google.com/maps/documentation/roads/nearest
-let getNearestRoadCoordinate = function () {
+function getNearestRoadCoordinate () {
   let lat = parseFloat(localStorage.getItem("LATITUDE"));
   let lon = parseFloat(localStorage.getItem("LONGITUDE"));
   let apiKey = localStorage.getItem("API-KEY");
