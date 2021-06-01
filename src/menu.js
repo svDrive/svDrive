@@ -42,11 +42,6 @@ function drive() {
 Welcome configuration modal
 *****************************/
 window.addEventListener("load", function () {
-  // Keeps modal from closing by clicking outside it
-  $("#welcomeModal").modal({
-    backdrop: "static",
-    keyboard: false,
-  });
   if (
     localStorage.getItem("API-KEY") == undefined ||
     localStorage.getItem("CONTROLLER-TYPE") == undefined
