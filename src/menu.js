@@ -195,7 +195,7 @@ let getNearestRoadCoordinate = function () {
         localStorage.setItem("LONGITUDE", lon);
 
         // Load drive.html page with new starting location
-        loadDriveHTML();
+        drive();
       })
       .catch((err) => window.alert("!!! WARNING !!!\n\n" + err.message));
   } else {
