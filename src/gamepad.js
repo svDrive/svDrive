@@ -283,6 +283,8 @@ function DpadChange(flag) {
 		curbot = document.getElementById((Math.abs(botidx) % botlen).toString());
 		prebot.style.fontSize = "medium";
 		curbot.style.fontSize = "large";
+		preidx = Number("200" + preidx % botlen);
+		botidx = Number("200" + botidx % botlen);
 	}
 }
 
