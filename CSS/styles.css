@@ -10,7 +10,7 @@ body {
 }
 
 /* Background Panoramic Display */
-.DisplayArea {
+.HUD-Background {
   z-index: 0;
   position: absolute;
   width: 100%;
@@ -120,21 +120,4 @@ a:hover {
 #gamepad * {
   max-height: 100%;
   width: auto;
-}
-
-/* End of Page footer*/
-footer {
-  z-index: 2;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  background-color: white;
-}
-
-/* All Child elements of footer */
-footer * {
-  margin-left: 0.5%;
-  margin-right: 0.5%;
 }

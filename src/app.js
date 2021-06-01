@@ -23,7 +23,6 @@ function loadMapsScript() {
 /*
     This function is supplied as a callback to the dynmically loaded Google Maps Script.
     This is the entry point of the 'Game'.
-    
 */
 function run() {
   let startingLocation = {

@@ -3,11 +3,13 @@ function setAPIKey(unsanitizedInput) {
   let sanitizedInput = sanitizeGMapKey(unsanitizedInput);
   localStorage.setItem("API-KEY", sanitizedInput);
 }
-// Sets a deviceflag to swtich between controller or steeringwheel.
+
+// Sets a device flag to switch between gamepad or steering wheel.
 function setDeviceflag(flag) {
   if (flag === 1) localStorage.setItem("CONTROLLER-TYPE", "gamepad");
   else localStorage.setItem("CONTROLLER-TYPE", "wheel");
 }
+
 // Removes all charcaters which are invalid for a Google Maps API Key from the input string.
 // Aggressively eleminates XXS attempts, as nearly every special character is removed.
 function sanitizeGMapKey(unsanitizedInput) {
@@ -28,7 +30,7 @@ function drive() {
 Welcome configuration modal
 *****************************/
 window.addEventListener("load", function () {
-  //Keeps modal from closing by clicking outside it
+  // Keeps modal from closing by clicking outside it
   $("#welcomeModal").modal({
     backdrop: "static",
     keyboard: false,
@@ -105,7 +107,7 @@ function startDrive() {
 
 // Pass user entered starting address as single argument
 // Save formatted starting address into local storage
-// This function usage Google geocode api.
+// This function uses the Google Geocoder API.
 // More information can be found here: https://developers.google.com/maps/documentation/geocoding/overview
 let getGeoCodeInfo = function (address) {
   let apikey = localStorage.getItem("API-KEY");
